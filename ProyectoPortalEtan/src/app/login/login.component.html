@@ -1,0 +1,14 @@
+<img src="./recursos/andres-dallimonti-kjqTlMHLci4-unsplash-3-scaled.jpg" alt="Fondo" id="fondo">
+
+<form class="login" (submit)="submitForm($event)">
+  <input type="text" #username placeholder="Matrícula" required>
+
+  <div class="contenedor__password">
+    <input type="password" #password placeholder="Contraseña" required>
+    <svg class="eye" id="visible" (click)="togglePassword()">
+      <use #imgVisible [attr.xlink:href]="'#icon-eye'"></use>
+    </svg>
+  </div>
+
+  <button type="submit" id="submit_registrar">Ingresar</button>
+</form>

@@ -1,0 +1,47 @@
+<button class="menu-toggle" (click)="toggleMenu()">☰</button> 
+<div class="container">
+  <!-- Menú lateral -->
+  <div class="menu" [class.active]="menuActivo">
+    <div class="group-header" routerLink="/admin-1/inicio" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Inicio</div>
+    </div>
+    <div class="group-header" routerLink="/admin-1/datos-generales" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Datos Generales</div>
+    </div>
+    <div class="group-header" routerLink="/admin-1/captura-alumnos" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Captura Alumnos</div>
+    </div>
+    <div class="group-header" routerLink="/admin-1/captura-maestros" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Captura Maestros</div>
+    </div>
+    <div class="group-header" routerLink="/admin-1/captura-administrativos" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Captura Administrativos</div>
+    </div>
+    <div class="group-header" routerLink="/admin-1/captura-aviones" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Captura Aviones</div>
+    </div>
+    <div class="group-header" routerLink="/admin-1/captura-cursos" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Captura Cursos</div>
+    </div>
+    <div class="group-header" routerLink="/admin-1/pagos" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Pagos</div>
+    </div>
+    <div class="group-header" routerLink="/admin-1/horas-vuelo" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Horas Vuelo</div>
+    </div>
+  </div>
+
+  <!-- Contenedor de contenido dinámico -->
+  <div id="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

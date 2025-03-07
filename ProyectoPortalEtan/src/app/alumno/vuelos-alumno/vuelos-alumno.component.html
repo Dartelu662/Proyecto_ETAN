@@ -1,0 +1,33 @@
+<div id="calendario">
+    <h2>{{ nombreMes }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let dia of ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']">{{ dia }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fila of calendario">
+          <td *ngFor="let dia of fila" 
+              [class.ocupado]="dia?.ocupado" 
+              [class.disponible]="dia?.disponible" 
+              [class.seleccionado]="dia?.seleccionado"
+              [class.hoy]="dia?.hoy"
+              (click)="dia?.disponible && seleccionarFecha(dia?.fecha)">
+            {{ dia?.dia }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="navegacion">
+    <button class="prev" (click)="cambiarMes(-1)">&lt;</button>
+    <button class="next" (click)="cambiarMes(1)">&gt;</button>
+  </div>
+  
+  <div>
+    <button id="confirmarSeleccion" (click)="confirmarSeleccion()">Confirmar selección</button>
+  </div>
+  
+  

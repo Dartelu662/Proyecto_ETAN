@@ -1,0 +1,27 @@
+<button class="menu-toggle" (click)="toggleMenu()">☰</button> 
+<div class="container">
+  <!-- Menú lateral -->
+  <div class="menu" [class.active]="menuActivo">
+    <div class="group-header" routerLink="/maestro/inicio" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Inicio</div>
+    </div>
+    <div class="group-header" routerLink="/maestro/datos-generales" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Datos Generales</div>
+    </div>
+    <div class="group-header" routerLink="/maestro/calificaciones" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Calificaciones</div>
+    </div>
+    <div class="group-header" routerLink="/maestro/cursos" (click)="toggleMenu()">
+      <div class="icon"></div>
+      <div class="title">Cursos</div>
+    </div>
+  </div>
+
+  <!-- Contenedor de contenido dinámico -->
+  <div id="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
