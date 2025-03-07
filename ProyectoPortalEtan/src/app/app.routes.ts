@@ -1,6 +1,4 @@
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
-import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { AlumnoComponent } from './alumno/alumno.component';
 import { InicioAlumnoComponent } from './alumno/inicio-alumno/inicio-alumno.component';
