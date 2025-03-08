@@ -1,131 +1,106 @@
-import { Component, type OnInit } from "@angular/core"
-import { CommonModule } from "@angular/common"
-import { MatDatepickerModule } from "@angular/material/datepicker"
-import { MatInputModule } from "@angular/material/input"
-import { MatFormFieldModule } from "@angular/material/form-field"
-import { MatButtonModule } from "@angular/material/button"
-import { FormsModule } from "@angular/forms"
-
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-vuelos-alumno',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule, 
+    MatStepperModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    CommonModule,
+    MatCardModule
+  ],
   templateUrl: './vuelos-alumno.component.html',
   styleUrl: './vuelos-alumno.component.css'
 })
-export class VuelosAlumnoComponent implements OnInit{
-  diasDisponibles: string[] = ["2025-02-25", "2025-02-27", "2025-02-29"] // Lista de días disponibles
-  fechaActual: Date = new Date()
-  mes: number = this.fechaActual.getMonth()
-  anio: number = this.fechaActual.getFullYear()
-  diaHoy: number = this.fechaActual.getDate()
-  mesHoy: number = this.mes
-  anioHoy: number = this.anio
-  fechaSeleccionada: string | null = null
-  nombreMes = ""
+export class VuelosAlumnoComponent{
+  dateFormGroup: FormGroup;
+  timeFormGroup: FormGroup;
+  paymentFormGroup: FormGroup;
+  
+  timeSlots: string[] = [
+    '8:00 AM', '9:30 AM', 
+    '11:00 AM', '12:30 PM',
+    '2:00 PM', '3:30 PM',
+    '5:00 PM', '6:30 PM',
+  ];
 
-  calendario: any[] = []
+  constructor(private _formBuilder: FormBuilder) {
+    // Inicializar formularios con validaciones
+    this.dateFormGroup = this._formBuilder.group({
+      date: ['', Validators.required]
+    });
 
-  constructor() {}
+    this.timeFormGroup = this._formBuilder.group({
+      timeSlot: ['', Validators.required]
+    });
 
-  ngOnInit(): void {
-    this.generarCalendario()
-    this.actualizarNombreMes()
+    this.paymentFormGroup = this._formBuilder.group({
+      cardName: ['', Validators.required],
+      cardNumber: ['', [
+        Validators.required, 
+        Validators.pattern('^[0-9]{4}[ ]?[0-9]{4}[ ]?[0-9]{4}[ ]?[0-9]{4}$')
+      ]],
+      expiryDate: ['', [
+        Validators.required, 
+        Validators.pattern('^(0[1-9]|1[0-2])\\/([0-9]{2})$')
+      ]],
+      cvv: ['', [
+        Validators.required, 
+        Validators.pattern('^[0-9]{3,4}$')
+      ]]
+    });
   }
 
-  generarCalendario(): void {
-    const primerDia = new Date(this.anio, this.mes, 1).getDay()
-    const totalDias = new Date(this.anio, this.mes + 1, 0).getDate()
-
-    this.calendario = []
-
-    let fila: any[] = []
-    for (let i = 0; i < primerDia; i++) {
-      fila.push(null)
-    }
-
-    for (let dia = 1; dia <= totalDias; dia++) {
-      const fecha = `${this.anio}-${(this.mes + 1).toString().padStart(2, "0")}-${dia.toString().padStart(2, "0")}`
-      const diaData = {
-        dia,
-        fecha,
-        disponible: this.diasDisponibles.includes(fecha), // Marca si el día es seleccionable
-        hoy: dia === this.diaHoy && this.mes === this.mesHoy && this.anio === this.anioHoy,
-        seleccionado: false,
-      }
-
-      fila.push(diaData)
-
-      if (fila.length === 7) {
-        this.calendario.push(fila)
-        fila = []
-      }
-    }
-
-    if (fila.length > 0) {
-      while (fila.length < 7) {
-        fila.push(null)
-      }
-      this.calendario.push(fila)
-    }
-
-    // Asegurarse de que siempre haya 6 filas
-    while (this.calendario.length < 6) {
-      this.calendario.push(new Array(7).fill(null))
-    }
+  formatDate(date: Date): string {
+    if (!date) return '';
+    return new Date(date).toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
-  seleccionarFecha(fecha: string): void {
-    if (this.fechaSeleccionada) {
-      const fechaSeleccionada = this.calendario.flat().find((d) => d && d.fecha === this.fechaSeleccionada)
-      if (fechaSeleccionada) {
-        fechaSeleccionada.seleccionado = false
-      }
-    }
-
-    const diaSeleccionado = this.calendario.flat().find((d) => d && d.fecha === fecha)
-    if (diaSeleccionado && diaSeleccionado.disponible) { // Solo se selecciona si el día está disponible
-      diaSeleccionado.seleccionado = true
-      this.fechaSeleccionada = fecha
-    }
+  getLastFourDigits(): string {
+    const cardNumber = this.paymentFormGroup.value.cardNumber;
+    if (!cardNumber) return '';
+    return cardNumber.replace(/\s/g, '').slice(-4);
   }
 
-  confirmarSeleccion(): void {
-    if (this.fechaSeleccionada) {
-      console.log(`Día seleccionado: ${this.fechaSeleccionada}`)
-    } else {
-      alert("No has seleccionado ninguna fecha.")
-    }
+  isFormValid(): boolean {
+    return this.dateFormGroup.valid && 
+           this.timeFormGroup.valid && 
+           this.paymentFormGroup.valid;
   }
 
-  cambiarMes(direccion: number): void {
-    this.mes += direccion
-    if (this.mes < 0) {
-      this.mes = 11
-      this.anio--
-    } else if (this.mes > 11) {
-      this.mes = 0
-      this.anio++
+  onSubmit(): void {
+    if (this.isFormValid()) {
+      console.log('Reserva confirmada', {
+        date: this.dateFormGroup.value.date,
+        timeSlot: this.timeFormGroup.value.timeSlot,
+        payment: {
+          cardName: this.paymentFormGroup.value.cardName,
+          lastFourDigits: this.getLastFourDigits()
+        }
+      });
+      // Aquí iría la lógica para enviar la información al servidor
+      alert('¡Reserva confirmada con éxito!');
     }
-    this.generarCalendario()
-    this.actualizarNombreMes()
-  }
-
-  actualizarNombreMes(): void {
-    const meses = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
-    ]
-    this.nombreMes = `${meses[this.mes]} ${this.anio}`
   }
 }

@@ -1,33 +1,123 @@
-<div id="calendario">
-    <h2>{{ nombreMes }}</h2>
-    <table>
-      <thead>
-        <tr>
-          <th *ngFor="let dia of ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']">{{ dia }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let fila of calendario">
-          <td *ngFor="let dia of fila" 
-              [class.ocupado]="dia?.ocupado" 
-              [class.disponible]="dia?.disponible" 
-              [class.seleccionado]="dia?.seleccionado"
-              [class.hoy]="dia?.hoy"
-              (click)="dia?.disponible && seleccionarFecha(dia?.fecha)">
-            {{ dia?.dia }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  <div class="navegacion">
-    <button class="prev" (click)="cambiarMes(-1)">&lt;</button>
-    <button class="next" (click)="cambiarMes(1)">&gt;</button>
-  </div>
-  
-  <div>
-    <button id="confirmarSeleccion" (click)="confirmarSeleccion()">Confirmar selección</button>
-  </div>
-  
-  
+<div class="booking-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Reserva tu cita</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-stepper [linear]="true" #stepper>
+        <!-- Paso 1: Selección de fecha -->
+        <mat-step [stepControl]="dateFormGroup">
+          <form [formGroup]="dateFormGroup">
+            <ng-template matStepLabel>Fecha</ng-template>
+            <h3>Selecciona una fecha</h3>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Fecha de reserva</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="date" required>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="dateFormGroup.controls['date'].hasError('required')">
+                Por favor selecciona una fecha
+              </mat-error>
+            </mat-form-field>
+            <div class="button-row">
+              <button mat-button matStepperNext color="primary" [disabled]="dateFormGroup.invalid">Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- Paso 2: Selección de horario -->
+        <mat-step [stepControl]="timeFormGroup">
+          <form [formGroup]="timeFormGroup">
+            <ng-template matStepLabel>Horario</ng-template>
+            <h3>Selecciona un horario</h3>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Horario disponible</mat-label>
+              <mat-select formControlName="timeSlot" required>
+                <mat-option *ngFor="let slot of timeSlots" [value]="slot">
+                  {{ slot }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="timeFormGroup.controls['timeSlot'].hasError('required')">
+                Por favor selecciona un horario
+              </mat-error>
+            </mat-form-field>
+            <div class="button-row">
+              <button mat-button matStepperPrevious>Atrás</button>
+              <button mat-button matStepperNext color="primary" [disabled]="timeFormGroup.invalid">Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- Paso 3: Información de tarjeta de crédito -->
+        <mat-step [stepControl]="paymentFormGroup">
+          <form [formGroup]="paymentFormGroup">
+            <ng-template matStepLabel>Pago</ng-template>
+            <h3>Información de pago</h3>
+            <div class="card-container">
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Nombre en la tarjeta</mat-label>
+                <input matInput formControlName="cardName" required>
+                <mat-error *ngIf="paymentFormGroup.controls['cardName'].hasError('required')">
+                  Nombre requerido
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Número de tarjeta</mat-label>
+                <input matInput formControlName="cardNumber" required maxlength="19">
+                <mat-icon matSuffix>credit_card</mat-icon>
+                <mat-error *ngIf="paymentFormGroup.controls['cardNumber'].hasError('required')">
+                  Número de tarjeta requerido
+                </mat-error>
+                <mat-error *ngIf="paymentFormGroup.controls['cardNumber'].hasError('pattern')">
+                  Número de tarjeta inválido
+                </mat-error>
+              </mat-form-field>
+
+              <div class="card-details">
+                <mat-form-field appearance="fill">
+                  <mat-label>Fecha de expiración (MM/AA)</mat-label>
+                  <input matInput formControlName="expiryDate" placeholder="MM/AA" required maxlength="5">
+                  <mat-error *ngIf="paymentFormGroup.controls['expiryDate'].hasError('required') || 
+                                    paymentFormGroup.controls['expiryDate'].hasError('pattern')">
+                    Formato inválido (MM/AA)
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>CVV</mat-label>
+                  <input matInput formControlName="cvv" required maxlength="4" type="password">
+                  <mat-error *ngIf="paymentFormGroup.controls['cvv'].hasError('required') || 
+                                    paymentFormGroup.controls['cvv'].hasError('pattern')">
+                    CVV inválido
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="button-row">
+              <button mat-button matStepperPrevious>Atrás</button>
+              <button mat-button matStepperNext color="primary" [disabled]="paymentFormGroup.invalid">Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- Paso 4: Confirmación -->
+        <mat-step>
+          <ng-template matStepLabel>Confirmación</ng-template>
+          <h3>Resumen de tu reserva</h3>
+          <div class="summary" *ngIf="isFormValid()">
+            <p><strong>Fecha:</strong> {{ formatDate(dateFormGroup.value.date) }}</p>
+            <p><strong>Horario:</strong> {{ timeFormGroup.value.timeSlot }}</p>
+            <p><strong>Método de pago:</strong> Tarjeta terminada en {{ getLastFourDigits() }}</p>
+          </div>
+          <div class="button-row">
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!isFormValid()">
+              Confirmar reserva
+            </button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>
