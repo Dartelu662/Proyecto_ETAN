@@ -1,9 +1,7 @@
-<p>cursos-maestro works!</p>
-
 <div class="teacher-container">
   <mat-card class="teacher-card">
     <mat-card-header>
-      <!-- <div mat-card-avatar class="header-image" [style.background-image]="'url(' + teacher.photoUrl + ')'"></div>  -->
+      <div mat-card-avatar class="header-image" [style.background-image]="'url(' + teacher.photoUrl + ')'"></div>
       <mat-card-title>{{ teacher.name }}</mat-card-title>
       <mat-card-subtitle>{{ teacher.title }} - {{ teacher.department }}</mat-card-subtitle>
     </mat-card-header>
@@ -43,15 +41,11 @@
                   [matBadge]="group.students.length"
                   matBadgePosition="after"
                   matBadgeColor="accent"
-                  (click)="goToGroup(stepper, i + 1)">
+                  (click)="selectGroup(group, stepper, i + 1)">
                   {{ group.name }}
                 </button>
               </div>
             </div>
-          </div>
-          
-          <div class="stepper-buttons">
-            <button mat-button matStepperNext>Ver Grupos <mat-icon>arrow_forward</mat-icon></button>
           </div>
         </mat-step>
         
@@ -72,28 +66,51 @@
               
               <mat-tab-group>
                 <mat-tab label="Lista de Alumnos">
-                  <div class="students-list">
-                    <mat-list>
-                      <mat-list-item *ngFor="let student of group.students">
-                        <div matListItemTitle>{{ student.name }}</div>
-                        <div matListItemLine>{{ student.email }}</div>
-                        <div matListItemMeta>
-                          <span 
-                            [ngClass]="{'good-grade': student.grade >= 80, 'average-grade': student.grade >= 60 && student.grade < 80, 'bad-grade': student.grade < 60}"
-                            matTooltip="Calificación">
-                            {{ student.grade }}%
-                          </span>
-                          <span 
-                            [ngClass]="{'good-attendance': student.attendance >= 90, 'average-attendance': student.attendance >= 75 && student.attendance < 90, 'bad-attendance': student.attendance < 75}"
-                            matTooltip="Asistencia">
-                            {{ student.attendance }}%
-                          </span>
-                        </div>
-                      </mat-list-item>
-                    </mat-list>
-                  </div>
+                  <table mat-table [dataSource]="group.students" class="mat-elevation-z8">
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef> Nombre del Alumno </th>
+                      <td mat-cell *matCellDef="let student"> {{student.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="date">
+                      <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                      <td mat-cell *matCellDef="let student"> {{currentDate | date:'dd/MM/yyyy'}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="grade">
+                      <th mat-header-cell *matHeaderCellDef> Calificación </th>
+                      <td mat-cell *matCellDef="let student">
+                        <mat-form-field appearance="fill">
+                          <input matInput type="number" [(ngModel)]="student.grade" min="0" max="100">
+                        </mat-form-field>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+
+                  <!-- Nueva tabla de 3 columnas: Nombre, Edad, País -->
+                  <h3>Datos Adicionales</h3>
+                  <table mat-table [dataSource]="group.students" class="mat-elevation-z8">
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                      <td mat-cell *matCellDef="let student"> {{ student.name }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="age">
+                      <th mat-header-cell *matHeaderCellDef> Edad </th>
+                      <td mat-cell *matCellDef="let student"> {{ student.age }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="country">
+                      <th mat-header-cell *matHeaderCellDef> País </th>
+                      <td mat-cell *matCellDef="let student"> {{ student.country }} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="['name', 'age', 'country']"></tr>
+                    <tr mat-row *matRowDef="let row; columns: ['name', 'age', 'country'];"></tr>
+                  </table>
+
+
                 </mat-tab>
-              
                 <mat-tab label="Estadísticas">
                   <div class="stats-container">
                     <div class="stat-card">
@@ -119,7 +136,7 @@
                 mat-raised-button 
                 [color]="i === j ? 'accent' : 'primary'"
                 [disabled]="i === j"
-                (click)="goToGroup(stepper, j + 1)">
+                (click)="selectGroup(otherGroup, stepper, j + 1)">
                 {{ otherGroup.name }}
               </button>
             </div>
@@ -141,3 +158,4 @@
     </mat-card-content>
   </mat-card>
 </div>
+
