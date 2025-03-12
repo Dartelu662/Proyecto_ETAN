@@ -1,143 +1,50 @@
-<p>cursos-maestro works!</p>
+<div *ngIf="!grupoSeleccionado">
+  <h2>Selecciona un grupo</h2>
+  <div class="tarjetas">
+    <div *ngFor="let grupo of grupos" class="tarjeta" (click)="seleccionarGrupo(grupo)">
+      <h3>{{ grupo.materia }}</h3>
+      <p>Plan de estudio: {{ grupo.planEstudio }}</p>
+      <p>Fecha de examen: {{ grupo.fechaExamen }}</p>
+    </div>
+  </div>
 
-<div class="teacher-container">
-  <mat-card class="teacher-card">
-    <mat-card-header>
-      <!-- <div mat-card-avatar class="header-image" [style.background-image]="'url(' + teacher.photoUrl + ')'"></div>  -->
-      <mat-card-title>{{ teacher.name }}</mat-card-title>
-      <mat-card-subtitle>{{ teacher.title }} - {{ teacher.department }}</mat-card-subtitle>
-    </mat-card-header>
-    
-    <mat-card-content>
-      <mat-stepper [linear]="false" #stepper>
-        <!-- Paso 1: Información general del maestro -->
-        <mat-step>
-          <ng-template matStepLabel>Información General</ng-template>
-          <div class="teacher-info">
-            <div class="teacher-details">
-              <h2>Información del Maestro</h2>
-              <mat-divider></mat-divider>
-              
-              <div class="info-section">
-                <p><strong>Nombre:</strong> {{ teacher.name }}</p>
-                <p><strong>Correo:</strong> {{ teacher.email }}</p>
-                <p><strong>Departamento:</strong> {{ teacher.department }}</p>
-                <p><strong>Título:</strong> {{ teacher.title }}</p>
-                
-                <h3>Especialidades</h3>
-                <div class="specialties">
-                  <mat-chip-set>
-                    <mat-chip *ngFor="let specialty of teacher.specialties">
-                      {{ specialty }}
-                    </mat-chip>
-                  </mat-chip-set>
-                </div>
-              </div>
-              
-              <h3>Grupos Asignados</h3>
-              <div class="group-buttons">
-                <button 
-                  *ngFor="let group of teacher.groups; let i = index" 
-                  mat-raised-button 
-                  color="primary"
-                  [matBadge]="group.students.length"
-                  matBadgePosition="after"
-                  matBadgeColor="accent"
-                  (click)="goToGroup(stepper, i + 1)">
-                  {{ group.name }}
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="stepper-buttons">
-            <button mat-button matStepperNext>Ver Grupos <mat-icon>arrow_forward</mat-icon></button>
-          </div>
-        </mat-step>
-        
-        <!-- Pasos 2-4: Grupos de alumnos -->
-        <mat-step *ngFor="let group of teacher.groups; let i = index">
-          <ng-template matStepLabel>{{ group.name }}</ng-template>
-          <div class="group-info">
-            <h2>{{ group.name }}</h2>
-            <mat-divider></mat-divider>
-            
-            <div class="group-details">
-              <div class="info-section">
-                <p><strong>Materia:</strong> {{ group.subject }}</p>
-                <p><strong>Horario:</strong> {{ group.schedule }}</p>
-                <p><strong>Aula:</strong> {{ group.classroom }}</p>
-                <p><strong>Total de alumnos:</strong> {{ group.students.length }}</p>
-              </div>
-              
-              <mat-tab-group>
-                <mat-tab label="Lista de Alumnos">
-                  <div class="students-list">
-                    <mat-list>
-                      <mat-list-item *ngFor="let student of group.students">
-                        <div matListItemTitle>{{ student.name }}</div>
-                        <div matListItemLine>{{ student.email }}</div>
-                        <div matListItemMeta>
-                          <span 
-                            [ngClass]="{'good-grade': student.grade >= 80, 'average-grade': student.grade >= 60 && student.grade < 80, 'bad-grade': student.grade < 60}"
-                            matTooltip="Calificación">
-                            {{ student.grade }}%
-                          </span>
-                          <span 
-                            [ngClass]="{'good-attendance': student.attendance >= 90, 'average-attendance': student.attendance >= 75 && student.attendance < 90, 'bad-attendance': student.attendance < 75}"
-                            matTooltip="Asistencia">
-                            {{ student.attendance }}%
-                          </span>
-                        </div>
-                      </mat-list-item>
-                    </mat-list>
-                  </div>
-                </mat-tab>
-              
-                <mat-tab label="Estadísticas">
-                  <div class="stats-container">
-                    <div class="stat-card">
-                      <h3>Promedio del Grupo</h3>
-                      <div class="stat-value">
-                        {{ calculateAverage(group.students, 'grade') | number:'1.1-1' }}%
-                      </div>
-                    </div>
-                    <div class="stat-card">
-                      <h3>Asistencia Promedio</h3>
-                      <div class="stat-value">
-                        {{ calculateAverage(group.students, 'attendance') | number:'1.1-1' }}%
-                      </div>
-                    </div>
-                  </div>
-                </mat-tab>
-              </mat-tab-group>
-            </div>
-            
-            <div class="group-buttons">
-              <button 
-                *ngFor="let otherGroup of teacher.groups; let j = index" 
-                mat-raised-button 
-                [color]="i === j ? 'accent' : 'primary'"
-                [disabled]="i === j"
-                (click)="goToGroup(stepper, j + 1)">
-                {{ otherGroup.name }}
-              </button>
-            </div>
-          </div>
-          
-          <div class="stepper-buttons">
-            <button mat-button matStepperPrevious>
-              <mat-icon>arrow_back</mat-icon> Anterior
-            </button>
-            <button mat-button (click)="goToTeacherInfo(stepper)">
-              <mat-icon>person</mat-icon> Información del Maestro
-            </button>
-            <button *ngIf="i < teacher.groups.length - 1" mat-button matStepperNext>
-              Siguiente <mat-icon>arrow_forward</mat-icon>
-            </button>
-          </div>
-        </mat-step>
-      </mat-stepper>
-    </mat-card-content>
-  </mat-card>
+  <label for="periodo">Selecciona un periodo:</label>
+  <select id="periodo" [(ngModel)]="periodoSeleccionado">
+    <option *ngFor="let periodo of periodosPasados" [value]="periodo">{{ periodo }}</option>
+  </select>
+</div>
+
+<div *ngIf="grupoSeleccionado">
+  <button (click)="regresarALista()">Volver a grupos</button>
+
+  <h2>{{ grupoSeleccionado.materia }} - {{ grupoSeleccionado.planEstudio }}</h2>
+  <p>Fecha de examen: {{ grupoSeleccionado.fechaExamen }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Calificación</th>
+        <th>Fecha de actualización</th>
+        <th>Hora de actualización</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let alumno of grupoSeleccionado.alumnos">
+        <td>{{ alumno.nombre }}</td>
+        <td>
+          <input *ngIf="grupoSeleccionado.edicionHabilitada" type="number" [(ngModel)]="alumno.calificacion" min="0" max="100">
+          <span *ngIf="!grupoSeleccionado.edicionHabilitada">{{ alumno.calificacion }}</span>
+        </td>
+        <td>{{ alumno.fechaActualizacion || '-' }}</td>
+        <td>{{ alumno.horaActualizacion || '-' }}</td>
+        <td>
+          <button *ngIf="grupoSeleccionado.edicionHabilitada" (click)="actualizarCalificacion(alumno)">Actualizar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button *ngIf="grupoSeleccionado.edicionHabilitada" (click)="bloquearEdicion()">Bloquear edición</button>
 </div>
