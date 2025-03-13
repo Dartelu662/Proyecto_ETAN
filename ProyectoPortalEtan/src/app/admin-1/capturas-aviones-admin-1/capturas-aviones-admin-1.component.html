@@ -1,1 +1,56 @@
-<p>capturas-aviones-admin-1 works!</p>
+<div class="container">
+    <h2>Gestión de Aviones</h2>
+  
+    <form [formGroup]="avionForm" (ngSubmit)="guardarAvion()">
+      <label for="registration_number">Número de Registro:</label>
+      <input type="text" id="registration_number" formControlName="registration_number" required />
+  
+      <label for="model">Modelo:</label>
+      <input type="text" id="model" formControlName="model" required />
+  
+      <label for="manufacture_year">Año de Fabricación:</label>
+      <input type="number" id="manufacture_year" formControlName="manufacture_year" />
+  
+      <label for="last_maintenance_date">Última Mantenimiento:</label>
+      <input type="date" id="last_maintenance_date" formControlName="last_maintenance_date" />
+  
+      <label for="status">Estado:</label>
+      <select id="status" formControlName="status">
+        <option value="disponible">Disponible</option>
+        <option value="mantenimiento">Mantenimiento</option>
+        <option value="inactivo">Inactivo</option>
+      </select>
+  
+      <button type="submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
+      <button type="button" (click)="cancelarEdicion()" *ngIf="isEditing">Cancelar</button>
+    </form>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Número de Registro</th>
+          <th>Modelo</th>
+          <th>Año</th>
+          <th>Mantenimiento</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let avion of aviones">
+          <td>{{ avion.avion_id }}</td>
+          <td>{{ avion.registration_number }}</td>
+          <td>{{ avion.model }}</td>
+          <td>{{ avion.manufacture_year || '-' }}</td>
+          <td>{{ avion.last_maintenance_date || '-' }}</td>
+          <td>{{ avion.status }}</td>
+          <td>
+            <button (click)="editarAvion(avion)">Editar</button>
+            <button (click)="eliminarAvion(avion.avion_id)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
