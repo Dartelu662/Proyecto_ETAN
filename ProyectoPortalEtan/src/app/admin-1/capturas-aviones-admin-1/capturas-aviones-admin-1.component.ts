@@ -19,7 +19,7 @@ interface Avion {
     CommonModule, ReactiveFormsModule, HttpClientModule
   ],
   templateUrl: './capturas-aviones-admin-1.component.html',
-  styleUrl: './capturas-aviones-admin-1.component.css'
+  styleUrl: './capturas-aviones-admin-1.component.scss'
 })
 export class CapturasAvionesAdmin1Component {
   aviones: Avion[] = [];

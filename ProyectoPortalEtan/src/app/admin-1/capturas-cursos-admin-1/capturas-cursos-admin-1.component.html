@@ -1,1 +1,123 @@
-<p>capturas-cursos-admin-1 works!</p>
+<div class="container">
+  <h2>Planes</h2>
+  <div class="tabla">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre del Plan</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let plan of planes">
+          <td>{{ plan.NombrePlan }}</td>
+          <td>{{ plan.FechaIni | date }}</td>
+          <td>{{ plan.FechaFin | date }}</td>
+          <td>
+            <button (click)="eliminarPlan(plan.PlanId)">Eliminar</button>
+            <button (click)="actualizarPlan(plan)">Actualizar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Agregar Nuevo Plan</h3>
+    <form (ngSubmit)="agregarPlan()">
+      <label for="nombrePlan">Nombre del Plan:</label>
+      <input type="text" id="nombrePlan" [(ngModel)]="nuevoPlan.NombrePlan" name="nombrePlan" required>
+      <Br>
+
+      <label for="fechaIniPlan">Fecha de Inicio:</label>
+      <input type="date" id="fechaIniPlan" [(ngModel)]="nuevoPlan.FechaIni" name="fechaIniPlan" required>
+      <Br>
+
+      <label for="fechaFinPlan">Fecha de Fin:</label>
+      <input type="date" id="fechaFinPlan" [(ngModel)]="nuevoPlan.FechaFin" name="fechaFinPlan" required>
+
+      <button type="submit">Agregar Plan</button>
+    </form>
+  </div>
+
+  <h2>Cursos</h2>
+  <div class="tabla">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre del Curso</th>
+          <th>Descripción</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let curso of cursos">
+          <td>{{ curso.NombreCurso }}</td>
+          <td>{{ curso.description }}</td>
+          <td>{{ curso.FechaIni | date }}</td>
+          <td>{{ curso.FechaFin | date }}</td>
+          <td>
+            <button (click)="eliminarCurso(curso.CursoId)">Eliminar</button>
+            <button (click)="actualizarCurso(curso)">Actualizar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Agregar Nuevo Curso</h3>
+    <form (ngSubmit)="agregarCurso()">
+      <label for="nombreCurso">Nombre del Curso:</label>
+      <input type="text" id="nombreCurso" [(ngModel)]="nuevoCurso.NombreCurso" name="nombreCurso" required>
+      <Br>
+
+      <label for="descripcionCurso">Descripción:</label>
+      <input type="text" id="descripcionCurso" [(ngModel)]="nuevoCurso.description" name="descripcionCurso" required>
+      <Br>
+
+      <label for="fechaIniCurso">Fecha de Inicio:</label>
+      <input type="date" id="fechaIniCurso" [(ngModel)]="nuevoCurso.FechaIni" name="fechaIniCurso" required>
+      <Br>
+
+      <label for="fechaFinCurso">Fecha de Fin:</label>
+      <input type="date" id="fechaFinCurso" [(ngModel)]="nuevoCurso.FechaFin" name="fechaFinCurso" required>
+
+      <button type="submit">Agregar Curso</button>
+    </form>
+  </div>
+
+  <h2>Materias</h2>
+  <div class="tabla">
+    <table>
+      <thead>
+        <tr>
+          <th>Materia</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let materia of materias">
+          <td>{{ materia.MateriaId }}</td>
+          <td>{{ materia.FechaIni | date }}</td>
+          <td>{{ materia.FechaFin | date }}</td>
+          <td>
+            <button (click)="eliminarMateria(materia.MateriaId)">Eliminar</button>
+            <button (click)="actualizarMateria(materia)">Actualizar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Agregar Nueva Materia</h3>
+    <form (ngSubmit)="agregarMateria()">
+      <label for="fechaIniMateria">Fecha de Inicio:</label>
+      <input type="date" id="fechaIniMateria" [(ngModel)]="nuevaMateria.FechaIni" name="fechaIniMateria" required>
+      <Br>
+
+      <label for="fechaFinMateria">Fecha de Fin:</label>
+      <input type="date" id="fechaFinMateria" [(ngModel)]="nuevaMateria.FechaFin" name="fechaFinMateria" required>
+
+      <button type="submit">Agregar Materia</button>
+    </form>
+  </div>
+</div>
