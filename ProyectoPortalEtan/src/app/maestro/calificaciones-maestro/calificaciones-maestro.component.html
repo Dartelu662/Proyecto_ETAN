@@ -1,11 +1,15 @@
 <div *ngIf="!grupoSeleccionado">
   <h2>Selecciona un grupo</h2>
   <div class="tarjetas">
-    <div *ngFor="let grupo of grupos" class="tarjeta" (click)="seleccionarGrupo(grupo)">
-      <h3>{{ grupo.materia }}</h3>
-      <p>Plan de estudio: {{ grupo.planEstudio }}</p>
-      <p>Fecha de examen: {{ grupo.fechaExamen }}</p>
-    </div>
+    <ng-container *ngFor="let grupo of grupos">
+      <div *ngIf="grupo.edicionHabilitada" 
+           class="tarjeta" 
+           (click)="seleccionarGrupo(grupo)">
+        <h3>{{ grupo.materia }}</h3>
+        <p>Plan de estudio: {{ grupo.planEstudio }}</p>
+        <p>Fecha de examen: {{ grupo.fechaExamen }}</p>
+      </div>
+    </ng-container>
   </div>
 
   <label for="periodo">Selecciona un periodo:</label>
@@ -23,6 +27,7 @@
   <table>
     <thead>
       <tr>
+        <th>matricula</th>
         <th>Nombre</th>
         <th>Calificación</th>
         <th>Fecha de actualización</th>
@@ -32,15 +37,21 @@
     </thead>
     <tbody>
       <tr *ngFor="let alumno of grupoSeleccionado.alumnos">
+        <td>{{ alumno.matricula }}</td>
         <td>{{ alumno.nombre }}</td>
         <td>
-          <input *ngIf="grupoSeleccionado.edicionHabilitada" type="number" [(ngModel)]="alumno.calificacion" min="0" max="100">
+          <input 
+            *ngIf="grupoSeleccionado.edicionHabilitada" 
+            type="number" 
+            [value]="alumno.calificacion" 
+            (input)="ValidarInfo($event)" 
+            min="0" max="100">
           <span *ngIf="!grupoSeleccionado.edicionHabilitada">{{ alumno.calificacion }}</span>
         </td>
         <td>{{ alumno.fechaActualizacion || '-' }}</td>
         <td>{{ alumno.horaActualizacion || '-' }}</td>
         <td>
-          <button *ngIf="grupoSeleccionado.edicionHabilitada" (click)="actualizarCalificacion(alumno)">Actualizar</button>
+          <button *ngIf="grupoSeleccionado.edicionHabilitada" (click)="actualizarCalificacion(alumno, $event)">Actualizar</button>
         </td>
       </tr>
     </tbody>
