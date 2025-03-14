@@ -10,7 +10,6 @@ import { MaestroComponent } from './maestro/maestro.component';
 import { InicioMaestroComponent } from './maestro/inicio-maestro/inicio-maestro.component';
 import { DatosGeneralesMaestroComponent } from './maestro/datos-generales-maestro/datos-generales-maestro.component';
 import { CalificacionesMaestroComponent } from './maestro/calificaciones-maestro/calificaciones-maestro.component';
-import { CursosMaestroComponent } from './maestro/cursos-maestro/cursos-maestro.component';
 import { Admin1Component } from './admin-1/admin-1.component';
 import { Admin2Component } from './admin-2/admin-2.component';
 import { Admin3Component } from './admin-3/admin-3.component';
@@ -58,7 +57,6 @@ export const routes: Routes = [
       { path: 'inicio', loadComponent: () => import('./maestro/inicio-maestro/inicio-maestro.component').then(m => m.InicioMaestroComponent) },
       { path: 'datos-generales', loadComponent: () => import('./maestro/datos-generales-maestro/datos-generales-maestro.component').then(m => m.DatosGeneralesMaestroComponent) },
       { path: 'calificaciones', loadComponent: () => import('./maestro/calificaciones-maestro/calificaciones-maestro.component').then(m => m.CalificacionesMaestroComponent) },
-      { path: 'cursos', loadComponent: () => import('./maestro/cursos-maestro/cursos-maestro.component').then(m => m.CursosMaestroComponent) },
     ]
   },
 

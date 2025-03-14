@@ -1,10 +1,17 @@
 {
   "hosting": {
-    "public": "dist",
+    "target": "portaletan-34386",
+    "public": "dist/proyecto-portal-etan/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites":[
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   },
   "database": {
