@@ -1,37 +1,5 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { AlumnoComponent } from './alumno/alumno.component';
-import { InicioAlumnoComponent } from './alumno/inicio-alumno/inicio-alumno.component';
-import { DatosGeneralesAlumnoComponent } from './alumno/datos-generales-alumno/datos-generales-alumno.component';
-import { VuelosAlumnoComponent } from './alumno/vuelos-alumno/vuelos-alumno.component';
-import { CalificacionesAlumnoComponent } from './alumno/calificaciones-alumno/calificaciones-alumno.component';
-import { PagosAlumnoComponent } from './alumno/pagos-alumno/pagos-alumno.component';
-import { MaestroComponent } from './maestro/maestro.component';
-import { InicioMaestroComponent } from './maestro/inicio-maestro/inicio-maestro.component';
-import { DatosGeneralesMaestroComponent } from './maestro/datos-generales-maestro/datos-generales-maestro.component';
-import { CalificacionesMaestroComponent } from './maestro/calificaciones-maestro/calificaciones-maestro.component';
-import { Admin1Component } from './admin-1/admin-1.component';
-import { Admin2Component } from './admin-2/admin-2.component';
-import { Admin3Component } from './admin-3/admin-3.component';
-import { InicioAdmin1Component } from './admin-1/inicio-admin-1/inicio-admin-1.component';
-import { DatosGeneralesAdmin1Component } from './admin-1/datos-generales-admin-1/datos-generales-admin-1.component';
-import { InicioAdmin2Component } from './admin-2/inicio-admin-2/inicio-admin-2.component';
-import { DatosGeneralesAdmin2Component } from './admin-2/datos-generales-admin-2/datos-generales-admin-2.component';
-import { InicioAdmin3Component } from './admin-3/inicio-admin-3/inicio-admin-3.component';
-import { DatosGeneralesAdmin3Component } from './admin-3/datos-generales-admin-3/datos-generales-admin-3.component';
-import { PagosAdmin1Component } from './admin-1/pagos-admin-1/pagos-admin-1.component';
-import { HorasVueloAdmin1Component } from './admin-1/horas-vuelo-admin-1/horas-vuelo-admin-1.component';
-import { CapturasEscolarAdmin1Component } from './admin-1/capturas-escolar-admin-1/capturas-escolar-admin-1.component';
-import { CapturasAlumnosAdmin2Component } from './admin-2/capturas-alumnos-admin-2/capturas-alumnos-admin-2.component';
-import { CapturasAvionesAdmin1Component } from './admin-1/capturas-aviones-admin-1/capturas-aviones-admin-1.component';
-import { CapturasCursosAdmin1Component } from './admin-1/capturas-cursos-admin-1/capturas-cursos-admin-1.component';
-import { CapturasAdministrativosAdmin1Component } from './admin-1/capturas-administrativos-admin-1/capturas-administrativos-admin-1.component';
-import { CapturasMaestrosAdmin2Component } from './admin-2/capturas-maestros-admin-2/capturas-maestros-admin-2.component';
-import { CapturasAdministrativosAdmin2Component } from './admin-2/capturas-administrativos-admin-2/capturas-administrativos-admin-2.component';
-import { CapturasAvionesAdmin2Component } from './admin-2/capturas-aviones-admin-2/capturas-aviones-admin-2.component';
-import { CapturasCursosAdmin2Component } from './admin-2/capturas-cursos-admin-2/capturas-cursos-admin-2.component';
-import { HorasVueloAdmin3Component } from './admin-3/horas-vuelo-admin-3/horas-vuelo-admin-3.component';
-import path from 'path';
+import { Pagina404Component } from './pagina404/pagina404.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -106,5 +74,6 @@ export const routes: Routes = [
     ]
   },
 
-  { path: '**', redirectTo: 'login' }
+  { path: '**', component: Pagina404Component }
+  
   ];

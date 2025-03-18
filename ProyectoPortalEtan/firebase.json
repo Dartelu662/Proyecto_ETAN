@@ -7,14 +7,21 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites":[
+    "rewrites": [
+      {
+        "source": "/index.html",
+        "destination": "/index.csr.html"
+      },
       {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/index.csr.html"
       }
     ]
   },
   "database": {
     "rules": "database.rules.json"
+  },
+  "functions": {
+    "source": "functions"
   }
 }
