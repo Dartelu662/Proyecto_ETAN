@@ -4,7 +4,8 @@ import Admin from '../../interfaces/admin.interface';
 import { UsuarioService } from '../../services/usuario.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Admin1Service } from '../../services/admin-1.service';
+import { AdminService } from '../../services/admin.service';
+import Auth from '../../interfaces/auth.interface';
 
 @Component({
   selector: 'app-capturas-administrativos-admin-1',
@@ -18,7 +19,7 @@ import { Admin1Service } from '../../services/admin-1.service';
 
 export class CapturasAdministrativosAdmin1Component implements OnInit{
 
-  constructor (private adminService:Admin1Service){ }
+  constructor (private adminService:AdminService){ }
 
   // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el admin
   usuario: Usuario = {
@@ -32,8 +33,7 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
     Direccion: '',
     FechaNac: '',
     FechaIngreso: '',
-    Password: '',
-    Activo: true 
+    Activo: true
   };
 
   // Objeto de tipo Admin
@@ -42,6 +42,10 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
     IdAdmin: 1
   };
 
+  auth: Auth = {
+    Email: '',
+    Password: ''
+}
 
   ngOnInit(): void {}
 
@@ -54,6 +58,9 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
     } if (this.admin.TipoAdmin === "Administrador tipo 3") {
       this.admin.IdAdmin = 3;
     }
+
+    this.auth.Email=this.usuario.Email
+
     this.adminService.AddAdmin(this.admin, this.usuario)
       .then((result) => {
         if (result === null) {
