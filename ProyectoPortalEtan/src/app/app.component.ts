@@ -9,7 +9,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ProyectoPortalEtan';
+  title = 'proyecto-portal-etan';
 
   
 }
