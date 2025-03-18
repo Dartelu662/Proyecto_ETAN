@@ -9,10 +9,6 @@
     ],
     "rewrites": [
       {
-        "source": "/index.html",
-        "destination": "/index.csr.html"
-      },
-      {
         "source": "**",
         "destination": "/index.csr.html"
       }
@@ -21,7 +17,8 @@
   "database": {
     "rules": "database.rules.json"
   },
-  "functions": {
-    "source": "functions"
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }

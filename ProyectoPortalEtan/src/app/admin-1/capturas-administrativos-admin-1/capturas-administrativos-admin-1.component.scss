@@ -222,3 +222,35 @@ form .ng-hide {
     }
   }
 }
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid $medium-gray;
+  border-radius: $border-radius / 2;
+  font-size: 1rem;
+  transition: $transition;
+  background-color: $white;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8.825L1.175 4 2.05 3.125 6 7.075 9.95 3.125 10.825 4 6 8.825z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px;
+  padding-right: 2.5rem;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+  }
+  
+  &.ng-invalid.ng-touched {
+    border-color: $accent-color;
+    box-shadow: 0 0 0 2px rgba($accent-color, 0.1);
+  }
+}
+
+// Estilos para las opciones del select
+option {
+  padding: 0.5rem;
+  font-size: 1rem;
+}

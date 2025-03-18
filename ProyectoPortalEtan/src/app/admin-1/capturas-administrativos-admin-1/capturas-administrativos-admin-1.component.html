@@ -1,74 +1,134 @@
 <div class="container">
-    <h2>Captura de Administrativos</h2>
-  
-    <form (ngSubmit)="onSubmit()" #adminForm="ngForm">
-      <div class="form-group">
-        <label for="userName">Nombre de usuario</label>
-        <input type="text" id="userName" class="form-control" [(ngModel)]="admin.usuario.UserName" name="userName" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" class="form-control" [(ngModel)]="admin.usuario.Password" name="password" required>
-      </div>
-
-      <div class="form-group">
-        <label for="nombres">Nombres</label>
-        <input type="text" id="nombres" class="form-control" [(ngModel)]="admin.usuario.Nombres" name="nombres" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="apellidoP">Apellido Paterno</label>
-        <input type="text" id="apellidoP" class="form-control" [(ngModel)]="admin.usuario.ApellidoP" name="apellidoP" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="apellidoM">Apellido Materno</label>
-        <input type="text" id="apellidoM" class="form-control" [(ngModel)]="admin.usuario.ApellidoM" name="apellidoM" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="email">Correo electrónico</label>
-        <input type="email" id="email" class="form-control" [(ngModel)]="admin.usuario.Email" name="email" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="celular">Celular</label>
-        <input type="text" id="celular" class="form-control" [(ngModel)]="admin.usuario.Celular" name="celular" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="direccion">Dirección</label>
-        <input type="text" id="direccion" class="form-control" [(ngModel)]="admin.usuario.Direccion" name="direccion">
-      </div>
-  
-      <div class="form-group">
-        <label for="fechaNac">Fecha de nacimiento</label>
-        <input type="date" id="fechaNac" class="form-control" [(ngModel)]="admin.usuario.FechaNac" name="fechaNac" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="fechaIngreso">Fecha de ingreso</label>
-        <input type="date" id="fechaIngreso" class="form-control" [(ngModel)]="admin.usuario.FechaIngreso" name="fechaIngreso" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="TipoAdmin">Tipo de Acceso</label>
-        <input type="text" id="permisoFormacion" class="form-control" [(ngModel)]="admin.PermisoFormacion" name="permisoFormacion" required>
-      </div>
-  
-      <!-- <div class="form-group">
-        <label for="matricula">Nombe de Usuario</label>
-        <input type="text" id="matricula" class="form-control" [(ngModel)]="admin.Matricula" name="matricula" required>
-      </div>
- -->
- 
-      <!-- <div class="form-group">
-        <label for="fechaFinPF">Fecha Fin Formación</label>
-        <input type="date" id="fechaFinPF" class="form-control" [(ngModel)]="admin.FechaFinPF" name="fechaFinPF" required>
-      </div> -->
-  
-      <button type="submit" class="btn btn-primary" [disabled]="!adminForm.form.valid">Guardar</button>
-    </form>
-  </div>
-  
+  <h2>Captura de Administrativos</h2>
+  <form (ngSubmit)="onSubmit()" #adminForm="ngForm">
+    <!-- Campos de Usuario -->
+    <div class="form-group">
+      <label for="userName">Nombre de usuario</label>
+      <input
+        type="text"
+        id="userName"
+        class="form-control"
+        [(ngModel)]="usuario.UserName"
+        name="userName"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Contraseña</label>
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        [(ngModel)]="usuario.Password"
+        name="password"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="nombres">Nombres</label>
+      <input
+        type="text"
+        id="nombres"
+        class="form-control"
+        [(ngModel)]="usuario.Nombres"
+        name="nombres"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="apellidoP">Apellido Paterno</label>
+      <input
+        type="text"
+        id="apellidoP"
+        class="form-control"
+        [(ngModel)]="usuario.ApellidoP"
+        name="apellidoP"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="apellidoP">Apellido Materno</label>
+      <input
+        type="text"
+        id="apellidoM"
+        class="form-control"
+        [(ngModel)]="usuario.ApellidoM"
+        name="apellidoM"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="email">Correo electrónico</label>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        [(ngModel)]="usuario.Email"
+        name="email"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="celular">Celular</label>
+      <input
+        type="text"
+        id="celular"
+        class="form-control"
+        [(ngModel)]="usuario.Celular"
+        name="celular"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="direccion">Dirección</label>
+      <input
+        type="text"
+        id="direccion"
+        class="form-control"
+        [(ngModel)]="usuario.Direccion"
+        name="direccion"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="fechaNac">Fecha de nacimiento</label>
+      <input
+        type="date"
+        id="fechaNac"
+        class="form-control"
+        [(ngModel)]="usuario.FechaNac"
+        name="fechaNac"
+        required>
+    </div>
+    
+    <div class="form-group">
+      <label for="fechaIngreso">Fecha de ingreso</label>
+      <input
+        type="date"
+        id="fechaIngreso"
+        class="form-control"
+        [(ngModel)]="usuario.FechaIngreso"
+        name="fechaIngreso"
+        
+        >
+    </div>
+    
+    <!-- Campo para Admin -->
+    <div class="form-group">
+      <label for="tipoAdmin">Tipo de Administrador</label>
+      <select id="tipoAdmin"
+              class="form-control"
+              [(ngModel)]="admin.TipoAdmin"
+              name="tipoAdmin"
+              required>
+        <option value="Administrador tipo 1">Administrador tipo 1</option>
+        <option value="Administrador tipo 2">Administrador tipo 2</option>
+        <option value="Instructor de vuelo">Instructor de vuelo</option>
+      </select>
+    </div>
+    
+    <button type="submit" class="btn btn-primary" [disabled]="!adminForm.form.valid">
+      Guardar
+    </button>
+  </form>
+</div>
