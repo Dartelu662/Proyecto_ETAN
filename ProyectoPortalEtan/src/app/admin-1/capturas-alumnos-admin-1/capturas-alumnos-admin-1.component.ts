@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import Usuario from '../../interfaces/usuario.interface';
+import alumno from '../../interfaces/alumno.interface';
+import { UsuarioService } from '../../services/usuario.service';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule
+import { AlumnoService } from '../../services/alumno.service';
+import Auth from '../../interfaces/auth.interface';
+
 
 @Component({
   selector: 'app-capturas-alumnos-admin-1',
@@ -13,9 +19,13 @@ import { FormsModule } from '@angular/forms'; // Importa FormsModule
   styleUrls: ['./capturas-alumnos-admin-1.component.scss']
 })
 export class CapturasAlumnosAdmin1Component {
-  alumno = {
-    usuario: {
+
+constructor ( private AlumnoService: AlumnoService) {}
+
+  // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el admin
+   usuario: Usuario = {
       UserName: '',
+      TipoUsuario: 'Alumno',
       Nombres: '',
       ApellidoP: '',
       ApellidoM: '',
@@ -24,18 +34,39 @@ export class CapturasAlumnosAdmin1Component {
       Direccion: '',
       FechaNac: '',
       FechaIngreso: '',
-      Password: ''
-    },
-    Matricula: '',
+      Activo: true
+    }
+    
+    alumno: alumno = {
     PermisoFormacion: '',
-    FechaFinPF: '',
-    Activo: true
-  };
+    FechaFinPF: ''
+  }
 
-     // Define el método onSubmit aquí
-  onSubmit() {
-    // Lógica para manejar el formulario cuando se envíe
-    console.log('Alumno guardado:', this.alumno);
+    auth: Auth = {
+      Email: '',
+      Password: ''
+  }
+  
+
+  ngOnInit(): void {}
+
+  onSubmit(): void {
+
+    this.auth.Email = this.usuario.Email
+    
+    this.AlumnoService.AddAlumno(this.alumno, this.usuario)
+      .then((result) => {
+        if (result === null) {
+          alert('La MATRICULA ya existe.');
+        } else {
+          alert('Usuario Alumno creado con exito');
+          console.log('Usuario creado:', result);
+        }
+      })
+      .catch((error) => { 
+        console.error('Error al crear el usuario:', error);
+        alert(error);
+        })
   }
   }
 

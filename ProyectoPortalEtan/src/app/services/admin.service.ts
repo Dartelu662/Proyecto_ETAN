@@ -7,7 +7,7 @@ import { UsuarioService } from './usuario.service';
 @Injectable({
   providedIn: 'root'
 })
-export class Admin1Service {
+export class AdminService {
 
   private firestore = inject(Firestore); // Usa inyección correcta
 
@@ -16,23 +16,15 @@ export class Admin1Service {
   async AddAdmin(admin: Admin, usuario: Usuario) {
     // 1️⃣ Verificar si el usuario ya existe
     let usuarioCreado = await this.usuarioService.getUsuarioByUserName(usuario.UserName);
-    debugger;
     if (!usuarioCreado) {
       // 2️⃣ Crear el usuario si no existe
       await this.usuarioService.AddUsuario(usuario);
-
-      // 3️⃣ Obtener el usuario recién creado
-      usuarioCreado = await this.usuarioService.getUsuarioByUserName(usuario.UserName);
-
-      if (!usuarioCreado) {
-        throw new Error('Error al crear el usuario.');
-      }
     } else {
     throw new Error('Usuario ya existente');
     }
 
     // 4️⃣ Asignar el ID del usuario al admin
-    admin.Username = usuarioCreado.UserName; // Asegúrate de que el campo sea correcto
+    admin.Username = usuario.UserName; // Asegúrate de que el campo sea correcto
 
     // 5️⃣ Guardar el admin en Firestore
     const AdminRef = collection(this.firestore, 'Admin');
