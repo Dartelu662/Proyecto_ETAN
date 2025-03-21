@@ -20,7 +20,6 @@ export class UsuarioService {
   if (existingUser) {
     throw new Error('Usuario ya existente');
   }
-  this._auth.createUserWithEmailAndPassword(usuario.Email, usuario.Password);
   return await addDoc(UsuarioRef, usuario);
   }
 
