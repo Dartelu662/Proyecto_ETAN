@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, query, where, getDocs } from '@angular/fire/firestore';
 import Usuario from '../interfaces/usuario.interface';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,30 +9,33 @@ import { Observable } from 'rxjs';
 })
 export class UsuarioService {
 
-  constructor(private firestore:Firestore) { }
+  constructor(private _firestore:Firestore, private _auth:AngularFireAuth) { }
+
+  Autentification(userName:string, password:string) {
+  }
 
   async AddUsuario(usuario:Usuario) {
-    const UsuarioRef = collection(this.firestore, 'Usuarios');
+    const UsuarioRef = collection(this._firestore, 'Usuarios');
     const existingUser = await this.getUsuarioByUserName(usuario.UserName)
-    debugger;
   if (existingUser) {
     throw new Error('Usuario ya existente');
   }
+  this._auth.createUserWithEmailAndPassword(usuario.Email, usuario.Password);
   return await addDoc(UsuarioRef, usuario);
   }
 
   getUsuarios(): Observable<Usuario[]> {
-    const usuarioRef = collection(this.firestore, 'Usuarios');
+    const usuarioRef = collection(this._firestore, 'Usuarios');
     return collectionData(usuarioRef, { idField: 'id' }) as Observable<Usuario[]>;
   }
 
   deleteUsuario(id: string) {
-    const usuarioDocRef = doc(this.firestore, `Usuarios/${id}`);
+    const usuarioDocRef = doc(this._firestore, `Usuarios/${id}`);
     return deleteDoc(usuarioDocRef);
   }
 
   async getUsuarioByUserName(userName: string): Promise<Usuario | null> {
-    const usuarioRef = collection(this.firestore, 'Usuarios');
+    const usuarioRef = collection(this._firestore, 'Usuarios');
     const q = query(usuarioRef, where('UserName', '==', userName));
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {

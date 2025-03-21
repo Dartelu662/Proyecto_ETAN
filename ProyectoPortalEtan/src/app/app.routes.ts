@@ -23,6 +23,7 @@ import { CapturasAdministrativosAdmin1Component } from './admin-1/capturas-admin
 import { HorasVueloAdmin2Component } from './admin-2/horas-vuelo-admin-2/horas-vuelo-admin-2.component';
 import { PagosAdmin2Component } from './admin-2/pagos-admin-2/pagos-admin-2.component';
 import path from 'path';
+import { Pagina404Component } from './pagina404/pagina404.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

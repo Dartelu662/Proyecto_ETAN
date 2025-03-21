@@ -8,6 +8,9 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 
+
+import { withInMemoryScrolling } from '@angular/router';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection(
@@ -34,4 +37,4 @@ export const appConfig: ApplicationConfig = {
   ),
   provideHttpClient()
 ]
-};
+}
