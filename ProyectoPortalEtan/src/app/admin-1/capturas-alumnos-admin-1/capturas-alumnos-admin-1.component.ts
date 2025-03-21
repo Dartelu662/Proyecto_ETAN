@@ -64,7 +64,7 @@ constructor ( private AlumnoService: AlumnoService) {}
         }
       })
       .catch((error) => { 
-        console.error('Error al crear el usuario:', error);
+        console.error('Error al crear el Alumno:', error);
         alert(error);
         })
   }

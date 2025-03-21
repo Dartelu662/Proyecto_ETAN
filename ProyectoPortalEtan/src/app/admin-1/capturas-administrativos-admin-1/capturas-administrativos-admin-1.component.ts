@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../services/admin.service';
 import Auth from '../../interfaces/auth.interface';
+import { AuthentificationService } from '../../services/authentification.service';
 
 @Component({
   selector: 'app-capturas-administrativos-admin-1',
@@ -58,9 +59,9 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
     } if (this.admin.TipoAdmin === "Administrador tipo 3") {
       this.admin.IdAdmin = 3;
     }
-
+    debugger;
     this.auth.Email=this.usuario.Email
-
+    
     this.adminService.AddAdmin(this.admin, this.usuario)
       .then((result) => {
         if (result === null) {

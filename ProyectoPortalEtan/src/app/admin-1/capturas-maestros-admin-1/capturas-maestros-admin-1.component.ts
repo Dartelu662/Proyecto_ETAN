@@ -1,24 +1,13 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import Usuario from '../../interfaces/usuario.interface';
+import Maestro from '../../interfaces/maestro.interface';
+import { UsuarioService } from '../../services/usuario.service';
 import { FormsModule } from '@angular/forms';
-
-interface Usuario {
-  UserName: string;
-  Nombres: string;
-  ApellidoP: string;
-  ApellidoM: string;
-  Email: string;
-  Celular: string;
-  Direccion: string;
-  FechaNac: string;
-  FechaIngreso: string;
-  Password: string;
-}
-
-interface Licencia {
-  TipoLicenciasId: NonNullable<number>;
-  FechaFin: string;
-}
+import { CommonModule } from '@angular/common';
+import { AdminService } from '../../services/admin.service';
+import Auth from '../../interfaces/auth.interface';
+import { MaestroService } from '../../services/maestro.service';
+import licencia from '../../interfaces/licencia.interface';
 
 @Component({
   selector: 'app-capturas-maestros-admin-1',
@@ -28,12 +17,14 @@ interface Licencia {
     CommonModule
   ],
   templateUrl: './capturas-maestros-admin-1.component.html',
-  styleUrl: './capturas-maestros-admin-1.component.scss'
+  styleUrls: ['./capturas-maestros-admin-1.component.scss']
 })
-export class CapturasMaestrosAdmin1Component {
-  admin = {
-    usuario: <Usuario>{
-      UserName: '',
+export class CapturasMaestrosAdmin1Component implements OnInit{
+
+   constructor (private maestroService:MaestroService, private cdr: ChangeDetectorRef){ }
+ 
+   
+    maestro: Maestro = {
       Nombres: '',
       ApellidoP: '',
       ApellidoM: '',
@@ -42,40 +33,67 @@ export class CapturasMaestrosAdmin1Component {
       Direccion: '',
       FechaNac: '',
       FechaIngreso: '',
-      Password: ''
-    },
-    licencias: [] as Licencia[] // <--- Se inicializa como un array vacío con tipado correcto
-  };
+      TipoLicencia: '',
+      Activo: true
+     }
 
-  licencia: Licencia = {
-    TipoLicenciasId: 1, // <--- Se asigna un valor por defecto válido
-    FechaFin: ''
-  };
-
-  tiposLicencia = [
-    { TipoLicenciasId: 1, TipoLicencia: 'Piloto Comercial' },
-    { TipoLicenciasId: 2, TipoLicencia: 'Piloto Privado' },
-    { TipoLicenciasId: 3, TipoLicencia: 'Instructor de Vuelo' }
+  tiposLicencia: licencia[] = [
+    { TipoLicenciasId: 1, TipoLicencia: 'Piloto Comercial', fechaFin: ''},
+    { TipoLicenciasId: 2, TipoLicencia: 'Piloto Privado', fechaFin: '' },
+    { TipoLicenciasId: 3, TipoLicencia: 'Instructor de Vuelo', fechaFin: ''}
   ];
 
-  agregarLicencia() {
-    if (this.licencia.TipoLicenciasId !== null && this.licencia.FechaFin) {
-      this.admin.licencias.push({ ...this.licencia });
+  selectedLicencias: licencia[] = [];
+  auth: Auth = {
+    Email: '',
+    Password: ''
+  };
 
-      // Resetear el formulario de licencia
-      this.licencia = {
-        TipoLicenciasId: 1, // <--- Se asegura que siempre tenga un número válido
-        FechaFin: ''
-      };
-    }
+  onSubmit() {
+    // Aquí puedes procesar la información, por ejemplo:
+    console.log('Licencias seleccionadas: ', this.selectedLicencias);
+  }
+
+  ngOnInit(): void {
+    
+    console.log(this.selectedLicencias)
+  }
+
+  agregarLicencia(TipoLic: HTMLSelectElement, fechaVen: HTMLInputElement) {
+    
+    debugger;
+    const valor = TipoLic.value;
+
+    const _TipoLicenciasId = parseInt(valor);
+    const _licenciaEncontrada = this.tiposLicencia.find(x => x.TipoLicenciasId === _TipoLicenciasId)?.TipoLicencia;
+    
+    const nuevaLicencia: licencia = {
+      TipoLicenciasId: _TipoLicenciasId,
+      TipoLicencia: _licenciaEncontrada || '',
+      fechaFin: fechaVen.value
+    };
+
+    if(nuevaLicencia.TipoLicencia !== '' &&
+      nuevaLicencia.fechaFin !== '' &&
+      nuevaLicencia.TipoLicenciasId ){
+        if(this.selectedLicencias.find(i => i.TipoLicenciasId === nuevaLicencia.TipoLicenciasId))
+        {
+          this.selectedLicencias = this.selectedLicencias.filter(i => i.TipoLicenciasId !== nuevaLicencia.TipoLicenciasId);
+        }
+        this.selectedLicencias.push(nuevaLicencia);
+      } 
+    this.ngOnInit();
   }
 
   obtenerNombreLicencia(id: number) {
-    const licencia = this.tiposLicencia.find(l => l.TipoLicenciasId === id);
-    return licencia ? licencia.TipoLicencia : 'Desconocido';
+    const lic = this.tiposLicencia.find(l => l.TipoLicenciasId === id);
+    return lic?.TipoLicencia;
   }
 
-  onSubmit() {
-    console.log('Maestro / Instructor guardado:', this.admin);
-  }
 }
+
+   
+
+
+
+

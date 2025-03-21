@@ -10,15 +10,17 @@ import { UsuarioService } from './usuario.service';
 export class AlumnoService {
 
   private firestore = inject(Firestore); // Usa inyección correcta
-
-  constructor(private usuarioService: UsuarioService) { }
+  
+  constructor(private usuarioservice: UsuarioService) { }
 
   async AddAlumno(alumno: Alumno, usuario: Usuario) {
     // 1️⃣ Verificar si el usuario ya existe
-    let usuarioCreado = await this.usuarioService.getUsuarioByUserName(usuario.UserName);
+    
+    let usuarioCreado = await this.usuarioservice.getUsuarioByUserName(usuario.UserName);
     if (!usuarioCreado) {
+      
       // 2️⃣ Crear el usuario si no existe
-      await this.usuarioService.AddUsuario(usuario);
+      await this.usuarioservice.AddUsuario(usuario);
     } else {
     throw new Error('Usuario ya existente');
     }

@@ -2,89 +2,98 @@
   <h2>Captura de Maestros / Instructores</h2>
 
   <form (ngSubmit)="onSubmit()" #adminForm="ngForm">
-      <!-- Datos del usuario -->
-      <div class="form-group">
-          <label for="userName">Nombre de usuario</label>
-          <input type="text" id="userName" class="form-control" [(ngModel)]="admin.usuario.UserName" name="userName" required>
+      <!-- Datos del maestro -->
+      <!-- <div class="form-group">
+          <label for="userName">Nombre de maestro</label>
+          <input type="text" id="userName" class="form-control" [(ngModel)]="maestro.UserName" name="userName" required>
       </div>
 
       <div class="form-group">
           <label for="password">Contraseña</label>
-          <input type="password" id="password" class="form-control" [(ngModel)]="admin.usuario.Password" name="password" required>
-      </div>
-<br>
+          <input type="password" id="password" class="form-control" [(ngModel)]="auth.Password" name="password" required>
+      </div> -->
       <div class="form-group">
           <label for="nombres">Nombres</label>
-          <input type="text" id="nombres" class="form-control" [(ngModel)]="admin.usuario.Nombres" name="nombres" required>
+          <input type="text" id="nombres" class="form-control" [(ngModel)]="maestro.Nombres" name="nombres" required>
       </div>
 
       <div class="form-group">
           <label for="apellidoP">Apellido Paterno</label>
-          <input type="text" id="apellidoP" class="form-control" [(ngModel)]="admin.usuario.ApellidoP" name="apellidoP" required>
+          <input type="text" id="apellidoP" class="form-control" [(ngModel)]="maestro.ApellidoP" name="apellidoP" required>
       </div>
 
       <div class="form-group">
           <label for="apellidoM">Apellido Materno</label>
-          <input type="text" id="apellidoM" class="form-control" [(ngModel)]="admin.usuario.ApellidoM" name="apellidoM" required>
+          <input type="text" id="apellidoM" class="form-control" [(ngModel)]="maestro.ApellidoM" name="apellidoM" required>
       </div>
 
       <div class="form-group">
           <label for="email">Correo electrónico</label>
-          <input type="email" id="email" class="form-control" [(ngModel)]="admin.usuario.Email" name="email" required>
+          <input type="email" id="email" class="form-control" [(ngModel)]="maestro.Email" name="email" required>
       </div>
 
       <div class="form-group">
           <label for="celular">Celular</label>
-          <input type="text" id="celular" class="form-control" [(ngModel)]="admin.usuario.Celular" name="celular" required>
+          <input type="text" id="celular" class="form-control" [(ngModel)]="maestro.Celular" name="celular" required>
       </div>
 
       <div class="form-group">
           <label for="direccion">Dirección</label>
-          <input type="text" id="direccion" class="form-control" [(ngModel)]="admin.usuario.Direccion" name="direccion">
+          <input type="text" id="direccion" class="form-control" [(ngModel)]="maestro.Direccion" name="direccion">
       </div>
 
       <div class="form-group">
           <label for="fechaNac">Fecha de nacimiento</label>
-          <input type="date" id="fechaNac" class="form-control" [(ngModel)]="admin.usuario.FechaNac" name="fechaNac" required>
+          <input type="date" id="fechaNac" class="form-control" [(ngModel)]="maestro.FechaNac" name="fechaNac" required>
       </div>
-<br>
+
       <div class="form-group">
           <label for="fechaIngreso">Fecha de ingreso</label>
-          <input type="date" id="fechaIngreso" class="form-control" [(ngModel)]="admin.usuario.FechaIngreso" name="fechaIngreso" required>
+          <input type="date" id="fechaIngreso" class="form-control" [(ngModel)]="maestro.FechaIngreso" name="fechaIngreso" required>
       </div>
-
       <!-- Licencias -->
-      <h3>Agregar Licencias</h3>
-      <div class="form-group">
-          <label for="tipoLicencia">Tipo de Licencia</label>
-          <select id="tipoLicencia" class="form-control" [(ngModel)]="licencia.TipoLicenciasId" name="tipoLicencia" required>
-              <option *ngFor="let tipo of tiposLicencia" [value]="tipo.TipoLicenciasId">{{ tipo.TipoLicencia }}</option>
-          </select>
-      </div>
+      <br>
+    <div class="form-group">
+        <h3>Agregar Licencias</h3>
+      <label for="TipoLicencias">Tipo de Licencia</label>
+      <select #TipoLic
+              class="form-control"
+              name="TipoLicencias"
+              multiple
+              required>
+        <option *ngFor="let lic of tiposLicencia" [value]="lic.TipoLicenciasId">
+          {{ lic.TipoLicencia }}
+        </option>
+      </select>
 
       <div class="form-group">
-          <label for="fechaVencimiento">Fecha de Vencimiento</label>
-          <input type="date" id="fechaVencimiento" class="form-control" [(ngModel)]="licencia.FechaFin" name="fechaVencimiento" required>
-      </div>
+        <label for="fechaVencimiento">Fecha de Vencimiento</label>
+        <input type="date" #fechaVen class="form-control" name="fechaVencimiento" required>
 
-      <button type="button" class="btn btn-success" (click)="agregarLicencia()">Agregar Licencia</button>
+        <button type="button" class="btn btn-success" (click)="agregarLicencia(TipoLic, fechaVen)">Agregar Licencia</button>
+    </div>  
+      <br>
+    </div>
 
       <!-- Tabla de Licencias -->
-      <h3>Licencias Agregadas</h3>
-      <table class="table">
-          <thead>
-              <tr>
-                  <th>Tipo de Licencia</th>
-                  <th>Fecha de Vencimiento</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let lic of admin.licencias">
-                  <td>{{ obtenerNombreLicencia(lic.TipoLicenciasId!) }}</td>
-                  <td>{{ lic.FechaFin }}</td>
-              </tr>
-          </tbody>
+       <div class="table">
+        <h3>Licencias Agregadas</h3>
+      <table >
+        <thead>
+          <tr>
+            <th>Tipo de Licencia</th>
+            <th>Fecha de Vencimiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let lic of selectedLicencias">
+            <td>{{ lic.TipoLicencia }}</td>
+            <td>{{ lic.fechaFin }}</td>
+          </tr>
+        </tbody>
       </table>
+       </div>
+      
 
       <button type="submit" class="btn btn-primary" [disabled]="!adminForm.form.valid">Guardar</button>
   </form>

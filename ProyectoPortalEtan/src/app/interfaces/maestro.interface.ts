@@ -1,6 +1,4 @@
-export default interface Usuario{
-    UserName: string;
-    TipoUsuario: string;
+export default interface Maestro{
     Nombres: string;
     ApellidoP: string;
     ApellidoM: string;
@@ -10,8 +8,6 @@ export default interface Usuario{
     Direccion: string;
     FechaNac: string;
     FechaIngreso: string;
+    TipoLicencia: string;
     Activo: boolean;
 }
-
-
-

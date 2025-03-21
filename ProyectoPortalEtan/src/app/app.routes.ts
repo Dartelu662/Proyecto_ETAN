@@ -12,18 +12,14 @@ import { DatosGeneralesMaestroComponent } from './maestro/datos-generales-maestr
 import { CalificacionesMaestroComponent } from './maestro/calificaciones-maestro/calificaciones-maestro.component';
 import { Admin1Component } from './admin-1/admin-1.component';
 import { Admin2Component } from './admin-2/admin-2.component';
-import { Admin3Component } from './admin-3/admin-3.component';
 import { InicioAdmin1Component } from './admin-1/inicio-admin-1/inicio-admin-1.component';
 import { DatosGeneralesAdmin1Component } from './admin-1/datos-generales-admin-1/datos-generales-admin-1.component';
 import { InicioAdmin2Component } from './admin-2/inicio-admin-2/inicio-admin-2.component';
 import { DatosGeneralesAdmin2Component } from './admin-2/datos-generales-admin-2/datos-generales-admin-2.component';
-import { InicioAdmin3Component } from './admin-3/inicio-admin-3/inicio-admin-3.component';
-import { DatosGeneralesAdmin3Component } from './admin-3/datos-generales-admin-3/datos-generales-admin-3.component';
 import { CapturasEscolarAdmin1Component } from './admin-1/capturas-escolar-admin-1/capturas-escolar-admin-1.component';
 import { CapturasAvionesAdmin1Component } from './admin-1/capturas-aviones-admin-1/capturas-aviones-admin-1.component';
 import { CapturasCursosAdmin1Component } from './admin-1/capturas-cursos-admin-1/capturas-cursos-admin-1.component';
 import { CapturasAdministrativosAdmin1Component } from './admin-1/capturas-administrativos-admin-1/capturas-administrativos-admin-1.component';
-import { HorasVueloAdmin3Component } from './admin-3/horas-vuelo-admin-3/horas-vuelo-admin-3.component';
 import { HorasVueloAdmin2Component } from './admin-2/horas-vuelo-admin-2/horas-vuelo-admin-2.component';
 import { PagosAdmin2Component } from './admin-2/pagos-admin-2/pagos-admin-2.component';
 import path from 'path';
@@ -82,17 +78,6 @@ export const routes: Routes = [
       { path: 'datos-generales', loadComponent: () => import('./admin-2/datos-generales-admin-2/datos-generales-admin-2.component').then(m => m.DatosGeneralesAdmin2Component) },
       { path: 'horas-vuelo', loadComponent: () => import('./admin-2/horas-vuelo-admin-2/horas-vuelo-admin-2.component').then(m => m.HorasVueloAdmin2Component)},
       { path: 'pagos', loadComponent: () => import('./admin-2/pagos-admin-2/pagos-admin-2.component').then(m => m.PagosAdmin2Component)},
-    ]
-  },
-
-  {
-    path: 'admin-3',
-    loadComponent: () => import('./admin-3/admin-3.component').then(m => m.Admin3Component),
-    children: [
-      { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-      { path: 'inicio', loadComponent: () => import('./admin-3/inicio-admin-3/inicio-admin-3.component').then(m => m.InicioAdmin3Component) },
-      { path: 'datos-generales', loadComponent: () => import('./admin-3/datos-generales-admin-3/datos-generales-admin-3.component').then(m => m.DatosGeneralesAdmin3Component) },
-      { path: 'horas-vuelo', loadComponent: () => import('./admin-3/horas-vuelo-admin-3/horas-vuelo-admin-3.component').then(m => m.HorasVueloAdmin3Component) },
     ]
   },
 

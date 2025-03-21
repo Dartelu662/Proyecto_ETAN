@@ -193,6 +193,7 @@ $transition: all 0.3s ease;
         tr {
           transition: $transition;
           
+          
           &:nth-child(even) {
             background-color: rgba($primary-light, 0.2);
           }
