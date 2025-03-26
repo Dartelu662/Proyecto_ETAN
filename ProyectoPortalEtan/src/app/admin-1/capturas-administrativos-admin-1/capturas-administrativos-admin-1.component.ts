@@ -60,7 +60,7 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
     }
     this.auth.Email=this.usuario.Email
     debugger;
-    this.adminService.AddAdmin(this.admin, this.usuario)
+    this.adminService.AddAdmin(this.admin, this.usuario, this.auth)
       .then((result) => {
         if (result === null) {
           alert('El nombre de usuario ya existe.');
