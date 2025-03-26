@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "target": "portaletan-34386",
     "public": "dist/proyecto-portal-etan/browser",
     "ignore": [
       "firebase.json",
@@ -9,16 +8,13 @@
     ],
     "rewrites": [
       {
+        "source": "/index.html",
+        "destination": "/index.csr.html"
+      },
+      {
         "source": "**",
         "destination": "/index.csr.html"
       }
     ]
-  },
-  "database": {
-    "rules": "database.rules.json"
-  },
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
   }
 }

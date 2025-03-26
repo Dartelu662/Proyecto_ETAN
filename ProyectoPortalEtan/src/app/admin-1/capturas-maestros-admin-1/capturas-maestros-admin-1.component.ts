@@ -1,13 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import Usuario from '../../interfaces/usuario.interface';
 import Maestro from '../../interfaces/maestro.interface';
-import { UsuarioService } from '../../services/usuario.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AdminService } from '../../services/admin.service';
 import Auth from '../../interfaces/auth.interface';
-import { MaestroService } from '../../services/maestro.service';
 import licencia from '../../interfaces/licencia.interface';
+import { MaestroService } from '../../services/maestro.service';
+import { AdminService } from '../../services/admin.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-capturas-maestros-admin-1',
@@ -21,7 +21,7 @@ import licencia from '../../interfaces/licencia.interface';
 })
 export class CapturasMaestrosAdmin1Component implements OnInit{
 
-   constructor (private maestroService:MaestroService, private cdr: ChangeDetectorRef){ }
+   constructor (){ }
  
    
     maestro: Maestro = {

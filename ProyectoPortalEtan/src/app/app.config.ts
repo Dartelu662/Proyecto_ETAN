@@ -3,13 +3,10 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideHttpClient } from '@angular/common/http';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-
-
-import { withInMemoryScrolling } from '@angular/router';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,21 +17,18 @@ export const appConfig: ApplicationConfig = {
     ), 
     provideRouter(routes), 
     provideClientHydration(withEventReplay()), 
-    provideFirebaseApp(() => initializeApp(
-      { 
-        apiKey: "AIzaSyAuVH2rIod-p2YKbHWGML0WVBHqYpC5pjc",
-        authDomain: "portal-etan.firebaseapp.com",
-        projectId: "portal-etan",
-        storageBucket: "portal-etan.firebasestorage.app",
-        messagingSenderId: "832244242801",
-        appId: "1:832244242801:web:f80fb71f331a9983e67ed0"
-      }
-    )
-  ), 
-    provideFirestore(() => getFirestore()
-  ),
-  provideAuth(() => getAuth()
-  ),
-  provideHttpClient()
+  provideHttpClient(), 
+  provideFirebaseApp(() => initializeApp(
+    { 
+      projectId: "portal-escuela-etan", 
+      appId: "1:525613967318:web:0a2c544cf9e08702f1a677", 
+      storageBucket: "portal-escuela-etan.firebasestorage.app", 
+      apiKey: "AIzaSyBy-s8T8A77_02AUNaYPewVSEYT_KmOzCk", 
+      authDomain: "portal-escuela-etan.firebaseapp.com", 
+      messagingSenderId: "525613967318" 
+    }
+  )), 
+  provideAuth(() => getAuth()), 
+  provideFirestore(() => getFirestore()), provideFirebaseApp(() => initializeApp({ projectId: "portal-escuela-etan", appId: "1:525613967318:web:0a2c544cf9e08702f1a677", storageBucket: "portal-escuela-etan.firebasestorage.app", apiKey: "AIzaSyBy-s8T8A77_02AUNaYPewVSEYT_KmOzCk", authDomain: "portal-escuela-etan.firebaseapp.com", messagingSenderId: "525613967318" })), provideAuth(() => getAuth()), provideFirestore(() => getFirestore())
 ]
 }

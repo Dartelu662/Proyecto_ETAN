@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class UsuarioService {
 
-  constructor(private _firestore:Firestore, private _auth:AngularFireAuth) { }
+  constructor(private _firestore:Firestore) { }
 
   Autentification(userName:string, password:string) {
   }

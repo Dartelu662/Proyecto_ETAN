@@ -5,7 +5,6 @@ export default interface Usuario{
     ApellidoP: string;
     ApellidoM: string;
     Email: string;
-    Correo?: string;
     Celular: string;
     Direccion: string;
     FechaNac: string;

@@ -1,24 +1,5 @@
 {
   "projects": {
-    "default": "portaletan-34386"
-  },
-  "targets": {
-    "portaletan-34386": {
-      "hosting": {
-        "portaletan-34386": [
-          "portaletan-34386"
-        ]
-      }
-    }
-  },
-  "etags": {},
-  "target": {
-    "portaletan-34386": {
-      "hosting": {
-        "portaletan-34386": [
-          "portaletan-34386"
-        ]
-      }
-    }
+    "default": "portal-escuela-etan"
   }
 }
