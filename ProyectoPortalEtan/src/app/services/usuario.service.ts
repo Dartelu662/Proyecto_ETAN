@@ -12,7 +12,7 @@ export class UsuarioService {
   constructor(private _firestore:Firestore) { }
 
   Autentification(userName:string, password:string) {
-    this._auth.createUserWithEmailAndPassword(userName, password);
+    //this._auth.createUserWithEmailAndPassword(userName, password);
   }
 
   async AddUsuario(usuario:Usuario) {

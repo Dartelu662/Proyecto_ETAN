@@ -26,6 +26,7 @@ $transition: all 0.3s ease;
   background-color: $primary-color;
   color: $white;
   border: none;
+  margin-right: 0.5rem;  // Espacio entre botones
   border-radius: $border-radius / 2;
   cursor: pointer;
   font-weight: 500;

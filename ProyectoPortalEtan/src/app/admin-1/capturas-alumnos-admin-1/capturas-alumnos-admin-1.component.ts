@@ -7,6 +7,7 @@ import Auth from '../../interfaces/auth.interface';
 import { AlumnoService } from '../../services/alumno.service';
 import { UsuarioService } from '../../services/usuario.service';
 import plan from '../../interfaces/plan.interface';
+import curso from '../../interfaces/curso.interface';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class CapturasAlumnosAdmin1Component {
 
 constructor ( private AlumnoService: AlumnoService) {}
 
-  // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el admin
+  // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el alumno
    usuario: Usuario = {
       UserName: '',
       TipoUsuario: 'Alumno',
@@ -55,6 +56,14 @@ constructor ( private AlumnoService: AlumnoService) {}
       FechaFin: ''
   }
 
+  
+    curso: curso = {
+      CursoId: '',
+      PlanId: '',
+      Nombre: '',
+      FechaCursoIni: '',
+      FechaCursoFin: ''
+  }
   
 
   ngOnInit(): void {}

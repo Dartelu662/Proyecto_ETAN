@@ -1,86 +1,89 @@
 <div class="container">
-    <h2>Captura de Alumnos</h2>
-  
-    <form (ngSubmit)="onSubmit()" #alumnoForm="ngForm">
-      <div class="form-group">
-        <label for="matricula">Matrícula</label>
-        <input type="text" id="matricula" class="form-control" [(ngModel)]="usuario.UserName" name="matricula" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" class="form-control" [(ngModel)]="auth.Password" name="password" required>
-      </div>
-  
-<br>
+  <h2>Captura de Alumnos</h2>
 
-      <div class="form-group">
-        <label for="nombres">Nombres</label>
-        <input type="text" id="nombres" class="form-control" [(ngModel)]="usuario.Nombres" name="nombres" required>
+  <form (ngSubmit)="onSubmit()" #alumnoForm="ngForm">
+      <!-- Línea 1: Matrícula y Contraseña -->
+      <div class="form-group linea1">
+          <label for="matricula">Matrícula</label>
+          <input type="text" id="matricula" class="form-control" [(ngModel)]="usuario.UserName" name="matricula" required>
       </div>
-  
-      <div class="form-group">
-        <label for="apellidoP">Apellido Paterno</label>
-        <input type="text" id="apellidoP" class="form-control" [(ngModel)]="usuario.ApellidoP" name="apellidoP" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="apellidoM">Apellido Materno</label>
-        <input type="text" id="apellidoM" class="form-control" [(ngModel)]="usuario.ApellidoM" name="apellidoM" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="email">Correo electrónico</label>
-        <input type="email" id="email" class="form-control" [(ngModel)]="usuario.Email" name="email" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="celular">Celular</label>
-        <input type="text" id="celular" class="form-control" [(ngModel)]="usuario.Celular" name="celular" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="direccion">Dirección</label>
-        <input type="text" id="direccion" class="form-control" [(ngModel)]="usuario.Direccion" name="direccion">
-      </div>
-  
-      <div class="form-group">
-        <label for="fechaNac">Fecha de nacimiento</label>
-        <input type="date" id="fechaNac" class="form-control" [(ngModel)]="usuario.FechaNac" name="fechaNac" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="fechaIngreso">Fecha de ingreso</label>
-        <input type="date" id="fechaIngreso" class="form-control" [(ngModel)]="usuario.FechaIngreso" name="fechaIngreso" required>
-      </div>
-      
-      <BR>
-      <br>
-      <div class="form-group">
-        <label for="permisoFormacion">Permiso de Formación</label>
-        <input type="text" id="permisoFormacion" class="form-control" [(ngModel)]="alumno.PermisoFormacion" name="permisoFormacion" required>
-      </div>
-  
-      <div class="form-group">
-        <label for="fechaFinPF">Fecha Fin Formación</label>
-        <input type="date" id="fechaFinPF" class="form-control" [(ngModel)]="alumno.FechaFinPF" name="fechaFinPF" required>
-      </div>
-  
-     <!-- Campo para Admin -->
-     <div class="form-group">
-      <label for="plan">Plan</label>
-      <select id="plan"
-              class="form-control"
-              [(ngModel)]="Plan.Plan"
-              name="plan"
-              required>
-        <option value="Plan 1">Plan 1</option>
-        <option value="Plan 2">Plan 2</option>
-      </select>
-    </div>
 
-      <button type="submit" class="btn btn-primary" [disabled]="!alumnoForm.form.valid">Guardar
-        </button>
-    </form>
-  </div>
-  
+      <div class="form-group linea1">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" class="form-control" [(ngModel)]="auth.Password" name="password" required>
+      </div>
+
+      <!-- Línea 2: Nombres, Apellido Paterno y Apellido Materno -->
+      <div class="form-group linea2">
+          <label for="nombres">Nombres</label>
+          <input type="text" id="nombres" class="form-control" [(ngModel)]="usuario.Nombres" name="nombres" required>
+      </div>
+
+      <div class="form-group linea2">
+          <label for="apellidoP">Apellido Paterno</label>
+          <input type="text" id="apellidoP" class="form-control" [(ngModel)]="usuario.ApellidoP" name="apellidoP" required>
+      </div>
+
+      <div class="form-group linea2">
+          <label for="apellidoM">Apellido Materno</label>
+          <input type="text" id="apellidoM" class="form-control" [(ngModel)]="usuario.ApellidoM" name="apellidoM" required>
+      </div>
+
+      <!-- Línea 3: Correo Electrónico, Celular y Dirección -->
+      <div class="form-group linea3">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" class="form-control" [(ngModel)]="usuario.Email" name="email" required>
+      </div>
+
+      <div class="form-group linea3">
+          <label for="celular">Celular</label>
+          <input type="text" id="celular" class="form-control" [(ngModel)]="usuario.Celular" name="celular" required>
+      </div>
+
+      <div class="form-group linea3">
+          <label for="direccion">Dirección</label>
+          <input type="text" id="direccion" class="form-control" [(ngModel)]="usuario.Direccion" name="direccion">
+      </div>
+
+      <!-- Línea 4: Fecha de Nacimiento, Fecha de Ingreso, Permiso Formación y Fecha Fin PF -->
+      <div class="form-group linea4">
+          <label for="fechaNac">Fecha de nacimiento</label>
+          <input type="date" id="fechaNac" class="form-control" [(ngModel)]="usuario.FechaNac" name="fechaNac" required>
+      </div>
+
+      <div class="form-group linea4">
+          <label for="fechaIngreso">Fecha de ingreso</label>
+          <input type="date" id="fechaIngreso" class="form-control" [(ngModel)]="usuario.FechaIngreso" name="fechaIngreso" required>
+      </div>
+
+      <div class="form-group linea4">
+          <label for="permisoFormacion">Permiso de Formación</label>
+          <input type="text" id="permisoFormacion" class="form-control" [(ngModel)]="alumno.PermisoFormacion" name="permisoFormacion" required>
+      </div>
+
+      <div class="form-group linea4">
+          <label for="fechaFinPF">Fecha Fin Formación</label>
+          <input type="date" id="fechaFinPF" class="form-control" [(ngModel)]="alumno.FechaFinPF" name="fechaFinPF" required>
+      </div>
+
+      <!-- Línea 5: Plan y Curso -->
+      <div class="form-group linea5">
+          <label for="plan">Plan</label>
+          <select id="plan" class="form-control" [(ngModel)]="Plan.Plan" name="plan" required>
+              <option value="Plan 1">Plan 1</option>
+              <option value="Plan 2">Plan 2</option>
+          </select>
+      </div>
+
+      <div class="form-group linea5">
+          <label for="Curso">Curso</label>
+          <select id="Curso" class="form-control" [(ngModel)]="curso.CursoId" name="Curso" required>
+              <option value="curso 1">Curso 1</option>
+              <option value="curso 2">Curso 2</option>
+          </select>
+      </div>
+
+      <!-- Botón de Guardar -->
+      <button type="submit" class="btn btn-primary" [disabled]="!alumnoForm.form.valid">Guardar</button>
+  </form>
+</div>
