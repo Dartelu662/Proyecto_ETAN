@@ -20,7 +20,8 @@ export class MaestroService {
     if (!usuarioCreado) {
       
       // 2️⃣ Crear el usuario si no existe
-      await this.usuarioservice.AddUsuario(usuario);
+      await this.usuarioservice.AddUsu
+      ario(usuario);
     } else {
     throw new Error('Usuario ya existente');
     }
