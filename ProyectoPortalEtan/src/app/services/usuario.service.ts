@@ -13,9 +13,6 @@ export class UsuarioService {
 
   constructor(private _firestore:Firestore, private _authService: AuthentificationService) { }
 
-  Autentification(userName:string, password:string) {
-  }
-
   async AddUsuario(usuario:Usuario, _auth: AUTH) {
     const UsuarioRef = collection(this._firestore, 'Usuarios');
     const existingUser = await this.getUsuarioByUserName(usuario.UserName)
