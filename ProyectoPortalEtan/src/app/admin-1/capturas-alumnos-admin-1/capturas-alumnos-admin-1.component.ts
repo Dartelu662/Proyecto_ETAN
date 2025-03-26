@@ -49,7 +49,7 @@ constructor ( private AlumnoService: AlumnoService) {}
   }
 
     Plan: plan = {
-      PlanId: '',
+      id: '',
       Plan: '',
       FechaIni: '', 
       FechaFin: ''

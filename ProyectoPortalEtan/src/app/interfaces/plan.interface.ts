@@ -1,6 +1,6 @@
 export default interface plan{
-    PlanId?: string;
+    id?: string;
     Plan: string;
     FechaIni: string;
-    FechaFin: String    
+    FechaFin?: String    
 }

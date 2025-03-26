@@ -11,22 +11,9 @@ export class MaestroService {
 
   private firestore = inject(Firestore); // Usa inyección correcta
   
-  constructor(private usuarioservice: UsuarioService) { }
+  constructor() { }
 
-  async AddMaestro(maestro: Maestro, usuario: Usuario) {
-    // 1️⃣ Verificar si el usuario ya existe
-    
-    let usuarioCreado = await this.usuarioservice.getUsuarioByUserName(usuario.UserName);
-    if (!usuarioCreado) {
-      
-      // 2️⃣ Crear el usuario si no existe
-      await this.usuarioservice.AddUsuario(usuario);
-    } else {
-    throw new Error('Usuario ya existente');
-    }
-
-
-    // 5️⃣ Guardar el maestro en Firestore
+  async AddMaestro(maestro: Maestro) {
     const MaestroRef = collection(this.firestore, 'Maestro');
     return await addDoc(MaestroRef, maestro);
   }
