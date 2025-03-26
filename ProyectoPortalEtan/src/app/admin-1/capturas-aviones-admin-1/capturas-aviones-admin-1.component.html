@@ -5,13 +5,13 @@
       <label for="registration_number">Número de Registro:</label>
       <input type="text" id="registration_number" formControlName="registration_number" required />
   
-      <label for="model">Modelo:</label>
+      <label for="model"> Modelo:</label>
       <input type="text" id="model" formControlName="model" required />
   
       <label for="manufacture_year">Año de Fabricación:</label>
       <input type="number" id="manufacture_year" formControlName="manufacture_year" />
   
-      <label for="last_maintenance_date">Última Mantenimiento:</label>
+      <label for="last_maintenance_date"> Última Fcha Mantenimiento:</label>
       <input type="date" id="last_maintenance_date" formControlName="last_maintenance_date" />
   
       <label for="status">Estado:</label>
@@ -20,6 +20,9 @@
         <option value="mantenimiento">Mantenimiento</option>
         <option value="inactivo">Inactivo</option>
       </select>
+
+      <label for="CostoHoraVuelo"> Costo Hora Vuelo:</label>
+      <input type="text" id="CostoHoraVuelo" formControlName="CostoHoraVuelo" />
   
       <button type="submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
       <button type="button" (click)="cancelarEdicion()" *ngIf="isEditing">Cancelar</button>

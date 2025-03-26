@@ -12,6 +12,7 @@ export class UsuarioService {
   constructor(private _firestore:Firestore) { }
 
   Autentification(userName:string, password:string) {
+    this._auth.createUserWithEmailAndPassword(userName, password);
   }
 
   async AddUsuario(usuario:Usuario) {
@@ -20,6 +21,7 @@ export class UsuarioService {
   if (existingUser) {
     throw new Error('Usuario ya existente');
   }
+  
   return await addDoc(UsuarioRef, usuario);
   }
 

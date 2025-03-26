@@ -9,6 +9,7 @@ interface Avion {
   model: string;
   manufacture_year?: number;
   last_maintenance_date?: string;
+  CostoHoraVuelo?: number;
   status: 'disponible' | 'mantenimiento' | 'inactivo';
 }
 
@@ -36,6 +37,7 @@ export class CapturasAvionesAdmin1Component {
       model: ['', Validators.required],
       manufacture_year: [null],
       last_maintenance_date: [''],
+      CostoHoraVuelo: [null],
       status: ['disponible', Validators.required],
     });
 

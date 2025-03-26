@@ -66,6 +66,19 @@
         <input type="date" id="fechaFinPF" class="form-control" [(ngModel)]="alumno.FechaFinPF" name="fechaFinPF" required>
       </div>
   
+     <!-- Campo para Admin -->
+     <div class="form-group">
+      <label for="plan">Plan</label>
+      <select id="plan"
+              class="form-control"
+              [(ngModel)]="Plan.Plan"
+              name="plan"
+              required>
+        <option value="Plan 1">Plan 1</option>
+        <option value="Plan 2">Plan 2</option>
+      </select>
+    </div>
+
       <button type="submit" class="btn btn-primary" [disabled]="!alumnoForm.form.valid">Guardar
         </button>
     </form>

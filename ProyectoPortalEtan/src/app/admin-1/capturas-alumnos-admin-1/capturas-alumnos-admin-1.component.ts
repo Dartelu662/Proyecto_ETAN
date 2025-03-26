@@ -6,6 +6,7 @@ import alumno from '../../interfaces/alumno.interface';
 import Auth from '../../interfaces/auth.interface';
 import { AlumnoService } from '../../services/alumno.service';
 import { UsuarioService } from '../../services/usuario.service';
+import plan from '../../interfaces/plan.interface';
 
 
 @Component({
@@ -20,7 +21,7 @@ import { UsuarioService } from '../../services/usuario.service';
 })
 export class CapturasAlumnosAdmin1Component {
 
-constructor ( /*private AlumnoService: AlumnoService*/) {}
+constructor ( private AlumnoService: AlumnoService) {}
 
   // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el admin
    usuario: Usuario = {
@@ -46,6 +47,14 @@ constructor ( /*private AlumnoService: AlumnoService*/) {}
       Email: '',
       Password: ''
   }
+
+    Plan: plan = {
+      PlanId: '',
+      Plan: '',
+      FechaIni: '', 
+      FechaFin: ''
+  }
+
   
 
   ngOnInit(): void {}
@@ -67,6 +76,21 @@ constructor ( /*private AlumnoService: AlumnoService*/) {}
     //     console.error('Error al crear el Alumno:', error);
     //     alert(error);
     //     })
+    this.Plan.Plan = this.Plan.Plan
+
+    this.AlumnoService.AddAlumno(this.alumno, this.usuario)
+      .then((result) => {
+        if (result === null) {
+          alert('La MATRICULA ya existe.');
+        } else {
+          alert('Usuario Alumno creado con exito');
+          console.log('Usuario creado:', result);
+        }
+      })
+      .catch((error) => { 
+        console.error('Error al crear el Alumno:', error);
+        alert(error);
+        })
   }
   }
 
