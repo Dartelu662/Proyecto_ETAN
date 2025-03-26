@@ -1,4 +1,5 @@
 export interface Calificacion {
+    id?: string;
     matricula?: string;
     plan: string;
     curso: string;

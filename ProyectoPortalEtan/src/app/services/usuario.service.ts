@@ -3,25 +3,23 @@ import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, query, w
 import Usuario from '../interfaces/usuario.interface';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
+import AUTH from '../interfaces/auth.interface';
+import { AuthentificationService } from './authentification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
 
-  constructor(private _firestore:Firestore) { }
+  constructor(private _firestore:Firestore, private _authService: AuthentificationService) { }
 
-  Autentification(userName:string, password:string) {
-    //this._auth.createUserWithEmailAndPassword(userName, password);
-  }
-
-  async AddUsuario(usuario:Usuario) {
+  async AddUsuario(usuario:Usuario, _auth: AUTH) {
     const UsuarioRef = collection(this._firestore, 'Usuarios');
     const existingUser = await this.getUsuarioByUserName(usuario.UserName)
   if (existingUser) {
     throw new Error('Usuario ya existente');
   }
-  
+  this._authService.registrer(_auth)
   return await addDoc(UsuarioRef, usuario);
   }
 

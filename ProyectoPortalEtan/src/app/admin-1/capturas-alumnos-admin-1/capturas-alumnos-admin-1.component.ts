@@ -5,7 +5,6 @@ import Usuario from '../../interfaces/usuario.interface';
 import alumno from '../../interfaces/alumno.interface';
 import Auth from '../../interfaces/auth.interface';
 import { AlumnoService } from '../../services/alumno.service';
-import { UsuarioService } from '../../services/usuario.service';
 import plan from '../../interfaces/plan.interface';
 import curso from '../../interfaces/curso.interface';
 
@@ -24,7 +23,7 @@ export class CapturasAlumnosAdmin1Component {
 
 constructor ( private AlumnoService: AlumnoService) {}
 
-  // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el alumno
+// Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el alumno
    usuario: Usuario = {
       UserName: '',
       TipoUsuario: 'Alumno',
@@ -50,20 +49,20 @@ constructor ( private AlumnoService: AlumnoService) {}
   }
 
     Plan: plan = {
-      PlanId: '',
+      id: '',
       Plan: '',
       FechaIni: '', 
       FechaFin: ''
   }
 
-  
-    curso: curso = {
-      CursoId: '',
-      PlanId: '',
-      Nombre: '',
-      FechaCursoIni: '',
-      FechaCursoFin: ''
-  }
+    
+  curso: curso = {
+    CursoId: '',
+    PlanId: '',
+    Nombre: '',
+    FechaCursoIni: '',
+    FechaCursoFin: ''
+}
   
 
   ngOnInit(): void {}
@@ -87,7 +86,7 @@ constructor ( private AlumnoService: AlumnoService) {}
     //     })
     this.Plan.Plan = this.Plan.Plan
 
-    this.AlumnoService.AddAlumno(this.alumno, this.usuario)
+    this.AlumnoService.AddAlumno(this.alumno, this.usuario, this.auth)
       .then((result) => {
         if (result === null) {
           alert('La MATRICULA ya existe.');

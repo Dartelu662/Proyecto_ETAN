@@ -1,8 +1,7 @@
 export default interface materia{
+    id?: string;
     PlanId?: string;
     CusoId?: string;
-    MateriaId?: string;
+    MaestroId?: string;
     Materia: String;
-    FechaIni: string;
-    FechaFin: String    
 }

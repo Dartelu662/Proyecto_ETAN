@@ -1,4 +1,5 @@
 export default interface Maestro{
+    id?: string;
     Nombres: string;
     ApellidoP: string;
     ApellidoM: string;
