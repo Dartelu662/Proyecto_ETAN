@@ -14,12 +14,12 @@ export class AdminService {
 
   constructor(private usuarioService: UsuarioService) { }
 
-  async AddAdmin(admin: Admin, usuario: Usuario, auth: AUTH) {
+  async AddAdmin(admin: Admin, usuario: Usuario) {
     // 1️⃣ Verificar si el usuario ya existe
     let usuarioCreado = await this.usuarioService.getUsuarioByUserName(usuario.UserName);
     if (!usuarioCreado) {
       // 2️⃣ Crear el usuario si no existe
-      await this.usuarioService.AddUsuario(usuario, auth);
+      await this.usuarioService.AddUsuario(usuario);
     } else {
     throw new Error('Usuario ya existente');
     }

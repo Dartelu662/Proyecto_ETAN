@@ -86,7 +86,7 @@ constructor ( private AlumnoService: AlumnoService) {}
     //     })
     this.Plan.Plan = this.Plan.Plan
 
-    this.AlumnoService.AddAlumno(this.alumno, this.usuario, this.auth)
+    this.AlumnoService.AddAlumno(this.alumno, this.usuario)
       .then((result) => {
         if (result === null) {
           alert('La MATRICULA ya existe.');

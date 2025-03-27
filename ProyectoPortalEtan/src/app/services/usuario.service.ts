@@ -11,15 +11,14 @@ import { AuthentificationService } from './authentification.service';
 })
 export class UsuarioService {
 
-  constructor(private _firestore:Firestore, private _authService: AuthentificationService) { }
+  constructor(private _firestore:Firestore) { }
 
-  async AddUsuario(usuario:Usuario, _auth: AUTH) {
+  async AddUsuario(usuario:Usuario) {
     const UsuarioRef = collection(this._firestore, 'Usuarios');
     const existingUser = await this.getUsuarioByUserName(usuario.UserName)
   if (existingUser) {
     throw new Error('Usuario ya existente');
   }
-  this._authService.registrer(_auth)
   return await addDoc(UsuarioRef, usuario);
   }
 

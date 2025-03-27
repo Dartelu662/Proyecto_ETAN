@@ -14,14 +14,14 @@ export class AlumnoService {
   
   constructor(private usuarioservice: UsuarioService) { }
 
-  async AddAlumno(alumno: Alumno, usuario: Usuario, auth: AUTH) {
+  async AddAlumno(alumno: Alumno, usuario: Usuario) {
     // 1️⃣ Verificar si el usuario ya existe
     
     let usuarioCreado = await this.usuarioservice.getUsuarioByUserName(usuario.UserName);
     if (!usuarioCreado) {
       
       // 2️⃣ Crear el usuario si no existe
-      await this.usuarioservice.AddUsuario(usuario, auth);
+      await this.usuarioservice.AddUsuario(usuario);
     } else {
     throw new Error('Usuario ya existente');
     }
