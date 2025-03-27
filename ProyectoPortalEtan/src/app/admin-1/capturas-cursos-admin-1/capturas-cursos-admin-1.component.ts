@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule
+import plan from '../../interfaces/plan.interface';
+import curso from '../../interfaces/curso.interface';
+import materia from '../../interfaces/materia.interface';
+import { PlanService } from '../../services/plan.service';
 
 @Component({
   selector: 'app-capturas-cursos-admin-1',
@@ -10,38 +14,39 @@ import { FormsModule } from '@angular/forms'; // Importa FormsModule
   styleUrls: ['./capturas-cursos-admin-1.component.scss']
 })
 export class CapturasCursosAdmin1Component {
-  planes: any[] = [];
-  cursos: any[] = [];
-  materias: any[] = [];
+  planes: plan [] = [];
+  cursos: curso [] = [];
+  materias: materia [] = [];
 
   // Modelos para los formularios
   nuevoPlan: any = { NombrePlan: '', FechaIni: '', FechaFin: '', Activo: true };
   nuevoCurso: any = { NombreCurso: '', description: '', FechaIni: '', FechaFin: '', PlanId: 1, Activo: true };
-  nuevaMateria: any = { PlanId: 1, CursoId: 1, FechaIni: '', FechaFin: '', Activo: true };
+  nuevaMateria: any = { PlanId: 1, CursoId: 1,  Activo: true };
 
-  constructor() { }
+  constructor( private planService: PlanService ) { }
 
   ngOnInit(): void {
     // Inicializa los datos de ejemplo, normalmente vendrán de un servicio
     this.planes = [
-      { PlanId: 1, NombrePlan: 'Plan A', FechaIni: '2025-03-01', FechaFin: '2025-12-31', Activo: true },
-      { PlanId: 2, NombrePlan: 'Plan B', FechaIni: '2025-03-01', FechaFin: '2025-12-31', Activo: true }
+      { id: "1", Plan: 'Plan A', FechaIni: '2025-03-01', FechaFin: '2025-12-31', Activo: true },
+      { id: "2", Plan: 'Plan B', FechaIni: '2025-03-01', FechaFin: '2025-12-31', Activo: true }
     ];
 
     this.cursos = [
-      { CursoId: 1, NombreCurso: 'Curso 1', PlanId: 1, description: 'Descripción del Curso 1', FechaIni: '2025-03-01', FechaFin: '2025-06-30', Activo: true },
-      { CursoId: 2, NombreCurso: 'Curso 2', PlanId: 2, description: 'Descripción del Curso 2', FechaIni: '2025-03-01', FechaFin: '2025-06-30', Activo: true }
+      {  Curso: 'Curso 1', PlanId: "1", Descripcion: 'Descripción del Curso 1', FechaCursoIni: '2025-03-01', FechaCursoFin: '2025-06-30', Activo: true },
+      {  Curso: 'Curso 2', PlanId: "2", Descripcion: 'Descripción del Curso 2', FechaCursoIni: '2025-03-01', FechaCursoFin: '2025-06-30', Activo: true }
     ];
 
     this.materias = [
-      { MateriaId: 1, PlanId: 1, CursoId: 1, FechaIni: '2025-03-01', FechaFin: '2025-06-30', Activo: true }
+      { Materia: "", PlanId: "1", CursoId: "1", MaestroId: "1",  Activo: true }
     ];
   }
 
   // Métodos para manejar las acciones en el HTML
 
-  eliminarPlan(planId: number): void {
-    this.planes = this.planes.filter(plan => plan.PlanId !== planId);
+  eliminarPlan(planId: string): void {
+  
+    this.planService.deletePlan 
   }
 
   actualizarPlan(plan: any): void {
@@ -54,7 +59,7 @@ export class CapturasCursosAdmin1Component {
     this.nuevoPlan = { NombrePlan: '', FechaIni: '', FechaFin: '', Activo: true }; // Limpiar formulario
   }
 
-  eliminarCurso(cursoId: number): void {
+  eliminarCurso(cursoId: string): void {
     this.cursos = this.cursos.filter(curso => curso.CursoId !== cursoId);
   }
 
@@ -68,8 +73,8 @@ export class CapturasCursosAdmin1Component {
     this.nuevoCurso = { NombreCurso: '', description: '', FechaIni: '', FechaFin: '', PlanId: 1, Activo: true }; // Limpiar formulario
   }
 
-  eliminarMateria(materiaId: number): void {
-    this.materias = this.materias.filter(materia => materia.MateriaId !== materiaId);
+  eliminarMateria(Materia: string): void {
+    this.materias = this.materias.filter(materia => materia.Materia !== Materia);
   }
 
   actualizarMateria(materia: any): void {

@@ -12,11 +12,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let plan of planes">
-          <td>{{ plan.NombrePlan }}</td>
+          <td>{{ plan.Plan }}</td>
           <td>{{ plan.FechaIni | date }}</td>
-          <td>{{ plan.FechaFin | date }}</td>
+          <td>{{ plan.FechaFin }}</td>
           <td>
-            <button (click)="eliminarPlan(plan.PlanId)">Eliminar</button>
+            <button (click)="eliminarPlan(plan.Plan)">Eliminar</button>
             <button (click)="actualizarPlan(plan)">Actualizar</button>
           </td>
         </tr>
@@ -53,12 +53,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let curso of cursos">
-          <td>{{ curso.NombreCurso }}</td>
-          <td>{{ curso.description }}</td>
-          <td>{{ curso.FechaIni | date }}</td>
-          <td>{{ curso.FechaFin | date }}</td>
+          <td>{{ curso.Curso }}</td>
+          <td>{{ curso.Descripcion }}</td>
+          <td>{{ curso.FechaCursoIni| date }}</td>
+          <td>{{ curso.FechaCursoFin| date }}</td>
           <td>
-            <button (click)="eliminarCurso(curso.CursoId)">Eliminar</button>
+            <button (click)="eliminarCurso(curso.Curso)">Eliminar</button>
             <button (click)="actualizarCurso(curso)">Actualizar</button>
           </td>
         </tr>
@@ -91,18 +91,20 @@
       <thead>
         <tr>
           <th>Materia</th>
-          <th>Fecha Inicio</th>
-          <th>Fecha Fin</th>
+          <th>Plan</th>
+          <th>Curso</th>
+          <th>Maestro</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let materia of materias">
-          <td>{{ materia.MateriaId }}</td>
-          <td>{{ materia.FechaIni | date }}</td>
-          <td>{{ materia.FechaFin | date }}</td>
+          <td>{{ materia.Materia }}</td>
+          <td>{{ materia.PlanId  }}</td>
+          <td>{{ materia.CursoId }}</td>
+          <td>{{ materia.MaestroId }}</td>
           <td>
-            <button (click)="eliminarMateria(materia.MateriaId)">Eliminar</button>
+            <button (click)="eliminarMateria(materia.Materia)">Eliminar</button>
             <button (click)="actualizarMateria(materia)">Actualizar</button>
           </td>
         </tr>
@@ -110,12 +112,17 @@
     </table>
     <h3>Agregar Nueva Materia</h3>
     <form (ngSubmit)="agregarMateria()">
-      <label for="fechaIniMateria">Fecha de Inicio:</label>
-      <input type="date" id="fechaIniMateria" [(ngModel)]="nuevaMateria.FechaIni" name="fechaIniMateria" required>
-      <Br>
-
-      <label for="fechaFinMateria">Fecha de Fin:</label>
-      <input type="date" id="fechaFinMateria" [(ngModel)]="nuevaMateria.FechaFin" name="fechaFinMateria" required>
+      <label for="Materia">Materia:</label>
+      <input type="string" id="Materia" [(ngModel)]="nuevaMateria.Materia" name="Materia" required>
+    <Br>
+      <label for="Plan">Plan:</label>
+      <input type="string" id="Plan" [(ngModel)]="nuevaMateria.Plan" name="Plan" required>
+    <br>
+      <label for="Curso">Curso:</label>
+      <input type="String" id="Curso" [(ngModel)]="nuevaMateria.Curso" name="Curso" required>
+    <br>
+      <label for="Maestro">Maestro:</label>
+      <input type="String" id="Maestro" [(ngModel)]="nuevaMateria.Maestro" name="Maestro" required>
 
       <button type="submit">Agregar Materia</button>
     </form>

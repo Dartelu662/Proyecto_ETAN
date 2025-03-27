@@ -52,16 +52,19 @@ constructor ( private AlumnoService: AlumnoService) {}
       id: '',
       Plan: '',
       FechaIni: '', 
-      FechaFin: ''
+      FechaFin: '',
+      Activo: true
   }
 
     
   curso: curso = {
     CursoId: '',
     PlanId: '',
-    Nombre: '',
+    Curso: '',
+    Descripcion: '',
     FechaCursoIni: '',
-    FechaCursoFin: ''
+    FechaCursoFin: '',
+    Activo: true
 }
   
 
