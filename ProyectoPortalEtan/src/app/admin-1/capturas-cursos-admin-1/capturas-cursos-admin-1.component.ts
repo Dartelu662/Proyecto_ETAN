@@ -20,7 +20,7 @@ export class CapturasCursosAdmin1Component {
 
   // Modelos para los formularios
   nuevoPlan: any = { NombrePlan: '', FechaIni: '', FechaFin: '', Activo: true };
-  nuevoCurso: any = { NombreCurso: '', description: '', FechaIni: '', FechaFin: '', PlanId: 1, Activo: true };
+  nuevoCurso: any = { NombreCurso: '', Semanal: '', Sabatino: '', FechaIni: '', FechaFin: '', PlanId: 1, Activo: true };
   nuevaMateria: any = { PlanId: 1, CursoId: 1,  Activo: true };
 
   constructor( private planService: PlanService ) { }
@@ -33,8 +33,8 @@ export class CapturasCursosAdmin1Component {
     ];
 
     this.cursos = [
-      {  Curso: 'Curso 1', PlanId: "1", Descripcion: 'Descripción del Curso 1', FechaCursoIni: '2025-03-01', FechaCursoFin: '2025-06-30', Activo: true },
-      {  Curso: 'Curso 2', PlanId: "2", Descripcion: 'Descripción del Curso 2', FechaCursoIni: '2025-03-01', FechaCursoFin: '2025-06-30', Activo: true }
+      {  Curso: 'Curso 1', PlanId: "1", Semanal: '8', Sabatino: '11', FechaCursoIni: '2025-03-01', FechaCursoFin: '2025-06-30', Activo: true },
+      {  Curso: 'Curso 2', PlanId: "2", Semanal: '8', Sabatino: '11', FechaCursoIni: '2025-03-01', FechaCursoFin: '2025-06-30', Activo: true }
     ];
 
     this.materias = [

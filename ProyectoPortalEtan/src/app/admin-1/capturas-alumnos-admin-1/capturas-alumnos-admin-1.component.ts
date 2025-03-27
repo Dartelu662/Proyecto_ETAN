@@ -8,7 +8,6 @@ import { AlumnoService } from '../../services/alumno.service';
 import plan from '../../interfaces/plan.interface';
 import curso from '../../interfaces/curso.interface';
 
-
 @Component({
   selector: 'app-capturas-alumnos-admin-1',
   standalone: true,
@@ -61,12 +60,14 @@ constructor ( private AlumnoService: AlumnoService) {}
     CursoId: '',
     PlanId: '',
     Curso: '',
-    Descripcion: '',
+    Semanal: '',
+    Sabatino: '',
     FechaCursoIni: '',
     FechaCursoFin: '',
     Activo: true
 }
   
+
 
   ngOnInit(): void {}
 
@@ -88,6 +89,13 @@ constructor ( private AlumnoService: AlumnoService) {}
     //     alert(error);
     //     })
     this.Plan.Plan = this.Plan.Plan
+
+    // if (this.admin.TipoAdmin === "Administrador tipo 1") {
+    //   this.admin.IdAdmin = 1;
+    // } if (this.admin.TipoAdmin === "Administrador tipo 2") {
+    //   this.admin.IdAdmin = 2;
+    // } 
+
 
     this.AlumnoService.AddAlumno(this.alumno, this.usuario)
       .then((result) => {

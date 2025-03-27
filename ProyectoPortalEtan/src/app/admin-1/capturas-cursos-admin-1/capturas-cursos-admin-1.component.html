@@ -45,8 +45,9 @@
       <thead>
         <tr>
           <th>Nombre del Curso</th>
-          <th>Descripción</th>
-          <th>Fecha Inicio</th>
+          <th>Mod. Semanal</th>
+          <th>Mod. Sabatino</th>
+          <th>Fecha Ini</th>
           <th>Fecha Fin</th>
           <th>Acciones</th>
         </tr>
@@ -54,7 +55,8 @@
       <tbody>
         <tr *ngFor="let curso of cursos">
           <td>{{ curso.Curso }}</td>
-          <td>{{ curso.Descripcion }}</td>
+          <td>{{ curso.Semanal }}</td>
+          <td>{{ curso.Sabatino }}</td>
           <td>{{ curso.FechaCursoIni| date }}</td>
           <td>{{ curso.FechaCursoFin| date }}</td>
           <td>
@@ -70,10 +72,13 @@
       <input type="text" id="nombreCurso" [(ngModel)]="nuevoCurso.NombreCurso" name="nombreCurso" required>
       <Br>
 
-      <label for="descripcionCurso">Descripción:</label>
-      <input type="text" id="descripcionCurso" [(ngModel)]="nuevoCurso.description" name="descripcionCurso" required>
+        <label for="Semanal">Semanal:</label>
+        <input type="text" id="Semanal" [(ngModel)]="nuevoCurso.Semanal" name="Semanal" required>
       <Br>
-
+        <label for="Sabatino">Sabatino:</label>
+        <input type="text" id="Sabatino" [(ngModel)]="nuevoCurso.Sabatino" name="Sabatino" required>
+      <Br>
+  
       <label for="fechaIniCurso">Fecha de Inicio:</label>
       <input type="date" id="fechaIniCurso" [(ngModel)]="nuevoCurso.FechaIni" name="fechaIniCurso" required>
       <Br>
