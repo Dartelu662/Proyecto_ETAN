@@ -50,7 +50,14 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
 }
 
   ngOnInit(): void {
-    this.adminService
+    this.adminService.GetAdmins().subscribe(admins => {
+      admins.forEach(async (admin) => {
+        if(admin.admin.id){
+          const adminData = await this.adminService.GetAdminById(admin.admin.id);
+          console.log(adminData);
+        }
+      });
+    });
   }
 
   async onSubmit(): Promise<void> {
