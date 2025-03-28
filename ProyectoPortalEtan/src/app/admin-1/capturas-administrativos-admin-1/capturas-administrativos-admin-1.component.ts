@@ -49,41 +49,38 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
     Password: ''
 }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.adminService
+  }
 
-  onSubmit(): void {
-    
-    if (this.admin.TipoAdmin === "Administrador tipo 1") {
-      this.admin.IdAdmin = 1;
-    } if (this.admin.TipoAdmin === "Administrador tipo 2") {
-      this.admin.IdAdmin = 2;
-    } 
-    this.auth.Email=this.usuario.Email
-    if(this.auth.Password.length >= 6)
-    {
-      this.authService.registrer(this.auth)
-      .then((result) => {
-        this.adminService.AddAdmin(this.admin, this.usuario)
-        .then((result) => {
-          if (result === null) {
-            alert('El nombre de usuario ya existe.');
-          } else {
-            alert('Usuario creado con exito');
-            console.log('Usuario creado:', result);
-          }
-        })
-        .catch((error) => { 
-          console.error('Error al crear el usuario:', error);
-          alert(error);
-        })
-      })
-      .catch((error) => { 
-        console.error('Error al crear el usuario:', error);
-        alert(error);
-      })
-    
-    } else {
-      alert("Su contraseña debe contener minimo 6 caracteres");
+  async onSubmit(): Promise<void> {
+    const adminIds: { [key: string]: number } = {
+      "Administrador tipo 1": 1,
+      "Administrador tipo 2": 2
+    };
+
+    this.admin.IdAdmin = adminIds[this.admin.TipoAdmin] || 1; // Default a 1 si no coincide
+
+    this.auth.Email = this.usuario.Email;
+
+    if (this.auth.Password.length < 6) {
+      alert("Su contraseña debe contener mínimo 6 caracteres");
+      return;
+    }
+
+    try {
+      await this.authService.registrer(this.auth);
+      const result = await this.adminService.AddAdmin(this.admin, this.usuario);
+      
+      if (!result) {
+        alert('El nombre de usuario ya existe.');
+      } else {
+        alert('Usuario creado con éxito');
+        console.log('Usuario creado:', result);
+      }
+    } catch (error) {
+      console.error('Error al crear el usuario:', error);
+      alert("Ocurrió un error al registrar el usuario.");
     }
   }
 }

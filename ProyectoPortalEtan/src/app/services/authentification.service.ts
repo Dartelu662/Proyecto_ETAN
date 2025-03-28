@@ -10,4 +10,5 @@ export class AuthentificationService {
     registrer(_auth: AUTH){
         return createUserWithEmailAndPassword(this._Auth, _auth.Email, _auth.Password);
     }
+
 }
