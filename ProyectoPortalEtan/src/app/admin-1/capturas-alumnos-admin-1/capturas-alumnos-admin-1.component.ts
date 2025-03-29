@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Usuario from '../../interfaces/usuario.interface';
@@ -18,7 +18,13 @@ import curso from '../../interfaces/curso.interface';
   templateUrl: './capturas-alumnos-admin-1.component.html',
   styleUrls: ['./capturas-alumnos-admin-1.component.scss']
 })
-export class CapturasAlumnosAdmin1Component {
+export class CapturasAlumnosAdmin1Component implements OnInit{
+eliminarAlumno(arg0: any) {
+throw new Error('Method not implemented.');
+}
+editarAlumno(_t150: any) {
+throw new Error('Method not implemented.');
+}
 
 constructor ( private AlumnoService: AlumnoService) {}
 
@@ -66,36 +72,29 @@ constructor ( private AlumnoService: AlumnoService) {}
     FechaCursoFin: '',
     Activo: true
 }
-  
+  matricula = "";
 
 
-  ngOnInit(): void {}
 
-  onSubmit(): void {
+  ngOnInit(): void {
+    
+  }
+
+  Actualizar(): void {
+  }
+
+  Guardar(): void {
 
     this.auth.Email = this.usuario.Email
-    
-    // this.AlumnoService.AddAlumno(this.alumno, this.usuario)
-    //   .then((result) => {
-    //     if (result === null) {
-    //       alert('La MATRICULA ya existe.');
-    //     } else {
-    //       alert('Usuario Alumno creado con exito');
-    //       console.log('Usuario creado:', result);
-    //     }
-    //   })
-    //   .catch((error) => { 
-    //     console.error('Error al crear el Alumno:', error);
-    //     alert(error);
-    //     })
     this.Plan.Plan = this.Plan.Plan
 
-    // if (this.admin.TipoAdmin === "Administrador tipo 1") {
-    //   this.admin.IdAdmin = 1;
-    // } if (this.admin.TipoAdmin === "Administrador tipo 2") {
-    //   this.admin.IdAdmin = 2;
-    // } 
+     if (this.curso.Semanal === "Semanal") {
+       this.curso.Semanal = "Semanal";
+     } if (this.curso.Sabatino === "Sabatino") {
+       this.curso.Sabatino = "Sabatino";
+     } 
 
+    
 
     this.AlumnoService.AddAlumno(this.alumno, this.usuario)
       .then((result) => {
@@ -111,5 +110,6 @@ constructor ( private AlumnoService: AlumnoService) {}
         alert(error);
         })
   }
+
   }
 

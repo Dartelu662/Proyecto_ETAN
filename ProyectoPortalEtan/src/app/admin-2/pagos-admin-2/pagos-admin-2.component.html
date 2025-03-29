@@ -1,1 +1,34 @@
-<p>pagos-admin-2 works!</p>
+<div class="container">
+    <h2>Capturar Pago</h2>
+  
+    <form [formGroup]="pagoForm" (ngSubmit)="guardarPago()">
+      <label for="matricula">Matrícula</label>
+      <input id="matricula" type="text" formControlName="matricula" placeholder="Ingrese matrícula">
+  
+      <label for="fechaPago">Fecha de Pago</label>
+      <input id="fechaPago" type="date" formControlName="fechaPago">
+  
+      <label for="montoPago">Monto de Pago</label>
+      <input id="montoPago" type="number" formControlName="montoPago" placeholder="Ingrese monto">
+  
+      <label for="medioPago">Medio de Pago</label>
+      <select id="medioPago" formControlName="medioPago">
+        <option value="Efectivo">Efectivo</option>
+        <option value="Tarjeta">Tarjeta</option>
+      </select>
+  
+      <label for="tipoPago">Tipo de Pago</label>
+      <select id="tipoPago" formControlName="tipoPago">
+        <option value="Inscripcion">Inscripcion</option>
+        <option value="MaterialDidactico">Material Dicactico</option>
+        <option value="PermisoFormacion">Permiso de Formacion</option>
+        <option value="Mensualidad">Mensualidad</option>
+        <option value="DoctoTramiteLicencia">Docto Tramite Licencia</option>
+        <option value="HorasVueloExFinal">Horas Vuelo Ex. Final</option>
+        <option value="OrdenExFinal">Orden Ex. Final</option>
+    </select>
+
+      <button type="submit" [disabled]="pagoForm.invalid">Guardar Pago</button>
+    </form>
+  </div>
+  

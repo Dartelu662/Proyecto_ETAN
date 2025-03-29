@@ -9,7 +9,7 @@ import { PagosAlumnoComponent } from './alumno/pagos-alumno/pagos-alumno.compone
 import { MaestroComponent } from './maestro/maestro.component';
 import { InicioMaestroComponent } from './maestro/inicio-maestro/inicio-maestro.component';
 import { DatosGeneralesMaestroComponent } from './maestro/datos-generales-maestro/datos-generales-maestro.component';
-import { CalificacionesMaestroComponent } from './maestro/calificaciones-maestro/calificaciones-maestro.component';
+import { CalificacionesMaestroComponent } from './admin-1/calificaciones-maestro/calificaciones-maestro.component';
 import { Admin1Component } from './admin-1/admin-1.component';
 import { Admin2Component } from './admin-2/admin-2.component';
 import { InicioAdmin1Component } from './admin-1/inicio-admin-1/inicio-admin-1.component';
@@ -50,7 +50,6 @@ export const routes: Routes = [
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       { path: 'inicio', loadComponent: () => import('./maestro/inicio-maestro/inicio-maestro.component').then(m => m.InicioMaestroComponent) },
       { path: 'datos-generales', loadComponent: () => import('./maestro/datos-generales-maestro/datos-generales-maestro.component').then(m => m.DatosGeneralesMaestroComponent) },
-      { path: 'calificaciones', loadComponent: () => import('./maestro/calificaciones-maestro/calificaciones-maestro.component').then(m => m.CalificacionesMaestroComponent) },
     ]
   },
 
@@ -67,6 +66,8 @@ export const routes: Routes = [
       { path: 'captura-aviones', loadComponent: () => import('./admin-1/capturas-aviones-admin-1/capturas-aviones-admin-1.component').then(m => m.CapturasAvionesAdmin1Component) },
       { path: 'captura-cursos', loadComponent: () => import('./admin-1/capturas-cursos-admin-1/capturas-cursos-admin-1.component').then(m => m.CapturasCursosAdmin1Component) },
       { path: 'captura-escolar', loadComponent: () => import('./admin-1/capturas-escolar-admin-1/capturas-escolar-admin-1.component').then(m=> m.CapturasEscolarAdmin1Component) },
+      { path: 'calificaciones', loadComponent: () => import('./admin-1/calificaciones-maestro/calificaciones-maestro.component').then(m => m.CalificacionesMaestroComponent) },
+
     ]
   },
 

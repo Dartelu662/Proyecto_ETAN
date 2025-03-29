@@ -1,7 +1,7 @@
 <div class="container">
   <h2>Captura de Alumnos</h2>
 
-  <form (ngSubmit)="onSubmit()" #alumnoForm="ngForm">
+  <form (ngSubmit)="Guardar()" #alumnoForm="ngForm">
       <!-- Línea 1: Matrícula y Contraseña -->
       <div class="form-group linea1">
           <label for="matricula">Matrícula</label>
@@ -83,9 +83,55 @@
           </select>
       </div>
 
-
+      <div class="form-group linea5" >
+        <label for="Modalidad" >Modalidad</label>
+        <select id="Modalidad" class="form-control" [(ngModel)]="curso.Semanal" name="Modalidad" required>
+            <option value="Modalidad 1">Semanal</option>
+            <option value="Modalidad 2">Sabatino</option>
+        </select>
+      </div>
 
       <!-- Botón de Guardar -->
       <button type="submit" class="btn btn-primary" [disabled]="!alumnoForm.form.valid">Guardar</button>
   </form>
+  <form (ngSubmit)="Actualizar()" #alumnoForm="ngForm">
+    <div class="form-group linea1">
+        <label for="matricula">Matrícula</label>
+        <input type="text" id="matricula2" class="form-control" [(ngModel)]="matricula" name="matricula" required>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!alumnoForm.form.valid">Actualizar</button>
+    <!-- <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>matricula</th>
+            <th>Nombre</th>
+            <th>PermisoFormacion</th>
+            <th>FechaFinPF</th>
+            <th>FechaIngreso</th>
+            <th>Plan</th>
+            <th>Curso</th>
+            <th>Modalidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alumno of alumno">
+            <td>{{ alumno.Matricula }}</td>
+            <td>{{ alumno.nombre }}</td>
+            <td>{{ alumno.PermisoFormacion }}</td>
+            <td>{{ alumno.FechaFinPF || '-' }}</td>
+            <td>{{ alumno.Plan || '-' }}</td>
+            <td>{{ alumno.Curso }}</td>
+            <td>{{ alumno.Modalidad }}</td>
+            <td>
+              <button (click)="editarAlumno(alumno)">Editar</button>
+              <button (click)="eliminarAlumno(alumno.Matricula)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table> -->
+
+    
+  </form>
+  
 </div>
