@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, query, where, getDocs } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, query, where, getDocs, updateDoc, getDoc } from '@angular/fire/firestore';
 import Usuario from '../interfaces/usuario.interface';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
-import AUTH from '../interfaces/auth.interface';
-import { AuthentificationService } from './authentification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +19,16 @@ export class UsuarioService {
   return await addDoc(UsuarioRef, usuario);
   }
 
-  getUsuarios(): Observable<Usuario[]> {
-    const usuarioRef = collection(this._firestore, 'Usuarios');
+  GetUsuarios(): Observable<Usuario[]> {
+    const usuarioRef = query(collection(this._firestore, 'Usuarios'), where('Activo', '==', true));
     return collectionData(usuarioRef, { idField: 'id' }) as Observable<Usuario[]>;
   }
 
-  deleteUsuario(id: string) {
+  
+
+  async DisableUsuario(id: string): Promise<void> {
     const usuarioDocRef = doc(this._firestore, `Usuarios/${id}`);
-    return deleteDoc(usuarioDocRef);
+    await updateDoc(usuarioDocRef, { Activo: false });
   }
 
   async getUsuarioByUserName(userName: string): Promise<Usuario | null> {
@@ -41,5 +40,22 @@ export class UsuarioService {
     } else {
       return null;
     }
+  }
+
+  async getUsuarioById(id: string): Promise<Usuario | null> {
+    const usuarioDoc = doc(this._firestore, 'Usuarios', id);
+    const snapshot = await getDoc(usuarioDoc);
+
+    if (!snapshot.exists()) {
+      return null;
+    }
+
+    const data = snapshot.data();
+    if (!data) {
+      return null;
+    }
+
+    // 🔹 Retornar el objeto con el ID incluido
+    return { id: snapshot.id, ...data } as Usuario;
   }
 }
