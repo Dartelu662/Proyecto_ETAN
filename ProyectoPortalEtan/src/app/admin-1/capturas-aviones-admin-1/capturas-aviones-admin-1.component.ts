@@ -1,94 +1,89 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import Avion from '../../interfaces/avion.interface';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-
-interface Avion {
-  avion_id?: number;
-  registration_number: string;
-  model: string;
-  manufacture_year?: number;
-  last_maintenance_date?: string;
-  CostoHoraVuelo?: number;
-  status: 'disponible' | 'mantenimiento' | 'inactivo';
-}
+import { AvionesService } from '../../services/aviones.service';
 
 @Component({
   selector: 'app-capturas-aviones-admin-1',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, HttpClientModule
+    FormsModule,
+    CommonModule
   ],
   templateUrl: './capturas-aviones-admin-1.component.html',
   styleUrl: './capturas-aviones-admin-1.component.scss'
 })
-export class CapturasAvionesAdmin1Component {
-  aviones: Avion[] = [];
-  avionForm!: FormGroup;
-  isEditing: boolean = false;
-  apiUrl = 'http://localhost:3000/aviones'; // Cambia esto según tu API
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
-
-  ngOnInit(): void {
-    this.avionForm = this.fb.group({
-      avion_id: [null],
-      registration_number: ['', Validators.required],
-      model: ['', Validators.required],
-      manufacture_year: [null],
-      last_maintenance_date: [''],
-      CostoHoraVuelo: [null],
-      status: ['disponible', Validators.required],
-    });
-
-    this.obtenerAviones();
-}
-
-obtenerAviones() {
-  this.http.get<Avion[]>(this.apiUrl).subscribe((data) => (this.aviones = data));
-}
-
-guardarAvion() {
-  const avion = this.avionForm.value;
-
-  if (this.isEditing) {
-    // Editar avión
-    this.http.put(`${this.apiUrl}/${avion.avion_id}`, avion).subscribe(() => {
-      this.obtenerAviones();
-      this.cancelarEdicion();
-    });
-  } else {
-    // Agregar avión nuevo
-    this.http.post(this.apiUrl, avion).subscribe(() => {
-      this.obtenerAviones();
-      this.avionForm.reset({ status: 'disponible' });
-    });
-  }
-}
-
-editarAvion(avion: Avion) {
-  this.isEditing = true;
-  this.avionForm.patchValue(avion);
-}
-
-
-eliminarAvion(avion_id?: number) {
- {
-    if (avion_id === undefined) {
-      console.error('Error: El avion_id es undefined.');
-      return;
+export class CapturasAvionesAdmin1Component implements OnInit{
+  aviones: Avion[] = []; // Lista de aviones
+    nuevoAvion: Avion = this.inicializarAvion(); // Avion para agregar
+    avionSeleccionado: Avion | null = null; // Avion que se edita
+  
+    constructor(private avionesService: AvionesService) {}
+  
+    ngOnInit(): void {
+      // Obtener la lista de aviones
+        this.avionesService.GetAvions().subscribe(avion => {
+        this.aviones = avion;
+        console.log('Lista de aviones:', avion);
+      });
     }
   
-    console.log(`Eliminando avión con ID: ${avion_id}`);
-    // Aquí puedes hacer la petición HTTP para eliminar el avión
-  }
-  if (confirm('¿Estás seguro de eliminar este avión?')) {
-    this.http.delete(`${this.apiUrl}/${avion_id}`).subscribe(() => this.obtenerAviones());
-  }
-}
-
-cancelarEdicion() {
-  this.isEditing = false;
-  this.avionForm.reset({ status: 'disponible' });
-}
+    // Inicializa un objeto Avion vacío
+    inicializarAvion(): Avion {
+      return {
+        Modelo: '',
+        NumeroRegistro: '',
+        AnioFabricacion: '',
+        FchaUltimoMtto: '',
+        CostoHoraVuelo: 0,
+        Activo: true,
+      };
+    }
+  
+    // Agregar un nuevo avion
+    async crearAvion(): Promise<void> {
+      const result = await this.avionesService.AddAvion(this.nuevoAvion);
+      if (result) {
+        console.log('Avion agregado:', result.id);
+        this.nuevoAvion = this.inicializarAvion();
+      } else {
+        alert('Error con el servidor');
+      }
+    }
+  
+    // Seleccionar un avion para edición
+    seleccionarAvion(avion: Avion): void {
+      this.avionSeleccionado = { ...avion };
+    }
+  
+    async confirmarEliminarAvion(avion: Avion) {
+      const confirmacion = window.confirm(`¿Estás seguro de que deseas desactivar a ${avion.Modelo} ${avion.NumeroRegistro}?`);
+    if (confirmacion && avion.id) {
+      const desactivado = await this.avionesService.deleteAvion(avion.id);
+      if (desactivado) {
+        console.log('Avion desactivado correctamente.');
+      } else {
+        console.log('ha ocurrido un error');
+      }
+    }
+    }
+    
+    async actualizarAvion(): Promise<void> {
+      if (!this.avionSeleccionado) return;
+  
+      const result = await this.avionesService.UpdateAvion(this.avionSeleccionado);
+      if (result) {
+        console.log('Avion actualizado:', this.avionSeleccionado.id);
+        this.avionSeleccionado = null;
+      } else {
+        console.error('Error al actualizar avion');
+      }
+    }
+  
+    // Cancelar edición
+    cancelarEdicion(): void {
+      this.avionSeleccionado = null;
+    }
 }

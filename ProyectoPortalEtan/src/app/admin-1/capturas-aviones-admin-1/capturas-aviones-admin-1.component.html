@@ -1,59 +1,37 @@
-<div class="container">
-    <h2>Gestión de Aviones</h2>
-  
-    <form [formGroup]="avionForm" (ngSubmit)="guardarAvion()">
-      <label for="registration_number">Número de Registro:</label>
-      <input type="text" id="registration_number" formControlName="registration_number" required />
-  
-      <label for="model"> Modelo:</label>
-      <input type="text" id="model" formControlName="model" required />
-  
-      <label for="manufacture_year">Año de Fabricación:</label>
-      <input type="number" id="manufacture_year" formControlName="manufacture_year" />
-  
-      <label for="last_maintenance_date"> Última Fcha Mantenimiento:</label>
-      <input type="date" id="last_maintenance_date" formControlName="last_maintenance_date" />
-  
-      <label for="status">Estado:</label>
-      <select id="status" formControlName="status">
-        <option value="disponible">Disponible</option>
-        <option value="mantenimiento">Mantenimiento</option>
-        <option value="inactivo">Inactivo</option>
-      </select>
+<div>
+  <h2>Gestión de Aviones</h2>
 
-      <label for="CostoHoraVuelo"> Costo Hora Vuelo:</label>
-      <input type="text" id="CostoHoraVuelo" formControlName="CostoHoraVuelo" />
-  
-      <button type="submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
-      <button type="button" (click)="cancelarEdicion()" *ngIf="isEditing">Cancelar</button>
+  <!-- Formulario para agregar un nuevo Aviones -->
+  <form (submit)="crearAvion()">
+    <input type="text" [(ngModel)]="nuevoAvion.Modelo" placeholder="Modelo" required name="Modelo">
+    <input type="text" [(ngModel)]="nuevoAvion.NumeroRegistro" placeholder="Numero de Registro" required name="NumeroRegistro">
+    <input type="text" [(ngModel)]="nuevoAvion.AnioFabricacion" placeholder="Año de Fabricacion" required name="AnioFabricacion">
+    <input type="date" [(ngModel)]="nuevoAvion.FchaUltimoMtto" placeholder="Fecha de Ultimo Mantenimiento" required name="FchaUltimoMtto">
+    <input type="number" [(ngModel)]="nuevoAvion.CostoHoraVuelo" placeholder="Costo de Hora Vuelo" name="CostoHoraVuelo">
+    <button type="submit">Agregar Aviones</button>
+  </form>
+
+  <!-- Listado de Aviones -->
+  <h3>Lista de Aviones</h3>
+  <ul>
+    <li *ngFor="let avion of aviones">
+      {{ avion.Modelo }} {{ avion.NumeroRegistro }} - ${{ avion.CostoHoraVuelo }}
+      <button (click)="seleccionarAvion(avion)">Editar</button>
+    </li>
+  </ul>
+
+  <!-- Formulario para actualizar Aviones seleccionado -->
+  <div *ngIf="avionSeleccionado">
+    <h3>Editar Aviones</h3>
+    <form (submit)="actualizarAvion()">
+      <input type="text" [(ngModel)]="avionSeleccionado.Modelo" placeholder="Modelo" required name="Modelo">
+      <input type="text" [(ngModel)]="avionSeleccionado.NumeroRegistro" placeholder="Numero de Registro" required name="NumeroRegistro">
+      <input type="text" [(ngModel)]="avionSeleccionado.AnioFabricacion" placeholder="Año de Fabricacion" required name="AnioFabricacion">
+      <input type="date" [(ngModel)]="avionSeleccionado.FchaUltimoMtto" placeholder="Fecha de Ultimo Mantenimiento" required name="FchaUltimoMtto">
+      <input type="number" [(ngModel)]="avionSeleccionado.CostoHoraVuelo" placeholder="Costo de Hora Vuelo" name="CostoHoraVuelo">
+      <button type="submit">Actualizar Aviones</button>
+      <button type="button" (click)="confirmarEliminarAvion(avionSeleccionado)">Eliminar</button>
+      <button type="button" (click)="cancelarEdicion()">Cancelar</button>
     </form>
-  
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Número de Registro</th>
-          <th>Modelo</th>
-          <th>Año</th>
-          <th>Mantenimiento</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let avion of aviones">
-          <td>{{ avion.avion_id }}</td>
-          <td>{{ avion.registration_number }}</td>
-          <td>{{ avion.model }}</td>
-          <td>{{ avion.manufacture_year || '-' }}</td>
-          <td>{{ avion.last_maintenance_date || '-' }}</td>
-          <td>{{ avion.status }}</td>
-          <td>
-            <button (click)="editarAvion(avion)">Editar</button>
-            <button (click)="eliminarAvion(avion.avion_id)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
+  </div>  
+</div>

@@ -16,21 +16,17 @@ export class AlumnoService {
   constructor(private usuarioService: UsuarioService) { }
 
   async AddAlumno(alumno: Alumno, usuario: Usuario) {
-    // 1️⃣ Verificar si el usuario ya existe
     
     let usuarioCreado = await this.usuarioService.getUsuarioByUserName(usuario.UserName);
     if (!usuarioCreado) {
       
-      // 2️⃣ Crear el usuario si no existe
       await this.usuarioService.AddUsuario(usuario);
     } else {
     throw new Error('Usuario ya existente');
     }
 
-    // 4️⃣ Asignar el ID del usuario al Alumno
-    alumno.Username = usuario.UserName; // Asegúrate de que el campo sea correcto
-
-    // 5️⃣ Guardar el alumno en Firestore
+    alumno.Username = usuario.UserName;
+    
     const AlumnoRef = collection(this.firestore, 'Alumno');
     return await addDoc(AlumnoRef, alumno);
   }
@@ -70,6 +66,22 @@ export class AlumnoService {
       return usuario ? { usuario, alumno: alumnoData } : null;
     }
   
+    async GetAlumnoByUsername(username: string): Promise<{ usuario: Usuario; alumno: Alumno } | null> {
+      const q = query(collection(this.firestore, 'Alumno'), where('Username', '==', username));
+      const querySnapshot = await getDocs(q);
+    
+      if (querySnapshot.empty) {
+        return null;
+      }
+      
+      const alumnoDoc = querySnapshot.docs[0];
+      const alumnoData = alumnoDoc.data() as Alumno;
+    
+      const usuario = await this.usuarioService.getUsuarioByUserName(username);
+    
+      return usuario ? { usuario, alumno: alumnoData } : null;
+    }
+
     async DisableAlumno(id: string): Promise<void> {
       const alumnoDocRef = doc(this.firestore, `Alumno/${id}`);
       await updateDoc(alumnoDocRef, { Activo: false });

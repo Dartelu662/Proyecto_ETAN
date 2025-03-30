@@ -1,13 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import Usuario from '../../interfaces/usuario.interface';
+import { Component, OnInit } from '@angular/core';
 import Maestro from '../../interfaces/maestro.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import Auth from '../../interfaces/auth.interface';
-import licencia from '../../interfaces/licencia.interface';
 import { MaestroService } from '../../services/maestro.service';
-import { AdminService } from '../../services/admin.service';
-import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-capturas-maestros-admin-1',
@@ -21,10 +16,23 @@ import { UsuarioService } from '../../services/usuario.service';
 })
 export class CapturasMaestrosAdmin1Component implements OnInit{
 
-   constructor (){ }
- 
-   
-    maestro: Maestro = {
+  maestros: Maestro[] = []; // Lista de maestros
+  nuevoMaestro: Maestro = this.inicializarMaestro(); // Maestro para agregar
+  maestroSeleccionado: Maestro | null = null; // Maestro que se edita
+
+  constructor(private maestroService: MaestroService) {}
+
+  ngOnInit(): void {
+    // Obtener la lista de maestros
+    this.maestroService.GetMaestros().subscribe(maestros => {
+      this.maestros = maestros;
+      console.log('Lista de Maestros:', maestros);
+    });
+  }
+
+  // Inicializa un objeto Maestro vacío
+  inicializarMaestro(): Maestro {
+    return {
       Nombres: '',
       ApellidoP: '',
       ApellidoM: '',
@@ -33,67 +41,55 @@ export class CapturasMaestrosAdmin1Component implements OnInit{
       Direccion: '',
       FechaNac: '',
       FechaIngreso: '',
-      TipoLicencia: '',
+      TipoLicencia1: '',
+      TipoLicencia2: '',
+      TipoLicencia3: '',
       Activo: true
-     }
-
-  tiposLicencia: licencia[] = [
-    { TipoLicenciasId: 1, TipoLicencia: 'Piloto Comercial', fechaFin: ''},
-    { TipoLicenciasId: 2, TipoLicencia: 'Piloto Privado', fechaFin: '' },
-    { TipoLicenciasId: 3, TipoLicencia: 'Instructor de Vuelo', fechaFin: ''}
-  ];
-
-  selectedLicencias: licencia[] = [];
-  auth: Auth = {
-    Email: '',
-    Password: ''
-  };
-
-  onSubmit() {
-    // Aquí puedes procesar la información, por ejemplo:
-    console.log('Licencias seleccionadas: ', this.selectedLicencias);
-  }
-
-  ngOnInit(): void {
-    
-    console.log(this.selectedLicencias)
-  }
-
-  agregarLicencia(TipoLic: HTMLSelectElement, fechaVen: HTMLInputElement) {
-    
-    debugger;
-    const valor = TipoLic.value;
-
-    const _TipoLicenciasId = parseInt(valor);
-    const _licenciaEncontrada = this.tiposLicencia.find(x => x.TipoLicenciasId === _TipoLicenciasId)?.TipoLicencia;
-    
-    const nuevaLicencia: licencia = {
-      TipoLicenciasId: _TipoLicenciasId,
-      TipoLicencia: _licenciaEncontrada || '',
-      fechaFin: fechaVen.value
     };
-
-    if(nuevaLicencia.TipoLicencia !== '' &&
-      nuevaLicencia.fechaFin !== '' &&
-      nuevaLicencia.TipoLicenciasId ){
-        if(this.selectedLicencias.find(i => i.TipoLicenciasId === nuevaLicencia.TipoLicenciasId))
-        {
-          this.selectedLicencias = this.selectedLicencias.filter(i => i.TipoLicenciasId !== nuevaLicencia.TipoLicenciasId);
-        }
-        this.selectedLicencias.push(nuevaLicencia);
-      } 
-    this.ngOnInit();
   }
 
-  obtenerNombreLicencia(id: number) {
-    const lic = this.tiposLicencia.find(l => l.TipoLicenciasId === id);
-    return lic?.TipoLicencia;
+  // Agregar un nuevo maestro
+  async crearMaestro(): Promise<void> {
+    const result = await this.maestroService.AddMaestro(this.nuevoMaestro);
+    if (result) {
+      console.log('Maestro agregado:', result.id);
+      this.nuevoMaestro = this.inicializarMaestro();
+    } else {
+      alert('Error con el servidor');
+    }
   }
 
+  // Seleccionar un maestro para edición
+  seleccionarMaestro(maestro: Maestro): void {
+    this.maestroSeleccionado = { ...maestro };
+  }
+
+  async confirmarEliminarMaestro(maestro: Maestro) {
+    const confirmacion = window.confirm(`¿Estás seguro de que deseas desactivar a ${maestro.Nombres} ${maestro.ApellidoP}?`);
+  if (confirmacion && maestro.id) {
+    const desactivado = await this.maestroService.deleteMaestro(maestro.id);
+    if (desactivado) {
+      console.log('Maestro desactivado correctamente.');
+    } else {
+      console.log('ha ocurrido un error');
+    }
+  }
+  }
+  
+  async actualizarMaestro(): Promise<void> {
+    if (!this.maestroSeleccionado) return;
+
+    const result = await this.maestroService.UpdateMaestro(this.maestroSeleccionado);
+    if (result) {
+      console.log('Maestro actualizado:', this.maestroSeleccionado.id);
+      this.maestroSeleccionado = null;
+    } else {
+      console.error('Error al actualizar maestro');
+    }
+  }
+
+  // Cancelar edición
+  cancelarEdicion(): void {
+    this.maestroSeleccionado = null;
+  }
 }
-
-   
-
-
-
-

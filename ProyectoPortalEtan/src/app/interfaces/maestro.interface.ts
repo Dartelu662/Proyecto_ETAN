@@ -4,11 +4,12 @@ export default interface Maestro{
     ApellidoP: string;
     ApellidoM: string;
     Email: string;
-    Correo?: string;
     Celular: string;
     Direccion: string;
     FechaNac: string;
     FechaIngreso: string;
-    TipoLicencia: string;
+    TipoLicencia1: string;
+    TipoLicencia2: string;
+    TipoLicencia3: string;
     Activo: boolean;
 }

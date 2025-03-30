@@ -68,6 +68,22 @@ export class AdminService {
     return usuario ? { usuario, admin: adminData } : null;
   }
 
+  async GetAdminByUsername(username: string): Promise<{ usuario: Usuario; admin: Admin } | null> {
+    const q = query(collection(this.firestore, 'Admin'), where('Username', '==', username));
+    const querySnapshot = await getDocs(q);
+  
+    if (querySnapshot.empty) {
+      return null;
+    }
+  
+    const adminDoc = querySnapshot.docs[0]; // Suponiendo que solo hay un admin con ese username
+    const adminData = adminDoc.data() as Admin;
+  
+    const usuario = await this.usuarioService.getUsuarioByUserName(username);
+  
+    return usuario ? { usuario, admin: adminData } : null;
+  }
+
   async DisableAdmin(id: string): Promise<void> {
     const adminDocRef = doc(this.firestore, `Admin/${id}`);
     await updateDoc(adminDocRef, { Activo: false });

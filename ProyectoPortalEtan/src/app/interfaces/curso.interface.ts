@@ -1,4 +1,4 @@
-export default interface curso{
+export default interface Curso{
     id?: string;
     CursoId?: string;
     PlanId: string;

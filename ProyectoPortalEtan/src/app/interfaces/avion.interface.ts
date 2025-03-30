@@ -3,9 +3,9 @@ export default interface Avion{
     AvionId?: string;
     Modelo: string;
     NumeroRegistro: string;  
-    AnioFabricacion: String;
+    AnioFabricacion: string;
     FchaUltimoMtto: string;
     CostoHoraVuelo: number;
-    Status: boolean;
+    Activo: boolean;
     
 }

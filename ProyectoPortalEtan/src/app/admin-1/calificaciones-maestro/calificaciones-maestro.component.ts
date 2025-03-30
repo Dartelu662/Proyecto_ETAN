@@ -109,7 +109,6 @@ export class CalificacionesMaestroComponent {
   }
 
   ValidarInfo(_e: Event|HTMLInputElement):boolean {
-    debugger;
     if (_e instanceof HTMLInputElement) {
       const input = _e;
       const calificacion = input.valueAsNumber; // Obtenemos el valor como número

@@ -1,4 +1,4 @@
-export default interface materia{
+export default interface Materia{
     id?: string;
     PlanId?: string;
     CursoId?: string;

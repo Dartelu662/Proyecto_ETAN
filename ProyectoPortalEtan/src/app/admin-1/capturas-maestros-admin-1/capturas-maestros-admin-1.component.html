@@ -1,100 +1,49 @@
-<div class="container">
-  <h2>Captura de informacion Maestros</h2>
+<div>
+  <h2>Gestión de Maestros</h2>
 
-  <form (ngSubmit)="onSubmit()" #adminForm="ngForm">
-      <!-- Datos del maestro -->
-      <!-- <div class="form-group">
-          <label for="userName">Nombre de maestro</label>
-          <input type="text" id="userName" class="form-control" [(ngModel)]="maestro.UserName" name="userName" required>
-      </div>
-
-      <div class="form-group">
-          <label for="password">Contraseña</label>
-          <input type="password" id="password" class="form-control" [(ngModel)]="auth.Password" name="password" required>
-      </div> -->
-      <div class="form-group">
-          <label for="nombres">Nombres</label>
-          <input type="text" id="nombres" class="form-control" [(ngModel)]="maestro.Nombres" name="nombres" required>
-      </div>
-
-      <div class="form-group">
-          <label for="apellidoP">Apellido Paterno</label>
-          <input type="text" id="apellidoP" class="form-control" [(ngModel)]="maestro.ApellidoP" name="apellidoP" required>
-      </div>
-
-      <div class="form-group">
-          <label for="apellidoM">Apellido Materno</label>
-          <input type="text" id="apellidoM" class="form-control" [(ngModel)]="maestro.ApellidoM" name="apellidoM" required>
-      </div>
-
-      <div class="form-group">
-          <label for="email">Correo electrónico</label>
-          <input type="email" id="email" class="form-control" [(ngModel)]="maestro.Email" name="email" required>
-      </div>
-
-      <div class="form-group">
-          <label for="celular">Celular</label>
-          <input type="text" id="celular" class="form-control" [(ngModel)]="maestro.Celular" name="celular" required>
-      </div>
-
-      <div class="form-group">
-          <label for="direccion">Dirección</label>
-          <input type="text" id="direccion" class="form-control" [(ngModel)]="maestro.Direccion" name="direccion">
-      </div>
-
-      <div class="form-group">
-          <label for="fechaNac">Fecha de nacimiento</label>
-          <input type="date" id="fechaNac" class="form-control" [(ngModel)]="maestro.FechaNac" name="fechaNac" required>
-      </div>
-
-      <div class="form-group">
-          <label for="fechaIngreso">Fecha de ingreso</label>
-          <input type="date" id="fechaIngreso" class="form-control" [(ngModel)]="maestro.FechaIngreso" name="fechaIngreso" required>
-      </div>
-      <!-- Licencias -->
-      <br>
-    <div class="form-group">
-        <h3>Agregar Licencias</h3>
-      <label for="TipoLicencias">Tipo de Licencia</label>
-      <select #TipoLic
-              class="form-control"
-              name="TipoLicencias"
-              multiple
-              required>
-        <option *ngFor="let lic of tiposLicencia" [value]="lic.TipoLicenciasId">
-          {{ lic.TipoLicencia }}
-        </option>
-      </select>
-
-      <div class="form-group">
-        <label for="fechaVencimiento">Fecha de Vencimiento</label>
-        <input type="date" #fechaVen class="form-control" name="fechaVencimiento" required>
-
-        <button type="button" class="btn btn-success" (click)="agregarLicencia(TipoLic, fechaVen)">Agregar Licencia</button>
-    </div>  
-      <br>
-    </div>
-
-      <!-- Tabla de Licencias -->
-       <div class="table">
-        <h3>Licencias Agregadas</h3>
-      <table >
-        <thead>
-          <tr>
-            <th>Tipo de Licencia</th>
-            <th>Fecha de Vencimiento</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let lic of selectedLicencias">
-            <td>{{ lic.TipoLicencia }}</td>
-            <td>{{ lic.fechaFin }}</td>
-          </tr>
-        </tbody>
-      </table>
-       </div>
-      
-
-      <button type="submit" class="btn btn-primary" [disabled]="!adminForm.form.valid">Guardar</button>
+  <!-- Formulario para agregar un nuevo maestro -->
+  <form (submit)="crearMaestro()">
+    <input type="text" [(ngModel)]="nuevoMaestro.Nombres" placeholder="Nombres" required>
+    <input type="text" [(ngModel)]="nuevoMaestro.ApellidoP" placeholder="Apellido Paterno" required>
+    <input type="text" [(ngModel)]="nuevoMaestro.ApellidoM" placeholder="Apellido Materno" required>
+    <input type="email" [(ngModel)]="nuevoMaestro.Email" placeholder="Correo Electrónico">
+    <input type="text" [(ngModel)]="nuevoMaestro.Celular" placeholder="Celular" required>
+    <input type="text" [(ngModel)]="nuevoMaestro.Direccion" placeholder="Dirección" required>
+    <input type="date" [(ngModel)]="nuevoMaestro.FechaNac" required>
+    <input type="date" [(ngModel)]="nuevoMaestro.FechaIngreso">
+    <input type="text" [(ngModel)]="nuevoMaestro.TipoLicencia1" placeholder="Tipo de Licencia" required>
+    <input type="text" [(ngModel)]="nuevoMaestro.TipoLicencia2" placeholder="Tipo de Licencia">
+    <input type="text" [(ngModel)]="nuevoMaestro.TipoLicencia3" placeholder="Tipo de Licencia">
+    <button type="submit">Agregar Maestro</button>
   </form>
+
+  <!-- Listado de Maestros -->
+  <h3>Lista de Maestros</h3>
+  <ul>
+    <li *ngFor="let maestro of maestros">
+      {{ maestro.Nombres }} {{ maestro.ApellidoP }} {{ maestro.ApellidoM }} - {{ maestro.Email }} | {{ maestro.TipoLicencia1 }} \ {{ maestro.TipoLicencia2 }} \ {{ maestro.TipoLicencia3 }}
+      <button (click)="seleccionarMaestro(maestro)">Editar</button>
+    </li>
+  </ul>
+
+  <!-- Formulario para actualizar maestro seleccionado -->
+  <div *ngIf="maestroSeleccionado">
+    <h3>Editar Maestro</h3>
+    <form (submit)="actualizarMaestro()">
+      <input type="text" [(ngModel)]="maestroSeleccionado.Nombres" placeholder="Nombres" required name="nombres">
+      <input type="text" [(ngModel)]="maestroSeleccionado.ApellidoP" placeholder="Apellido Paterno" required name="apellidoP">
+      <input type="text" [(ngModel)]="maestroSeleccionado.ApellidoM" placeholder="Apellido Materno" required name="apellidoM">
+      <input type="email" [(ngModel)]="maestroSeleccionado.Email" placeholder="Correo Electrónico" name="email">
+      <input type="text" [(ngModel)]="maestroSeleccionado.Celular" placeholder="Celular" required name="celular">
+      <input type="text" [(ngModel)]="maestroSeleccionado.Direccion" placeholder="Dirección" required name="direccion">
+      <input type="date" [(ngModel)]="maestroSeleccionado.FechaNac" placeholder="Fecha de Nacimiento" required name="fechaNac">
+      <input type="date" [(ngModel)]="maestroSeleccionado.FechaIngreso" placeholder="Fecha de Ingreso" name="fechaIngreso">
+      <input type="text" [(ngModel)]="maestroSeleccionado.TipoLicencia1" placeholder="Tipo de Licencia" required name="tipoLicencia1">
+      <input type="text" [(ngModel)]="maestroSeleccionado.TipoLicencia2" placeholder="Tipo de Licencia" name="tipoLicencia2">
+      <input type="text" [(ngModel)]="maestroSeleccionado.TipoLicencia3" placeholder="Tipo de Licencia" name="tipoLicencia3">
+      <button type="submit">Actualizar Maestro</button>
+      <button type="button" (click)="confirmarEliminarMaestro(maestroSeleccionado)">Eliminar</button>
+      <button type="button" (click)="cancelarEdicion()">Cancelar</button>
+    </form>
+  </div>  
 </div>

@@ -26,7 +26,7 @@ editarAlumno(_t150: any) {
 throw new Error('Method not implemented.');
 }
 
-constructor ( private AlumnoService: AlumnoService) {}
+constructor ( private alumnoService: AlumnoService) {}
 
 // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el alumno
    usuario: Usuario = {
@@ -74,13 +74,26 @@ constructor ( private AlumnoService: AlumnoService) {}
 }
   matricula = "";
 
-
+  listaMatricula: { usuario: Usuario, alumno: alumno }[] = [];
 
   ngOnInit(): void {
     
   }
 
   Actualizar(): void {
+    this.alumnoService.GetAlumnoByUsername(this.matricula)
+    .then((result) => {
+      if(result != null){
+        this.listaMatricula = [];
+        this.listaMatricula.push(result);
+      } else {
+        alert('Matricula no encontrada');
+      }
+    })
+    .catch((error) => { 
+      console.error('Error al crear el Alumno:', error);
+      alert('Error al crear el Alumno');
+    })
   }
 
   Guardar(): void {
@@ -96,7 +109,7 @@ constructor ( private AlumnoService: AlumnoService) {}
 
     
 
-    this.AlumnoService.AddAlumno(this.alumno, this.usuario)
+    this.alumnoService.AddAlumno(this.alumno, this.usuario)
       .then((result) => {
         if (result === null) {
           alert('La MATRICULA ya existe.');

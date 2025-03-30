@@ -6,5 +6,5 @@ export interface Escolar {
     maestro: string;
     materia: string;
     calificacion?: number;
-    fecha?: string; // Formato YYYY-MM-DD
+    fecha?: string;
   }
