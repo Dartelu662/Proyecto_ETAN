@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { AuthentificationService } from '../services/authentification.service';
+
 
 @Component({
   selector: 'app-admin-2',
@@ -9,8 +11,18 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 })
 export class Admin2Component {
   menuActivo = false;
-
+  constructor(private authService: AuthentificationService, private router: Router) {}
   toggleMenu() {
     this.menuActivo = !this.menuActivo;
+  }
+
+  logout(): void {
+    this.authService.logout()
+      .then(() => {
+      this.router.navigate(['/login']);
+      })
+      .catch(error => {
+        console.error('Error al cerrar sesión:', error);
+      });
   }
 }

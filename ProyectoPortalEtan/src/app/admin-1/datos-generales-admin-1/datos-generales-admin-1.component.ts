@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './datos-generales-admin-1.component.css'
 })
 export class DatosGeneralesAdmin1Component {
-
+  
 }

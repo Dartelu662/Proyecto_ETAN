@@ -1,18 +1,11 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, OnInit, NgZone } from "@angular/core"
 import { CommonModule } from "@angular/common"
+import { AlumnoService } from "../../services/alumno.service"
+import { UsuarioService } from "../../services/usuario.service"
+import { Auth, user, User } from "@angular/fire/auth"
+import Usuario from "../../interfaces/usuario.interface"
 
-interface Alumno {
-  matricula: string
-  nombre: string
-  apellidoPaterno: string
-  apellidoMaterno: string
-  correo1: string
-  correo2: string
-  celular: string
-  direccion: string
-  fechaNacimiento: Date
-  fechaFinPermiso: Date
-}
+
 
 @Component({
   selector: 'app-datos-generales-alumno',
@@ -21,28 +14,40 @@ interface Alumno {
   styleUrl: './datos-generales-alumno.component.css'
 })
 export class DatosGeneralesAlumnoComponent implements OnInit{
-  alumno: Alumno = {
-    matricula: "A12345678",
-    nombre: "Juan",
-    apellidoPaterno: "Pérez",
-    apellidoMaterno: "García",
-    correo1: "juan.perez@ejemplo.com",
-    correo2: "juanpg@otrocorreo.com",
-    celular: "555-123-4567",
-    direccion: "Calle Principal 123, Ciudad Ejemplo, CP 12345",
-    fechaNacimiento: new Date("1995-05-15"),
-    fechaFinPermiso: new Date("2025-12-31"),
-  }
+
+  usuarioAutenticado!: User | null
+  user: Usuario | null = null
+
+  constructor(
+    private alumnoService: AlumnoService,
+    private usuarioService: UsuarioService,
+    private auth: Auth,
+    private ngZone: NgZone
+  ) {}
 
   get nombreCompleto(): string {
-    return `${this.alumno.nombre} ${this.alumno.apellidoPaterno} ${this.alumno.apellidoMaterno}`
+    return this.user ? `${this.user.Nombres} ${this.user.ApellidoP} ${this.user.ApellidoM}` : ''
   }
 
-  constructor() {}
+  async ngOnInit(): Promise<void> {
+    user(this.auth).subscribe(async (usuario) => {
+      if (!usuario) return
 
-  ngOnInit(): void {}
+      this.ngZone.run(async () => {
+        this.usuarioAutenticado = usuario
 
-  formatDate(date: Date): string {
-    return date.toLocaleDateString("es-ES", { year: "numeric", month: "2-digit", day: "2-digit" })
+        if (usuario.email) {
+          const usuarioDB = await this.usuarioService.getUsuarioByUserName(usuario.email)
+          if (usuarioDB) {
+            this.user = usuarioDB
+          }
+        }
+      })
+    })
+  }
+
+  formatDate(date: string | null | undefined): string | null {
+    if (!date) return null
+    return new Date(date).toLocaleDateString("es-ES", { year: "numeric", month: "2-digit", day: "2-digit" })
   }
 }

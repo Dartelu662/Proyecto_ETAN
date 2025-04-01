@@ -3,7 +3,7 @@
     <div class="datos-grid">
       <div class="dato">
         <label>Matrícula:</label>
-        <span>{{ alumno.matricula }}</span>
+        <span>{{ user?.UserName }}</span>
       </div>
       <div class="dato nombre-completo">
         <label>Nombre Completo:</label>
@@ -11,27 +11,19 @@
       </div>
       <div class="dato">
         <label>Correo Principal:</label>
-        <span>{{ alumno.correo1 }}</span>
-      </div>
-      <div class="dato">
-        <label>Correo Secundario:</label>
-        <span>{{ alumno.correo2 }}</span>
+        <span>{{ user?.Email }}</span>
       </div>
       <div class="dato">
         <label>Celular:</label>
-        <span>{{ alumno.celular }}</span>
+        <span>{{ user?.Celular }}</span>
       </div>
       <div class="dato direccion">
         <label>Dirección:</label>
-        <span>{{ alumno.direccion }}</span>
+        <span>{{ user?.Direccion }}</span>
       </div>
       <div class="dato">
         <label>Fecha de Nacimiento:</label>
-        <span>{{ formatDate(alumno.fechaNacimiento) }}</span>
-      </div>
-      <div class="dato">
-        <label>Fecha de Fin de Permiso de Formación:</label>
-        <span>{{ formatDate(alumno.fechaFinPermiso) }}</span>
+        <span>{{ formatDate(user?.FechaNac) }}</span>
       </div>
     </div>
   </div>
