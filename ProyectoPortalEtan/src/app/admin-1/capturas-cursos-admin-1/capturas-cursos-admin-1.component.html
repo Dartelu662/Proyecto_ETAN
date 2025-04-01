@@ -25,7 +25,7 @@
     <h3>Agregar Nuevo Plan</h3>
     <form (ngSubmit)="agregarPlan()">
       <label for="nombrePlan">Nombre del Plan:</label>
-      <input type="text" id="nombrePlan" [(ngModel)]="nuevoPlan.NombrePlan" name="nombrePlan" required>
+      <input type="text" id="nombrePlan" [(ngModel)]="nuevoPlan.Plan" name="nombrePlan" required>
       <Br>
 
       <label for="fechaIniPlan">Fecha de Inicio:</label>
@@ -69,7 +69,7 @@
     <h3>Agregar Nuevo Curso</h3>
     <form (ngSubmit)="agregarCurso()">
       <label for="nombreCurso">Nombre del Curso:</label>
-      <input type="text" id="nombreCurso" [(ngModel)]="nuevoCurso.NombreCurso" name="nombreCurso" required>
+      <input type="text" id="nombreCurso" [(ngModel)]="nuevoCurso.Curso" name="nombreCurso" required>
       <Br>
 
         <label for="Semanal">Semanal:</label>
@@ -80,11 +80,11 @@
       <Br>
   
       <label for="fechaIniCurso">Fecha de Inicio:</label>
-      <input type="date" id="fechaIniCurso" [(ngModel)]="nuevoCurso.FechaIni" name="fechaIniCurso" required>
+      <input type="date" id="fechaIniCurso" [(ngModel)]="nuevoCurso.FechaCursoIni" name="fechaIniCurso" required>
       <Br>
 
       <label for="fechaFinCurso">Fecha de Fin:</label>
-      <input type="date" id="fechaFinCurso" [(ngModel)]="nuevoCurso.FechaFin" name="fechaFinCurso" required>
+      <input type="date" id="fechaFinCurso" [(ngModel)]="nuevoCurso.FechaCursoFin" name="fechaFinCurso" required>
 
       <button type="submit">Agregar Curso</button>
     </form>
