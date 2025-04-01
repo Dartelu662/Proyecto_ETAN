@@ -1,8 +1,8 @@
 <div class="datos-alumno-container">
-    <h2>Datos Generales del Alumno</h2>
+    <h2>Datos Generales del Usuario</h2>
     <div class="datos-grid">
       <div class="dato">
-        <label>Matrícula:</label>
+        <label>UserName:</label>
         <span>{{ user?.UserName }}</span>
       </div>
       <div class="dato nombre-completo">
@@ -20,6 +20,10 @@
       <div class="dato direccion">
         <label>Dirección:</label>
         <span>{{ user?.Direccion }}</span>
+      </div>
+      <div class="dato direccion">
+        <label>Tipo de Usuario:</label>
+        <span>{{ user?.TipoUsuario }}</span>
       </div>
       <div class="dato">
         <label>Fecha de Nacimiento:</label>
