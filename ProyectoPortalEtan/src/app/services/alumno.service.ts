@@ -82,13 +82,66 @@ export class AlumnoService {
       return usuario ? { usuario, alumno: alumnoData } : null;
     }
 
-    async DisableAlumno(id: string): Promise<void> {
-      const alumnoDocRef = doc(this.firestore, `Alumno/${id}`);
-      await updateDoc(alumnoDocRef, { Activo: false });
-  
-      const alumnoData = await this.GetAlumnoById(id);
-      if (alumnoData && alumnoData.usuario.id) {
-        await this.usuarioService.DisableUsuario(alumnoData.usuario.id);
+    async disableAlumno(userName: string): Promise<void> {
+      // 1. Obtener el usuario por UserName
+      const usuario = await this.usuarioService.getUsuarioByUserName(userName);
+      if (!usuario) {
+        throw new Error('Usuario no encontrado');
       }
+    
+      // 2. Deshabilitar el usuario actualizando el campo Activo a false
+      await this.usuarioService.DisableUsuario(usuario.id!);
     }
+
+    async UpdateUsuarioYAlumno(usuario: Usuario, alumno: Alumno): Promise<boolean> {
+      if (!usuario.UserName) {
+          console.error('Error: El UserName del usuario es obligatorio para actualizar.');
+          return false;
+      }
+  
+      // 1. Buscar el usuario por su UserName
+      const usuarioExistente = await this.usuarioService.getUsuarioByUserName(usuario.UserName);
+      if (!usuarioExistente) {
+          console.error('Error: Usuario no encontrado.');
+          return false;
+      }
+  
+      // 2. Preparar los datos a actualizar solo con los campos que no son nulos o vacíos
+      const updateUsuarioData: Partial<Usuario> = Object.fromEntries(
+          Object.entries(usuario).filter(([_, value]) => value !== null && value !== '')
+      );
+  
+      // 3. Actualizar el usuario
+      const usuarioDocRef = doc(this.firestore, `Usuarios/${usuarioExistente.id}`);
+      try {
+          await updateDoc(usuarioDocRef, updateUsuarioData);
+      } catch (error) {
+          console.error('Error al actualizar usuario:', error);
+          return false;
+      }
+  
+      // 4. Buscar el alumno asociado al usuario por UserName
+      const q = query(collection(this.firestore, 'Alumno'), where('Username', '==', usuario.UserName));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+          console.error('Error: Alumno no encontrado.');
+          return false;
+      }
+  
+      // 5. Preparar los datos a actualizar solo con los campos que no son nulos o vacíos
+      const updateAlumnoData: Partial<Alumno> = Object.fromEntries(
+          Object.entries(alumno).filter(([_, value]) => value !== null && value !== '')
+      );
+  
+      // 6. Actualizar el alumno
+      const alumnoDocRef = doc(this.firestore, `Alumno/${querySnapshot.docs[0].id}`);
+      try {
+          await updateDoc(alumnoDocRef, updateAlumnoData);
+          return true;
+      } catch (error) {
+          console.error('Error al actualizar alumno:', error);
+          return false;
+      }
+  }
+    
 }

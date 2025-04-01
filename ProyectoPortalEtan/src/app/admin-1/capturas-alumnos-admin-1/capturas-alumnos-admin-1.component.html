@@ -94,42 +94,32 @@
       <!-- Botón de Guardar -->
       <button type="submit" class="btn btn-primary" [disabled]="!alumnoForm.form.valid">Guardar</button>
   </form>
-  <form (ngSubmit)="Actualizar()" #alumnoTb="ngForm">
-    <div class="form-group linea1">
-        <label for="matricula">Matrícula</label>
-        <input type="text" id="matricula2" class="form-control" [(ngModel)]="matricula" name="matricula" required>
+  <form (submit)="buscarAlumno()">
+    <div class="form-group">
+      <label for="matricula">Matrícula</label>
+      <input type="text" id="matricula" class="form-control" [(ngModel)]="matriculaBusqueda" name="matricula" required>
     </div>
-    <button type="submit" class="btn btn-primary" [disabled]="!alumnoTb.form.valid">Actualizar</button>
-    <table>
-        <thead>
-          <tr>
-            <th>matricula</th>
-            <th>Nombre</th>
-            <th>PermisoFormacion</th>
-            <th>FechaFinPF</th>
-            <th>Plan</th>
-            <th>Curso</th>
-            <th>Modalidad</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of listaMatricula">
-                <td>{{ item.usuario.UserName }}</td>
-                <td>{{ item.usuario.Nombres }} {{ item.usuario.ApellidoP }} {{ item.usuario.ApellidoM }}</td>
-                <td>{{ item.alumno.PermisoFormacion }}</td>
-                <td>{{ item.alumno.FechaFinPF || '-' }}</td>
-                <!-- <td>{{ Plan.Plan || '-' }}</td>
-                <td>{{ curso.Curso }}</td>
-                <td>{{ curso.Semanal }}</td> -->
-                <td>
-                    <button (click)="editarAlumno(item)">Editar</button>
-                    <button (click)="eliminarAlumno(item.usuario.UserName)">Eliminar</button>
-                </td>
-            </tr>
-        </tbody>
-      </table>
-
-    
+    <button type="submit" class="btn btn-primary">Buscar</button>
   </form>
+  
+  <!-- Mostrar tarjeta del alumno si existe -->
+  <div *ngIf="alumnoSeleccionado" class="card">
+    <h3>Editar Alumno</h3>
+    <form (submit)="actualizarAlumno()">
+        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.UserName" [disabled]="true" placeholder="Matricula" required name="UserName">
+        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.Nombres" placeholder="Nombre" required name="Nombres">
+        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.ApellidoP" placeholder="Apellido Paterno" required name="ApellidoP">
+        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.ApellidoM" placeholder="Apellido Materno" required name="ApellidoM">
+        <input type="email" [(ngModel)]="alumnoSeleccionado.usuario.Email" placeholder="Correo" required name="Email">
+        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.Direccion" placeholder="Direccion" required name="Direccion">
+        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.Celular" placeholder="Celular" required name="Celular">
+        <input type="date" [(ngModel)]="alumnoSeleccionado.usuario.FechaNac" placeholder="Fecha Nacimiento" required name="FechaNac">
+      <input type="text" [(ngModel)]="alumnoSeleccionado.alumno.PermisoFormacion" placeholder="Permiso de Formacion" required name="PermisoFormacion">
+      <input type="date" [(ngModel)]="alumnoSeleccionado.alumno.FechaFinPF" placeholder="Fecha Fin PF" required name="FechaFinPF">
+      <button type="submit" class="btn btn-success">Actualizar</button>
+      <button type="button" class="btn btn-danger" (click)="deshabilitarAlumno()">Deshabilitar</button>
+      <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+    </form>
+  </div>
   
 </div>

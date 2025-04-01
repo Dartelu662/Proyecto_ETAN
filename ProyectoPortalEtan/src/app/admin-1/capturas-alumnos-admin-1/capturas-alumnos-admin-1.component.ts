@@ -7,6 +7,8 @@ import Auth from '../../interfaces/auth.interface';
 import { AlumnoService } from '../../services/alumno.service';
 import plan from '../../interfaces/plan.interface';
 import curso from '../../interfaces/curso.interface';
+import { UsuarioService } from '../../services/usuario.service';
+import Alumno from '../../interfaces/alumno.interface';
 
 @Component({
   selector: 'app-capturas-alumnos-admin-1',
@@ -19,14 +21,60 @@ import curso from '../../interfaces/curso.interface';
   styleUrls: ['./capturas-alumnos-admin-1.component.scss']
 })
 export class CapturasAlumnosAdmin1Component implements OnInit{
-eliminarAlumno(arg0: any) {
-throw new Error('Method not implemented.');
-}
-editarAlumno(_t150: any) {
-throw new Error('Method not implemented.');
-}
 
-constructor ( private alumnoService: AlumnoService) {}
+  matriculaBusqueda: string = '';
+  alumnoSeleccionado: { alumno: Alumno; usuario: Usuario } | null = null;
+
+
+  async buscarAlumno(): Promise<void> {
+    if (!this.matriculaBusqueda.trim()) return;
+
+    const resultado = await this.alumnoService.GetAlumnoByUsername(this.matriculaBusqueda);
+    
+    if (resultado) {
+      this.alumnoSeleccionado = resultado;
+    } else {
+      alert('Alumno no encontrado');
+    }
+  }
+
+  cancelarEdicion(): void {
+    this.alumnoSeleccionado = null;
+  }
+  
+  async actualizarAlumno(): Promise<void> {
+    if (!this.alumnoSeleccionado) return;
+
+    const { alumno, usuario } = this.alumnoSeleccionado;
+
+    const actualizado = await this.alumnoService.UpdateUsuarioYAlumno(usuario, alumno);
+    
+    if (actualizado) {
+      alert('Alumno actualizado correctamente');
+      this.alumnoSeleccionado = null;
+    } else {
+      alert('Error al actualizar');
+    }
+  }
+
+  async deshabilitarAlumno() {
+    if (this.alumnoSeleccionado) {
+      const usuario = this.alumnoSeleccionado.usuario;
+      try {
+        await this.alumnoService.disableAlumno(usuario.UserName);
+        alert('Alumno deshabilitado correctamente');
+        this.alumnoSeleccionado = null;  // Limpiar los datos del alumno
+      } catch (error) {
+        console.error('Error al deshabilitar', error);
+        alert('Error al deshabilitar');
+      }
+    }
+  }
+
+constructor ( 
+  private alumnoService: AlumnoService, 
+  private usuarioService: UsuarioService
+) {}
 
 // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el alumno
    usuario: Usuario = {
@@ -72,7 +120,6 @@ constructor ( private alumnoService: AlumnoService) {}
     FechaCursoFin: '',
     Activo: true
 }
-  matricula = "";
 
   listaMatricula: { usuario: Usuario, alumno: alumno }[] = [];
 
@@ -80,21 +127,7 @@ constructor ( private alumnoService: AlumnoService) {}
     
   }
 
-  Actualizar(): void {
-    this.alumnoService.GetAlumnoByUsername(this.matricula)
-    .then((result) => {
-      if(result != null){
-        this.listaMatricula = [];
-        this.listaMatricula.push(result);
-      } else {
-        alert('Matricula no encontrada');
-      }
-    })
-    .catch((error) => { 
-      console.error('Error al crear el Alumno:', error);
-      alert('Error al crear el Alumno');
-    })
-  }
+  
 
   Guardar(): void {
 

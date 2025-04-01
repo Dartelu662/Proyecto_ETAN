@@ -31,6 +31,15 @@ export class UsuarioService {
     await updateDoc(usuarioDocRef, { Activo: false });
   }
 
+  async UpdateUsuario(usuario: Partial<Usuario>): Promise<void> {
+    if(usuario && usuario.id){
+      const usuarioDocRef = doc(this._firestore, `Usuario/${usuario.id}`);
+    await updateDoc(usuarioDocRef, usuario);
+    } else {
+      throw new Error('Usuario no encontrado');
+    }
+  }
+
   async getUsuarioByUserName(userName: string): Promise<Usuario | null> {
     const usuarioRef = collection(this._firestore, 'Usuarios');
     const q = query(usuarioRef, where('UserName', '==', userName));
