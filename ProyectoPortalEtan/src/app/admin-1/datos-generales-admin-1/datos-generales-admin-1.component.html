@@ -1,1 +1,31 @@
-<p>datos-generales-admin-1 works!</p>
+<div class="datos-alumno-container">
+    <h2>Datos Generales del Alumno</h2>
+    <div class="datos-grid">
+      <div class="dato">
+        <label>Matrícula:</label>
+        <span>{{ user?.UserName }}</span>
+      </div>
+      <div class="dato nombre-completo">
+        <label>Nombre Completo:</label>
+        <span>{{ nombreCompleto }}</span>
+      </div>
+      <div class="dato">
+        <label>Correo Principal:</label>
+        <span>{{ user?.Email }}</span>
+      </div>
+      <div class="dato">
+        <label>Celular:</label>
+        <span>{{ user?.Celular }}</span>
+      </div>
+      <div class="dato direccion">
+        <label>Dirección:</label>
+        <span>{{ user?.Direccion }}</span>
+      </div>
+      <div class="dato">
+        <label>Fecha de Nacimiento:</label>
+        <span>{{ formatDate(user?.FechaNac) }}</span>
+      </div>
+    </div>
+  </div>
+  
+  

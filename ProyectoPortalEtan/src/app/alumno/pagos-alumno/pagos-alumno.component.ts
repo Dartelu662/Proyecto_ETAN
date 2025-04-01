@@ -10,7 +10,7 @@ declare var paypal: any;
   selector: 'app-pagos-alumno',
   imports: [],
   templateUrl: './pagos-alumno.component.html',
-  styleUrl: './pagos-alumno.component.css'
+  styleUrl: './pagos-alumno.component.scss'
 })
 // export class PagosAlumnoComponent {
 

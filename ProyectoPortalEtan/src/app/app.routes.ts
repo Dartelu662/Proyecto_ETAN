@@ -14,8 +14,7 @@ export const routes: Routes = [
     loadComponent: () => import('./alumno/alumno.component').then(m => m.AlumnoComponent),
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-      { path: 'inicio', loadComponent: () => import('./alumno/inicio-alumno/inicio-alumno.component').then(m => m.InicioAlumnoComponent) },
+      { path: '', redirectTo: 'datos-generales', pathMatch: 'full' },
       { path: 'datos-generales', loadComponent: () => import('./alumno/datos-generales-alumno/datos-generales-alumno.component').then(m => m.DatosGeneralesAlumnoComponent) },
       { path: 'vuelos', loadComponent: () => import('./alumno/vuelos-alumno/vuelos-alumno.component').then(m => m.VuelosAlumnoComponent) },
       { path: 'calificaciones', loadComponent: () => import('./alumno/calificaciones-alumno/calificaciones-alumno.component').then(m => m.CalificacionesAlumnoComponent) },

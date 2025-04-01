@@ -4,6 +4,8 @@ import AUTH from '../interfaces/auth.interface';
 import { UsuarioService } from './usuario.service';
 import { throwError } from 'rxjs';
 import { AdminService } from './admin.service';
+import { error } from 'console';
+import Usuario from '../interfaces/usuario.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,18 @@ export class AuthentificationService {
     logout(): Promise<void> {
       return signOut(this.authActual);  // Cierra la sesión de Firebase
     }
+
+    async retornarUsuarioActual(): Promise<Usuario | null> {
+  if (this.authActual && this.authActual.currentUser && this.authActual.currentUser.email) {
+    try {
+      const value = await this.usuarioService.getUsuarioByEMail(this.authActual.currentUser.email);
+      return value;
+    } catch (error) {
+      return null;
+    }
+  }
+  return null;
+}
 
     async updatePassword(newPassword: string): Promise<void> {
       const user = this._Auth.currentUser;

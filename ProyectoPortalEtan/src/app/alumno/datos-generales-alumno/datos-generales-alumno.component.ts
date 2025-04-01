@@ -4,6 +4,7 @@ import { AlumnoService } from "../../services/alumno.service"
 import { UsuarioService } from "../../services/usuario.service"
 import { Auth, user, User } from "@angular/fire/auth"
 import Usuario from "../../interfaces/usuario.interface"
+import { AuthentificationService } from "../../services/authentification.service"
 
 
 
@@ -22,7 +23,7 @@ export class DatosGeneralesAlumnoComponent implements OnInit{
     private alumnoService: AlumnoService,
     private usuarioService: UsuarioService,
     private auth: Auth,
-    private ngZone: NgZone
+    private authentificationService: AuthentificationService
   ) {}
 
   get nombreCompleto(): string {
@@ -30,19 +31,9 @@ export class DatosGeneralesAlumnoComponent implements OnInit{
   }
 
   async ngOnInit(): Promise<void> {
-    user(this.auth).subscribe(async (usuario) => {
-      if (!usuario) return
-
-      this.ngZone.run(async () => {
-        this.usuarioAutenticado = usuario
-
-        if (usuario.email) {
-          const usuarioDB = await this.usuarioService.getUsuarioByUserName(usuario.email)
-          if (usuarioDB) {
-            this.user = usuarioDB
-          }
-        }
-      })
+    this.authentificationService.retornarUsuarioActual()
+    .then(v => {
+      this.user = v;
     })
   }
 
