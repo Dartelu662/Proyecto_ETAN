@@ -2,9 +2,9 @@
 <div class="container">
   <!-- Menú lateral -->
   <div class="menu" [class.active]="menuActivo">
-    <div class="group-header" routerLink="/admin-1/inicio" (click)="toggleMenu()">
+    <div class="group-header" routerLink="/admin-1/datos-generales" (click)="toggleMenu()">
       <div class="icon"></div>
-      <div class="title">Inicio</div>
+      <div class="title">Datos Generales</div>
     </div>
     <div class="group-header" routerLink="/admin-1/captura-alumnos" (click)="toggleMenu()">
       <div class="icon"></div>
@@ -35,8 +35,8 @@
       <div class="icon"></div>
       <div class="title">Captura Escolar</div>
     </div>
+  <button (click)="logout()">Cerrar sesión</button>
   </div>
-
   <!-- Contenedor de contenido dinámico -->
   <div id="content">
     <router-outlet></router-outlet>

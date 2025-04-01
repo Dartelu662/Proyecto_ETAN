@@ -42,6 +42,17 @@ export class UsuarioService {
     }
   }
 
+  async getUsuarioByEMail(email: string): Promise<Usuario | null> {
+    const usuarioRef = collection(this._firestore, 'Usuarios');
+    const q = query(usuarioRef, where('Email', '==', email));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs[0].data() as Usuario;
+    } else {
+      return null;
+    }
+  }
+
   async getUsuarioById(id: string): Promise<Usuario | null> {
     const usuarioDoc = doc(this._firestore, 'Usuarios', id);
     const snapshot = await getDoc(usuarioDoc);

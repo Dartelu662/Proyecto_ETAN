@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms'; // Asegúrate de importar 
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './pagos-admin-2.component.html',
-  styleUrl: './pagos-admin-2.component.css'
+  styleUrls: ['./pagos-admin-2.component.scss']
 })
 export class PagosAdmin2Component {
   pagoForm: FormGroup;

@@ -2,10 +2,6 @@
 <div class="container">
   <!-- Menú lateral -->
   <div class="menu" [class.active]="menuActivo">
-    <div class="group-header" routerLink="/admin-2/inicio" (click)="toggleMenu()">
-      <div class="icon"></div>
-      <div class="title">Inicio</div>
-    </div>
     <div class="group-header" routerLink="/admin-2/datos-generales" (click)="toggleMenu()">
       <div class="icon"></div>
       <div class="title">Datos Generales</div>
@@ -18,6 +14,7 @@
       <div class="icon"></div>
       <div class="title">Pagos</div>
     </div>
+  <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
    </div>
 
 

@@ -26,7 +26,7 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
   // Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el admin
   usuario: Usuario = {
     UserName: '',
-    TipoUsuario: 'admin',
+    TipoUsuario: 'Admin-1',
     Nombres: '',
     ApellidoP: '',
     ApellidoM: '',
@@ -66,8 +66,13 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
       "Administrador tipo 2": 2
     };
 
-    this.admin.IdAdmin = adminIds[this.admin.TipoAdmin] || 1; // Default a 1 si no coincide
+    const tipoAdmin: { [key: string]: string } = {
+      "Administrador tipo 1": 'Admin-1',
+      "Administrador tipo 2": 'Admin-2'
+    };
 
+    this.admin.IdAdmin = adminIds[this.admin.TipoAdmin] || 1; // Default a 1 si no coincide
+    this.usuario.TipoUsuario = tipoAdmin[this.admin.TipoAdmin] || 'Admin-1';
     this.auth.Email = this.usuario.Email;
 
     if (this.auth.Password.length < 6) {
