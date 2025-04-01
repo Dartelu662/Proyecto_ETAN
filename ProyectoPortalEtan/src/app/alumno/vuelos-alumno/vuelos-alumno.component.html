@@ -12,7 +12,9 @@
             <h3>Selecciona una fecha</h3>
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Fecha de reserva</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="date" required>
+              <input matInput [matDatepicker]="picker" formControlName="date" required 
+               [ngModel]="hrsVuelo.Fecha"
+               > <!--input-->
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
               <mat-error *ngIf="dateFormGroup.controls['date'].hasError('required')">
@@ -32,7 +34,9 @@
             <h3>Selecciona un horario</h3>
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Horario disponible</mat-label>
-              <mat-select formControlName="timeSlot" required>
+              <mat-select formControlName="timeSlot" required 
+              [ngModel]="hrsVuelo.Hora"  
+              >
                 <mat-option *ngFor="let slot of timeSlots" [value]="slot">
                   {{ slot }}
                 </mat-option>
@@ -48,12 +52,40 @@
           </form>
         </mat-step>
 
-        <!-- Paso 3: Información de tarjeta de crédito -->
+
+        <!-- Paso 3: Selección de Avion -->
+        <mat-step [stepControl]="planeFormGroup">
+          <form [formGroup]="planeFormGroup">
+            <ng-template matStepLabel>Avion</ng-template>
+            <h3>Selecciona un Avion</h3>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Avion disponible</mat-label>
+              <mat-select formControlName="listaAviones" required 
+              [ngModel]="hrsVuelo.Avion"  
+              >
+                <mat-option *ngFor="let slot of listaAviones" [value]="slot">
+                  {{ slot.Modelo }}
+                  {{ slot.NumeroRegistro }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="planeFormGroup.controls['listaAviones'].hasError('required')">
+                Por favor selecciona un Avion
+              </mat-error>
+            </mat-form-field>
+            <div class="button-row">
+              <button mat-button matStepperPrevious>Atrás</button>
+              <button mat-button matStepperNext color="primary" [disabled]="planeFormGroup.invalid">Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+
+
+       <!-- Paso 4: Información de tarjeta de crédito -->
         <mat-step [stepControl]="paymentFormGroup">
           <form [formGroup]="paymentFormGroup">
             <ng-template matStepLabel>Pago</ng-template>
             <h3>Información de pago</h3>
-            <div class="card-container">
+            <!-- <div class="card-container">
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Nombre en la tarjeta</mat-label>
                 <input matInput formControlName="cardName" required>
@@ -93,8 +125,9 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-            </div>
+            </div> -->
             <div class="button-row">
+              <div #paypal></div>
               <button mat-button matStepperPrevious>Atrás</button>
               <button mat-button matStepperNext color="primary" [disabled]="paymentFormGroup.invalid">Siguiente</button>
             </div>

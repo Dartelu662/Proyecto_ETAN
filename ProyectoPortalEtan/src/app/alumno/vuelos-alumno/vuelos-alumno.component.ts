@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -9,6 +9,13 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { HrsvueloService } from '../../services/hrsvuelo.service';
+import { HrsVuelo } from '../../interfaces/hrsvuelo.interface';
+import Avion from '../../interfaces/avion.interface';
+import { AvionesService } from '../../services/aviones.service';
+import { ViewChild } from '@angular/core';
+
+declare var paypal: any;
 
 @Component({
   selector: 'app-vuelos-alumno',
@@ -28,9 +35,21 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './vuelos-alumno.component.html',
   styleUrl: './vuelos-alumno.component.css'
 })
-export class VuelosAlumnoComponent{
+export class VuelosAlumnoComponent implements OnInit {
+
+    @ViewChild('paypal', { static: true }) paypalElement: ElementRef | undefined;
+
+
+  hrsVuelo: HrsVuelo = {
+    Matricula: '',
+    Fecha: '',
+    Hora: '',
+    Avion: ''
+}
+
   dateFormGroup: FormGroup;
   timeFormGroup: FormGroup;
+  planeFormGroup: FormGroup;
   paymentFormGroup: FormGroup;
   
   timeSlots: string[] = [
@@ -40,7 +59,61 @@ export class VuelosAlumnoComponent{
     '5:00 PM', '6:30 PM',
   ];
 
-  constructor(private _formBuilder: FormBuilder) {
+  Pagos = {
+    descripcion : 'Mensualidad',
+    monto      :  5200,
+    img         : 'imagen de tu producto'
+  }
+
+  listaAviones: Avion[] = []
+
+  ngOnInit(): void {
+      this.avionService.GetAvions().subscribe( async value => {
+        this.listaAviones = value;
+        console.log (value)
+      });
+
+                // Verificar si paypal está definido
+          if (typeof paypal !== 'undefined') {
+      
+              paypal
+              .Buttons({
+                createOrder: (data: any, actions: any) => {
+                  return actions.order.create({
+                    purchase_units: [{
+                      description: this.Pagos.descripcion, 
+                      amount     : {
+                      currency_code: 'MXN', 
+                      value        : this.Pagos.monto.toString()
+                      }
+                    }]
+                  })
+                },
+      
+                onApprove: async (_data: any, actions: { order: { capture: () => any; }; }) => {
+                  const order = await actions.order.capture();
+                  console.log(order);
+                },
+                onError: (err: any) => {
+                  console.log(err);
+                }
+       
+              })
+              
+              .render  (this.paypalElement?.nativeElement);
+      
+            } else {
+              console.error('PayPal SDK no ha sido cargado correctamente');
+            }
+
+
+  }
+
+  constructor(
+    private _formBuilder: FormBuilder, 
+    private hrsVueloService : HrsvueloService,
+    private avionService : AvionesService
+  ) {
     // Inicializar formularios con validaciones
     this.dateFormGroup = this._formBuilder.group({
       date: ['', Validators.required]
@@ -49,6 +122,10 @@ export class VuelosAlumnoComponent{
     this.timeFormGroup = this._formBuilder.group({
       timeSlot: ['', Validators.required]
     });
+
+    this.planeFormGroup = this._formBuilder.group({
+      listaAviones: ['', Validators.required]
+    })
 
     this.paymentFormGroup = this._formBuilder.group({
       cardName: ['', Validators.required],
