@@ -45,12 +45,15 @@ export class CapturasCursosAdmin1Component {
   nuevaMateria: Materia = { plan: '', curso: '', idMaestro: '', Maestro: '', Materia: '', Activo: true };
 
   selectedMaestro: string = '';
+  selectPlan: string = '';
+  selectCurso: string = '';
 
   constructor( 
     private planService: PlanService, 
     private cursoservice:CursoService, 
     private materiaservice: MateriaService,
-    private maestroservice: MaestroService
+    private maestroservice: MaestroService, 
+    
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +62,6 @@ export class CapturasCursosAdmin1Component {
       this.listaMaestros = value;
       console.log (value)
     }
-
 
     )
 
@@ -93,6 +95,36 @@ export class CapturasCursosAdmin1Component {
     }
    }
  
+
+   onPlanSelected(plan: string): void{
+    if(plan){
+      console.log(plan)
+      this.nuevaMateria.plan=plan
+      this.planService.GetPlanById(plan).subscribe( value => {
+        if(value)
+        {
+          this.nuevaMateria.plan = value.plan
+        }
+      })
+    }
+   }
+
+   
+   onCursoSelected(curso: string): void{
+    if(curso){
+      console.log(curso)
+      this.nuevaMateria.curso
+      this.cursoservice.GetCursoById(curso).subscribe( value => {
+        if(value)
+        {
+          this.nuevaMateria.curso = value.curso
+        }
+      })
+    }
+  }
+
+
+
   // Métodos para manejar las acciones en el HTML
 
   eliminarPlan(planId: Plan): void {
@@ -116,13 +148,17 @@ export class CapturasCursosAdmin1Component {
     this.nuevoPlan = { plan: '', FechaIni: '', FechaFin: '', Activo: true }; // Limpiar formulario
   }
 
-  eliminarCurso(cursoId: string): void {
-    this.cursos = this.cursos.filter(curso => curso.curso !== cursoId);
+  eliminarCurso(id: string): void {
+    // this.cursos = this.cursos.filter(curso => curso.curso !== cursoId);
+    console.log(this.cursoservice.deleteCurso(id))
+    
+    
   }
 
   actualizarCurso(curso: any): void {
     // Lógica para actualizar el curso
     console.log('Actualizar curso', curso);
+    this.cursoservice.UpdateCurso(curso)
   }
 
   agregarCurso(): void {
@@ -131,18 +167,32 @@ export class CapturasCursosAdmin1Component {
     this.nuevoCurso = { curso: '', Semanal: '', Sabatino: '', FechaCursoIni: '', FechaCursoFin: '', plan: '', Activo: true }; // Limpiar formulario
   }
 
-  eliminarMateria(Materia: string): void {
-    this.materias = this.materias.filter(materia => materia.Materia !== Materia);
+  eliminarMateria(Materia: string | undefined): void {
+    console.log('Eliminar materia', Materia)
+    if(Materia) {
+      this.materiaservice.deleteMateria(Materia)
+    }
+    
+    
+    //this.materias = this.materias.filter(materia => materia.Materia !== Materia);
   }
 
-  actualizarMateria(materia: any): void {
+  actualizarMateria(Materia: Materia | undefined): void {
     // Lógica para actualizar la materia
-    console.log('Actualizar materia', materia);
+    console.log('Actualizar materia', Materia);
+    if(Materia) {
+      this.materiaservice.UpdateMateria(Materia)
+    }
   }
 
-  agregarMateria(): void {
+    agregarMateria(): void {
     this.materiaservice.AddMateria(this.nuevaMateria);
     //this.materias.push({ ...this.nuevaMateria });
-    this.nuevaMateria = { plan: '', curso: '', idMaestro: '', Maestro: '', Materia: '', Activo: true }; // Limpiar formulario
+    // this.nuevaMateria = { plan: '', curso: '', idMaestro: '', Maestro: '', Materia: '', Activo: true }; // Limpiar formulario
+    this.nuevaMateria = { plan: '', curso: '',idMaestro: '', Maestro: '', Materia: '', Activo: true };
+    this.selectPlan = '';
+    this.selectCurso = '';
+    this.selectedMaestro = '';
   }
-}
+
+  }
