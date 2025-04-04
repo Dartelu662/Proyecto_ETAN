@@ -47,7 +47,7 @@ export class CapturasAlumnosAdmin1Component implements OnInit{
 
     const { alumno, usuario } = this.alumnoSeleccionado;
 
-    const actualizado = await this.alumnoService.UpdateUsuarioYAlumno(usuario, alumno);
+    const actualizado = await this.alumnoService.UpdateAlumno(alumno, usuario);
     
     if (actualizado) {
       alert('Alumno actualizado correctamente');
