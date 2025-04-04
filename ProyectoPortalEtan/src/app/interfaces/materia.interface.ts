@@ -1,8 +1,9 @@
 export default interface Materia{
     id?: string;
-    PlanId?: string;
-    CursoId?: string;
-    MaestroId?: string;
+    plan?: string;
+    curso?: string;
+    idMaestro: string;
+    Maestro: string;
     Materia: string;
     Activo: boolean;
 }

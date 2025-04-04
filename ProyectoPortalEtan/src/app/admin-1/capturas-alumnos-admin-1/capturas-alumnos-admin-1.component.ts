@@ -103,7 +103,7 @@ constructor (
 
     Plan: plan = {
       id: '',
-      Plan: '',
+      plan: '',
       FechaIni: '', 
       FechaFin: '',
       Activo: true
@@ -111,9 +111,8 @@ constructor (
 
     
   curso: curso = {
-    CursoId: '',
-    PlanId: '',
-    Curso: '',
+    curso: '',
+    plan: '',
     Semanal: '',
     Sabatino: '',
     FechaCursoIni: '',
@@ -132,7 +131,7 @@ constructor (
   Guardar(): void {
 
     this.auth.Email = this.usuario.Email
-    this.Plan.Plan = this.Plan.Plan
+    this.Plan.plan = this.Plan.plan
 
      if (this.curso.Semanal === "Semanal") {
        this.curso.Semanal = "Semanal";
