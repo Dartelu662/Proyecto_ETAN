@@ -1,141 +1,115 @@
 <div class="container">
+  <!-- PLANES -->
   <h2>Planes</h2>
-  <div class="tabla">
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre del Plan</th>
-          <th>Fecha Inicio</th>
-          <th>Fecha Fin</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let plan of planes">
-          <td>{{ plan.plan }}</td>
-          <td>{{ plan.FechaIni | date }}</td>
-          <td>{{ plan.FechaFin }}</td>
-          <td>
-            <button (click)="eliminarPlan(plan)">Eliminar</button>
-            <button (click)="actualizarPlan(plan)">Actualizar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <h3>Agregar Nuevo Plan</h3>
-    <form (ngSubmit)="agregarPlan()">
-      <label for="nombrePlan">Nombre del Plan:</label>
-      <input type="text" id="nombrePlan" [(ngModel)]="nuevoPlan.plan" name="nombrePlan" required>
-      <Br>
-
-      <label for="fechaIniPlan">Fecha de Inicio:</label>
-      <input type="date" id="fechaIniPlan" [(ngModel)]="nuevoPlan.FechaIni" name="fechaIniPlan" required>
-      <Br>
-
-      <label for="fechaFinPlan">Fecha de Fin:</label>
-      <input type="date" id="fechaFinPlan" [(ngModel)]="nuevoPlan.FechaFin" name="fechaFinPlan" required>
-
-      <button type="submit">Agregar Plan</button>
-    </form>
+  <div *ngFor="let plan of planes" class="registro-item">
+    <input [(ngModel)]="plan.plan" placeholder="Nombre del Plan" class="input-field">
+    <input type="date" [(ngModel)]="plan.FechaIni" class="input-field">
+    <input type="date" [(ngModel)]="plan.FechaFin" class="input-field">
+    <button (click)="actualizarPlan(plan)" class="btn">Actualizar</button>
+    <button (click)="eliminarPlan(plan)" class="btn">Eliminar</button>
   </div>
 
+  <h3>Agregar Nuevo Plan</h3>
+  <form (ngSubmit)="agregarPlan()">
+    <input type="text" [(ngModel)]="nuevoPlan.plan" name="nombrePlan" placeholder="Nombre del Plan" class="input-field" required>
+    <input type="date" [(ngModel)]="nuevoPlan.FechaIni" name="fechaIniPlan" class="input-field" required>
+    <input type="date" [(ngModel)]="nuevoPlan.FechaFin" name="fechaFinPlan" class="input-field" required>
+    <button type="submit" class="btn">Agregar Plan</button>
+  </form>
+
+  <hr>
+
+  <!-- CURSOS -->
   <h2>Cursos</h2>
-  <div class="tabla">
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre del Curso</th>
-          <th>Mod. Semanal</th>
-          <th>Mod. Sabatino</th>
-          <th>Fecha Ini</th>
-          <th>Fecha Fin</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let curso of cursos">
-          <td>{{ curso.curso }}</td>
-          <td>{{ curso.Semanal }}</td>
-          <td>{{ curso.Sabatino }}</td>
-          <td>{{ curso.FechaCursoIni| date }}</td>
-          <td>{{ curso.FechaCursoFin| date }}</td>
-          <td>
-            <button (click)="eliminarCurso(curso.curso)">Eliminar</button>
-            <button (click)="actualizarCurso(curso)">Actualizar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <h3>Agregar Nuevo Curso</h3>
-    <form (ngSubmit)="agregarCurso()">
-      <label for="nombreCurso">Nombre del Curso:</label>
-      <input type="text" id="nombreCurso" [(ngModel)]="nuevoCurso.curso" name="nombreCurso" required>
-      <Br>
-
-        <label for="Semanal">Semanal:</label>
-        <input type="text" id="Semanal" [(ngModel)]="nuevoCurso.Semanal" name="Semanal" required>
-      <Br>
-        <label for="Sabatino">Sabatino:</label>
-        <input type="text" id="Sabatino" [(ngModel)]="nuevoCurso.Sabatino" name="Sabatino" required>
-      <Br>
-  
-      <label for="fechaIniCurso">Fecha de Inicio:</label>
-      <input type="date" id="fechaIniCurso" [(ngModel)]="nuevoCurso.FechaCursoIni" name="fechaIniCurso" required>
-      <Br>
-
-      <label for="fechaFinCurso">Fecha de Fin:</label>
-      <input type="date" id="fechaFinCurso" [(ngModel)]="nuevoCurso.FechaCursoFin" name="fechaFinCurso" required>
-
-      <button type="submit">Agregar Curso</button>
-    </form>
+  <div *ngFor="let curso of cursos" class="registro-item">
+    <input [(ngModel)]="curso.curso" placeholder="Nombre del Curso" class="input-field">
+    <input [(ngModel)]="curso.Semanal" placeholder="Mod. Semanal" class="input-field">
+    <input [(ngModel)]="curso.Sabatino" placeholder="Mod. Sabatino" class="input-field">
+    <input type="date" [(ngModel)]="curso.FechaCursoIni" class="input-field">
+    <input type="date" [(ngModel)]="curso.FechaCursoFin" class="input-field">
+    <button (click)="actualizarCurso(curso)" class="btn">Actualizar</button>
+    <button (click)="eliminarCurso(curso.curso)" class="btn">Eliminar</button>
   </div>
 
+  <h3>Agregar Nuevo Curso</h3>
+  <form (ngSubmit)="agregarCurso()">
+    <input type="text" [(ngModel)]="nuevoCurso.curso" name="nombreCurso" placeholder="Nombre del Curso" class="input-field" required>
+    <input type="text" [(ngModel)]="nuevoCurso.Semanal" name="Semanal" placeholder="Semanal" class="input-field" required>
+    <input type="text" [(ngModel)]="nuevoCurso.Sabatino" name="Sabatino" placeholder="Sabatino" class="input-field" required>
+    <input type="date" [(ngModel)]="nuevoCurso.FechaCursoIni" name="fechaIniCurso" class="input-field" required>
+    <input type="date" [(ngModel)]="nuevoCurso.FechaCursoFin" name="fechaFinCurso" class="input-field" required>
+    <button type="submit" class="btn">Agregar Curso</button>
+  </form>
+
+  <hr>
+
+  <!-- MATERIAS -->
   <h2>Materias</h2>
-  <div class="tabla">
-    <table>
-      <thead>
-        <tr>
-          <th>Materia</th>
-          <th>Plan</th>
-          <th>Curso</th>
-          <th>Maestro</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let materia of materias">
-          <td>{{ materia.Materia }}</td>
-          <td>{{ materia.plan  }}</td>
-          <td>{{ materia.curso }}</td>
-          <td>{{ materia.Maestro }}</td>
-          <td>
-            <button (click)="eliminarMateria(materia.Materia)">Eliminar</button>
-            <button (click)="actualizarMateria(materia)">Actualizar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <h3>Agregar Nueva Materia</h3>
-    <form (ngSubmit)="agregarMateria()">
-      <label for="Materia">Materia:</label>
-      <input type="string" id="Materia" [(ngModel)]="nuevaMateria.Materia" name="Materia" required>
-    <Br>
-      <label for="Plan">Plan:</label>
-      <input type="string" id="Plan" [(ngModel)]="nuevaMateria.plan" name="Plan" required>
-    <br>
-      <label for="Curso">Curso:</label>
-      <input type="String" id="Curso" [(ngModel)]="nuevaMateria.curso" name="Curso" required>
-    <br>
+  <div *ngFor="let materia of materias" class="registro-item">
+    <input [(ngModel)]="materia.Materia" placeholder="Materia" class="input-field">
 
-    <div class="form-group linea5">
-      <label for="Maestro">Maestro</label>
-      <select id="Maestro" class="form-control" [(ngModel)]="selectedMaestro" name="listaMaestros" (change)="onMaestroSelected(selectedMaestro)" required>
-        <option   *ngFor="let maestro of listaMaestros" [value]="maestro.id">{{ maestro.Nombres }} {{ maestro.ApellidoP }} {{ maestro.ApellidoM }}</option>
-      </select>
-    </div>
+    <select [(ngModel)]="materia.plan" class="input-field">
+      <option *ngFor="let plan of planes" [value]="plan.plan">{{ plan.plan }}</option>
+    </select>
 
+    <select [(ngModel)]="materia.curso" class="input-field">
+      <option *ngFor="let curso of cursos" [value]="curso.curso">{{ curso.curso }}</option>
+    </select>
 
-      <button type="submit">Agregar Materia</button>
-    </form>
+    <select [(ngModel)]="materia.idMaestro" class="input-field">
+      <option *ngFor="let maestro of listaMaestros" [value]="maestro.id">
+        {{ maestro.Nombres }} {{ maestro.ApellidoP }} {{ maestro.ApellidoM }}
+      </option>
+    </select>
+
+    <button (click)="actualizarMateria(materia)" class="btn">Actualizar</button>
+    <button (click)="eliminarMateria(materia.id)" class="btn">Eliminar</button>
   </div>
+
+  <h3>Agregar Nueva Materia</h3>
+  <form (ngSubmit)="agregarMateria()">
+    <input type="text" [(ngModel)]="nuevaMateria.Materia" name="Materia" placeholder="Materia" class="input-field" required>
+
+    <select [(ngModel)]="selectPlan" name="planes" (change)="onPlanSelected(selectPlan)" class="input-field" required>
+      <option *ngFor="let plan of planes" [value]="plan.id">{{ plan.plan }}</option>
+    </select>
+
+    <select [(ngModel)]="selectCurso" name="Cursos" (change)="onCursoSelected(selectCurso)" class="input-field" required>
+      <option *ngFor="let curso of cursos" [value]="curso.id">{{ curso.curso }}</option>
+    </select>
+
+    <select [(ngModel)]="selectedMaestro" name="listaMaestros" (change)="onMaestroSelected(selectedMaestro)" class="input-field" required>
+      <option *ngFor="let maestro of listaMaestros" [value]="maestro.id">
+        {{ maestro.Nombres }} {{ maestro.ApellidoP }} {{ maestro.ApellidoM }}
+      </option>
+    </select>
+
+    <button type="submit" class="btn">Agregar Materia</button>
+  </form>
 </div>
+
+<style>
+  .registro-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+
+  .input-field {
+    padding: 6px;
+    font-size: 14px;
+    width: 180px;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  hr {
+    margin: 30px 0;
+  }
+</style>
