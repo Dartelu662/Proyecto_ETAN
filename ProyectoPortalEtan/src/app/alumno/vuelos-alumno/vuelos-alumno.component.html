@@ -36,7 +36,7 @@
               <mat-label>Horario disponible</mat-label>
               <mat-select formControlName="timeSlot" required 
               [ngModel]="hrsVuelo.Hora"  
-              >
+              > <!--input-->
                 <mat-option *ngFor="let slot of timeSlots" [value]="slot">
                   {{ slot }}
                 </mat-option>
@@ -85,47 +85,6 @@
           <form [formGroup]="paymentFormGroup">
             <ng-template matStepLabel>Pago</ng-template>
             <h3>Información de pago</h3>
-            <!-- <div class="card-container">
-              <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Nombre en la tarjeta</mat-label>
-                <input matInput formControlName="cardName" required>
-                <mat-error *ngIf="paymentFormGroup.controls['cardName'].hasError('required')">
-                  Nombre requerido
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Número de tarjeta</mat-label>
-                <input matInput formControlName="cardNumber" required maxlength="19">
-                <mat-icon matSuffix>credit_card</mat-icon>
-                <mat-error *ngIf="paymentFormGroup.controls['cardNumber'].hasError('required')">
-                  Número de tarjeta requerido
-                </mat-error>
-                <mat-error *ngIf="paymentFormGroup.controls['cardNumber'].hasError('pattern')">
-                  Número de tarjeta inválido
-                </mat-error>
-              </mat-form-field>
-
-              <div class="card-details">
-                <mat-form-field appearance="fill">
-                  <mat-label>Fecha de expiración (MM/AA)</mat-label>
-                  <input matInput formControlName="expiryDate" placeholder="MM/AA" required maxlength="5">
-                  <mat-error *ngIf="paymentFormGroup.controls['expiryDate'].hasError('required') || 
-                                    paymentFormGroup.controls['expiryDate'].hasError('pattern')">
-                    Formato inválido (MM/AA)
-                  </mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="fill">
-                  <mat-label>CVV</mat-label>
-                  <input matInput formControlName="cvv" required maxlength="4" type="password">
-                  <mat-error *ngIf="paymentFormGroup.controls['cvv'].hasError('required') || 
-                                    paymentFormGroup.controls['cvv'].hasError('pattern')">
-                    CVV inválido
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </div> -->
             <div class="button-row">
               <div #paypal></div>
               <button mat-button matStepperPrevious>Atrás</button>
@@ -134,7 +93,7 @@
           </form>
         </mat-step>
 
-        <!-- Paso 4: Confirmación -->
+        <!-- Paso 5: Confirmación -->
         <mat-step>
           <ng-template matStepLabel>Confirmación</ng-template>
           <h3>Resumen de tu reserva</h3>

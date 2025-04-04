@@ -12,11 +12,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let plan of planes">
-          <td>{{ plan.Plan }}</td>
+          <td>{{ plan.plan }}</td>
           <td>{{ plan.FechaIni | date }}</td>
           <td>{{ plan.FechaFin }}</td>
           <td>
-            <button (click)="eliminarPlan(plan.Plan)">Eliminar</button>
+            <button (click)="eliminarPlan(plan)">Eliminar</button>
             <button (click)="actualizarPlan(plan)">Actualizar</button>
           </td>
         </tr>
@@ -25,7 +25,7 @@
     <h3>Agregar Nuevo Plan</h3>
     <form (ngSubmit)="agregarPlan()">
       <label for="nombrePlan">Nombre del Plan:</label>
-      <input type="text" id="nombrePlan" [(ngModel)]="nuevoPlan.Plan" name="nombrePlan" required>
+      <input type="text" id="nombrePlan" [(ngModel)]="nuevoPlan.plan" name="nombrePlan" required>
       <Br>
 
       <label for="fechaIniPlan">Fecha de Inicio:</label>
@@ -54,13 +54,13 @@
       </thead>
       <tbody>
         <tr *ngFor="let curso of cursos">
-          <td>{{ curso.Curso }}</td>
+          <td>{{ curso.curso }}</td>
           <td>{{ curso.Semanal }}</td>
           <td>{{ curso.Sabatino }}</td>
           <td>{{ curso.FechaCursoIni| date }}</td>
           <td>{{ curso.FechaCursoFin| date }}</td>
           <td>
-            <button (click)="eliminarCurso(curso.Curso)">Eliminar</button>
+            <button (click)="eliminarCurso(curso.curso)">Eliminar</button>
             <button (click)="actualizarCurso(curso)">Actualizar</button>
           </td>
         </tr>
@@ -69,7 +69,7 @@
     <h3>Agregar Nuevo Curso</h3>
     <form (ngSubmit)="agregarCurso()">
       <label for="nombreCurso">Nombre del Curso:</label>
-      <input type="text" id="nombreCurso" [(ngModel)]="nuevoCurso.Curso" name="nombreCurso" required>
+      <input type="text" id="nombreCurso" [(ngModel)]="nuevoCurso.curso" name="nombreCurso" required>
       <Br>
 
         <label for="Semanal">Semanal:</label>
@@ -105,9 +105,9 @@
       <tbody>
         <tr *ngFor="let materia of materias">
           <td>{{ materia.Materia }}</td>
-          <td>{{ materia.PlanId  }}</td>
-          <td>{{ materia.CursoId }}</td>
-          <td>{{ materia.MaestroId }}</td>
+          <td>{{ materia.plan  }}</td>
+          <td>{{ materia.curso }}</td>
+          <td>{{ materia.Maestro }}</td>
           <td>
             <button (click)="eliminarMateria(materia.Materia)">Eliminar</button>
             <button (click)="actualizarMateria(materia)">Actualizar</button>
@@ -121,13 +121,19 @@
       <input type="string" id="Materia" [(ngModel)]="nuevaMateria.Materia" name="Materia" required>
     <Br>
       <label for="Plan">Plan:</label>
-      <input type="string" id="Plan" [(ngModel)]="nuevaMateria.Plan" name="Plan" required>
+      <input type="string" id="Plan" [(ngModel)]="nuevaMateria.plan" name="Plan" required>
     <br>
       <label for="Curso">Curso:</label>
-      <input type="String" id="Curso" [(ngModel)]="nuevaMateria.Curso" name="Curso" required>
+      <input type="String" id="Curso" [(ngModel)]="nuevaMateria.curso" name="Curso" required>
     <br>
-      <label for="Maestro">Maestro:</label>
-      <input type="String" id="Maestro" [(ngModel)]="nuevaMateria.Maestro" name="Maestro" required>
+
+    <div class="form-group linea5">
+      <label for="Maestro">Maestro</label>
+      <select id="Maestro" class="form-control" [(ngModel)]="selectedMaestro" name="listaMaestros" (change)="onMaestroSelected(selectedMaestro)" required>
+        <option   *ngFor="let maestro of listaMaestros" [value]="maestro.id">{{ maestro.Nombres }} {{ maestro.ApellidoP }} {{ maestro.ApellidoM }}</option>
+      </select>
+    </div>
+
 
       <button type="submit">Agregar Materia</button>
     </form>

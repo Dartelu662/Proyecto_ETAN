@@ -17,7 +17,7 @@ export class PagosAdmin2Component {
     // Iniciar formulario reactivo
     this.pagoForm = this.fb.group({
       matricula: ['', Validators.required],
-      fechaPago: ['', Validators.required],
+      fechaPago: [new Date(), Validators.required],
       montoPago: [null, [Validators.required, Validators.min(1)]],
       tipoPago: ['Efectivo', Validators.required],
     });

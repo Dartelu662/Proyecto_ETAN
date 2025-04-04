@@ -1,8 +1,7 @@
 export default interface Curso{
     id?: string;
-    CursoId?: string;
-    PlanId: string;
-    Curso: string;
+    plan: string;
+    curso: string;
     Semanal: string;
     Sabatino: string;
     FechaCursoIni: string;    
