@@ -15,7 +15,6 @@ import Avion from '../../interfaces/avion.interface';
 import { AvionesService } from '../../services/aviones.service';
 import { ViewChild } from '@angular/core';
 
-
 declare var paypal: any;
 
 @Component({
@@ -52,7 +51,8 @@ export class HorasVueloAdmin2Component {
   timeFormGroup: FormGroup;
   planeFormGroup: FormGroup;
   paymentFormGroup: FormGroup;
-  
+  matriculaFormGroup: FormGroup;
+
   
   timeSlots: string[] = [
     '8:00 AM', '9:30 AM', 
@@ -74,6 +74,9 @@ export class HorasVueloAdmin2Component {
       this.listaAviones = value;
       console.log (value)
     });
+
+
+    
 
               // Verificar si paypal está definido
         if (typeof paypal !== 'undefined') {
@@ -112,11 +115,18 @@ export class HorasVueloAdmin2Component {
 }
 
 
+
+
 constructor(
   private _formBuilder: FormBuilder, 
   private hrsVueloService : HrsvueloService,
   private avionService : AvionesService
 ) {
+
+  this.matriculaFormGroup = this._formBuilder.group({
+    matricula: ['', Validators.required]
+  });
+
     // Inicializar formularios con validaciones
     this.dateFormGroup = this._formBuilder.group({
       date: ['', Validators.required]
@@ -164,7 +174,8 @@ constructor(
   }
 
   isFormValid(): boolean {
-    return this.dateFormGroup.valid && 
+    return this.matriculaFormGroup.valid &&
+           this.dateFormGroup.valid && 
            this.timeFormGroup.valid && 
            this.planeFormGroup.valid;
   }
@@ -172,11 +183,13 @@ constructor(
   onSubmit(): void {
     if (this.isFormValid()) {
       // Actualizar los valores en el objeto hrsVuelo
+      this.hrsVuelo.Matricula = this.matriculaFormGroup.value.matricula;
       this.hrsVuelo.Fecha = this.dateFormGroup.value.date;
       this.hrsVuelo.Hora = this.timeFormGroup.value.timeSlot;
       this.hrsVuelo.Avion = this.planeFormGroup.value.listaAviones;
   
       console.log('Reserva confirmada', {
+        matricula: this.hrsVuelo.Matricula,
         date: this.hrsVuelo.Fecha,
         timeSlot: this.hrsVuelo.Hora,
         Avion: this.hrsVuelo.Avion

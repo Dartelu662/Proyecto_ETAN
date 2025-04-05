@@ -11,5 +11,7 @@ export default interface Maestro{
     TipoLicencia1: string;
     TipoLicencia2: string;
     TipoLicencia3: string;
+    PermisoInstruccion: string;
+    FechaPermInst: string;
     Activo: boolean;
 }

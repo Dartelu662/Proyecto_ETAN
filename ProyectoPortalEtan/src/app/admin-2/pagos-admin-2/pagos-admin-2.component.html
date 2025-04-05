@@ -1,35 +1,47 @@
 <div class="container">
-    <h2>Capturar Pago</h2>
-  
-    <form [formGroup]="pagoForm" (ngSubmit)="guardarPago()">
+  <h2>Capturar Pago</h2>
+
+  <form [formGroup]="pagoForm" (ngSubmit)="guardarPago()">
+    <div class="form-group">
       <label for="matricula">Matrícula</label>
       <input id="matricula" type="text" formControlName="matricula" placeholder="Ingrese matrícula">
-  
+    </div>
+
+    <div class="form-group">
       <label for="fechaPago">Fecha de Pago</label>
       <input id="fechaPago" type="date" formControlName="fechaPago">
-  
+    </div>
+
+    <div class="form-group">
       <label for="montoPago">Monto de Pago</label>
       <input id="montoPago" type="number" formControlName="montoPago" placeholder="Ingrese monto">
-  
+    </div>
+
+    <div class="form-group">
       <label for="medioPago">Medio de Pago</label>
       <select id="medioPago" formControlName="medioPago">
         <option value="Efectivo">Efectivo</option>
         <option value="Tarjeta">Tarjeta</option>
       </select>
-  
+    </div>
+
+    <div class="form-group">
       <label for="tipoPago">Tipo de Pago</label>
       <select id="tipoPago" formControlName="tipoPago">
-        <option value="Inscripcion">Inscripcion</option>
-        <option value="MaterialDidactico">Material Dicactico</option>
-        <option value="PermisoFormacion">Permiso de Formacion</option>
+        <option value="Inscripcion">Inscripción</option>
+        <option value="MaterialDidactico">Material Didáctico</option>
+        <option value="PermisoFormacion">Permiso de Formación</option>
         <option value="Mensualidad">Mensualidad</option>
         <option value="Horas Vuelo">Horas Vuelo</option>
-        <option value="DoctoTramiteLicencia">Docto Tramite Licencia</option>
+        <option value="Simulador">Horas Simulador</option>
+        <option value="DoctoTramiteLicencia">Docto Trámite Licencia</option>
         <option value="HorasVueloExFinal">Horas Vuelo Ex. Final</option>
         <option value="OrdenExFinal">Orden Ex. Final</option>
-    </select>
+        <option value="ExSinudalTeorico">Examen Sinudal Práctico</option>
+        <option value="ExSinudalPractico">Examen Sinudal Teórico</option>
+      </select>
+    </div>
 
-      <button type="submit" [disabled]="pagoForm.invalid">Guardar Pago</button>
-    </form>
-  </div>
-  
+    <button type="submit" [disabled]="pagoForm.invalid">Guardar Pago</button>
+  </form>
+</div>

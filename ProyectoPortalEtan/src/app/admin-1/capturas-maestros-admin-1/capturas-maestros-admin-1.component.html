@@ -9,11 +9,19 @@
     <input type="email" [(ngModel)]="nuevoMaestro.Email" placeholder="Correo Electrónico">
     <input type="text" [(ngModel)]="nuevoMaestro.Celular" placeholder="Celular" required>
     <input type="text" [(ngModel)]="nuevoMaestro.Direccion" placeholder="Dirección" required>
-    <input type="date" [(ngModel)]="nuevoMaestro.FechaNac" required>
-    <input type="date" [(ngModel)]="nuevoMaestro.FechaIngreso">
+    <input type="date" [(ngModel)]="nuevoMaestro.FechaNac" required 
+    matTooltip="Fecha de nacimiento del maestro" 
+    matTooltipPosition="above" > 
+    <input type="date" [(ngModel)]="nuevoMaestro.FechaIngreso" 
+    matTooltip="Fecha de Ingreso del maestro" 
+    matTooltipPosition="above"> 
     <input type="text" [(ngModel)]="nuevoMaestro.TipoLicencia1" placeholder="Tipo de Licencia" required>
     <input type="text" [(ngModel)]="nuevoMaestro.TipoLicencia2" placeholder="Tipo de Licencia">
     <input type="text" [(ngModel)]="nuevoMaestro.TipoLicencia3" placeholder="Tipo de Licencia">
+    <input type="text" [(ngModel)]="nuevoMaestro.PermisoInstruccion" placeholder="Permiso de Instrucción" required>
+    <input type="date" [(ngModel)]="nuevoMaestro.FechaPermInst" placeholder="Fecha Permiso Instrucción" required 
+    matTooltip="Fecha de Permiso de Instrucción maestro" 
+    matTooltipPosition="above">
     <button type="submit">Agregar Maestro</button>
   </form>
 
@@ -21,7 +29,7 @@
   <h3>Lista de Maestros</h3>
   <ul>
     <li *ngFor="let maestro of maestros">
-      {{ maestro.Nombres }} {{ maestro.ApellidoP }} {{ maestro.ApellidoM }} - {{ maestro.Email }} | {{ maestro.TipoLicencia1 }} \ {{ maestro.TipoLicencia2 }} \ {{ maestro.TipoLicencia3 }}
+      {{ maestro.Nombres }} {{ maestro.ApellidoP }} {{ maestro.ApellidoM }} - {{ maestro.Email }} | {{ maestro.TipoLicencia1 }} \ {{ maestro.TipoLicencia2 }} \ {{ maestro.TipoLicencia3 }} \ {{maestro.PermisoInstruccion}} \ {{maestro.FechaPermInst}}
       <button (click)="seleccionarMaestro(maestro)">Editar</button>
     </li>
   </ul>
@@ -41,6 +49,8 @@
       <input type="text" [(ngModel)]="maestroSeleccionado.TipoLicencia1" placeholder="Tipo de Licencia" required name="tipoLicencia1">
       <input type="text" [(ngModel)]="maestroSeleccionado.TipoLicencia2" placeholder="Tipo de Licencia" name="tipoLicencia2">
       <input type="text" [(ngModel)]="maestroSeleccionado.TipoLicencia3" placeholder="Tipo de Licencia" name="tipoLicencia3">
+      <input type="text" [(ngModel)]="maestroSeleccionado.PermisoInstruccion" placeholder="Permiso Instrucción" name="PermisoInstruccion">
+      <input type="date" [(ngModel)]="maestroSeleccionado.FechaPermInst" placeholder="Fecha Permiso Instrucción" name="FechaPermInst">
       <button type="submit">Actualizar Maestro</button>
       <button type="button" (click)="confirmarEliminarMaestro(maestroSeleccionado)">Eliminar</button>
       <button type="button" (click)="cancelarEdicion()">Cancelar</button>
