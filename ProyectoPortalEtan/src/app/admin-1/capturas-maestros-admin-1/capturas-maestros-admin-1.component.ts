@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import Maestro from '../../interfaces/maestro.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -9,7 +10,8 @@ import { MaestroService } from '../../services/maestro.service';
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    MatTooltipModule
   ],
   templateUrl: './capturas-maestros-admin-1.component.html',
   styleUrls: ['./capturas-maestros-admin-1.component.scss']
@@ -44,6 +46,8 @@ export class CapturasMaestrosAdmin1Component implements OnInit{
       TipoLicencia1: '',
       TipoLicencia2: '',
       TipoLicencia3: '',
+      PermisoInstruccion: '',
+      FechaPermInst: '',
       Activo: true
     };
   }

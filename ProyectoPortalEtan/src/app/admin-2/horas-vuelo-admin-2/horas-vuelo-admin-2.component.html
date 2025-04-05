@@ -5,6 +5,27 @@
       </mat-card-header>
       <mat-card-content>
         <mat-stepper [linear]="true" #stepper>
+          <!-- Paso 0: Selección de Alumno -->
+          <mat-step [stepControl]="matriculaFormGroup">
+            <form [formGroup]="matriculaFormGroup">
+              <ng-template matStepLabel>Alumno</ng-template>
+              <h3>Ingresa la matrícula del alumno</h3>
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Matrícula</mat-label>
+                <input matInput formControlName="matricula" required
+                [ngModel]="hrsVuelo.Matricula"
+                >
+                <mat-error *ngIf="matriculaFormGroup.controls['matricula'].hasError('required')">
+                  Por favor ingresa la matrícula
+                </mat-error>
+              </mat-form-field>
+              <div class="button-row">
+                <button mat-button matStepperNext color="primary" [disabled]="matriculaFormGroup.invalid">Siguiente</button>
+              </div>
+            </form>
+          </mat-step>
+                    
+
           <!-- Paso 1: Selección de fecha -->
           <mat-step [stepControl]="dateFormGroup">
             <form [formGroup]="dateFormGroup">
@@ -84,6 +105,7 @@
         <ng-template matStepLabel>Confirmación</ng-template>
         <h3>Resumen de tu reserva</h3>
         <div class="summary" *ngIf="isFormValid()">
+          <p><strong>Matricula:</strong> {{ matriculaFormGroup.value.matricula }}</p>
           <p><strong>Fecha:</strong> {{ formatDate(dateFormGroup.value.date) }}</p>
           <p><strong>Horario:</strong> {{ timeFormGroup.value.timeSlot }}</p>
           <p><strong>Avion:</strong>  {{ planeFormGroup.value.listaAviones.Modelo }}</p>
