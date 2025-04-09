@@ -10,7 +10,6 @@ import { collectionData } from 'rxfire/firestore';
   providedIn: 'root'
 })
 export class AlumnoService {
-
   private firestore = inject(Firestore); // Usa inyección correcta
   
   constructor(private usuarioService: UsuarioService) { }
@@ -69,15 +68,19 @@ export class AlumnoService {
     async GetAlumnoByUsername(username: string): Promise<{ usuario: Usuario; alumno: Alumno } | null> {
       const q = query(collection(this.firestore, 'Alumno'), where('Username', '==', username));
       const querySnapshot = await getDocs(q);
-    
       if (querySnapshot.empty) {
         return null;
       }
       
       const alumnoDoc = querySnapshot.docs[0];
-      const alumnoData = alumnoDoc.data() as Alumno;
-    
+      const alumnoData: Alumno = {
+        ...alumnoDoc.data() as Alumno,
+        id: alumnoDoc.id
+      };
+
       const usuario = await this.usuarioService.getUsuarioByUserName(username);
+      
+      if(!usuario?.Activo) return null;
     
       return usuario ? { usuario, alumno: alumnoData } : null;
     }
@@ -93,27 +96,57 @@ export class AlumnoService {
       await this.usuarioService.DisableUsuario(usuario.id!);
     }
 
+    getIdByUsername(userName: string): Observable<string | null> {
+      return new Observable((observer) => {
+        // Referencia a la colección 'usuarios'
+        const usuariosCollection = collection(this.firestore, 'Usuarios');
+  
+        // Creamos una consulta para encontrar documentos donde 'UserName' sea igual al valor proporcionado
+        const q = query(usuariosCollection, where('UserName', '==', userName));
+  
+        // Ejecutamos la consulta
+        getDocs(q).then((querySnapshot) => {
+          if (!querySnapshot.empty) {
+            // Si encontramos el documento, devolvemos el ID
+            const usuarioDoc = querySnapshot.docs[0];
+            
+            observer.next(usuarioDoc.id);
+            
+          } else {
+            // Si no se encuentra, devolvemos null
+            observer.next(null);
+          }
+        }).catch((error) => {
+          console.error("Error obteniendo el documento: ", error);
+          observer.next(null);
+        });
+      });
+    }
+
     async UpdateAlumno(alumno: Alumno, usuario: Usuario): Promise<boolean> {
-        if (!alumno.id) {
-          console.error('Error: El ID del Alumno es obligatorio para actualizar.');
-          return false;
-        }
-    
-        const alumnoDocRef = doc(this.firestore, `Alumno/${alumno.id}`);
-    
-        const updateData: Partial<Alumno> = Object.fromEntries(
-          Object.entries(alumno).filter(([_, value]) => value !== null && value !== '')
-        );
-    
-        try {
-          await updateDoc(alumnoDocRef, updateData);
-          await this.usuarioService.UpdateUsuario(usuario);
-          
-          return true;
-        } catch (error) {
-          console.error('Error al actualizar alumno:', error);
-          return false;
-        }
+      
+      console.log(alumno);
+      if (!alumno.id) {
+        console.error('Error: El ID del Alumno es obligatorio para actualizar.');
+        return false;
       }
+  
+      const alumnoDocRef = doc(this.firestore, `Alumno/${alumno.id}`);
+  
+      const updateData: Partial<Alumno> = Object.fromEntries(
+        Object.entries(alumno).filter(([_, value]) => value !== null && value !== '')
+      );
+  
+      try {
+        await updateDoc(alumnoDocRef, updateData);
+        await this.usuarioService.UpdateUsuario(usuario);
+        
+        return true;
+      } catch (error) {
+        console.error('Error al actualizar alumno:', error);
+        return false;
+      }
+    }
+        
       
 }

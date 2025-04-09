@@ -1,10 +1,11 @@
 export interface Escolar {
     id?: string;
-    matricula?: string;
-    plan: string;
-    curso: string;
-    maestro: string;
-    materia: string;
-    calificacion?: number;
-    fecha?: string;
+    Matricula: string;
+    Plan: string;
+    Curso: string;
+    Maestro: string;
+    Materia: string;
+    Calificacion?: number;
+    FechaActualizacion?: string;
+    Activo: boolean;
   }
