@@ -42,7 +42,7 @@ export class CapturasCursosAdmin1Component {
   // Modelos para los formularios
   nuevoPlan: Plan = { plan: '', FechaIni: '', FechaFin: '', Activo: true };
   nuevoCurso: Curso = { curso: '', Semanal: '', Sabatino: '', FechaCursoIni: '', FechaCursoFin: '', plan: '', Activo: true };
-  nuevaMateria: Materia = { plan: '', curso: '', idMaestro: '', Maestro: '', Materia: '', Activo: true };
+  nuevaMateria: Materia = { planid: '', plan: '', cursoid: '', curso: '', idMaestro: '', Maestro: '', Materia: '', Activo: true };
 
   selectedMaestro: string = '';
   selectPlan: string = '';
@@ -99,11 +99,12 @@ export class CapturasCursosAdmin1Component {
    onPlanSelected(plan: string): void{
     if(plan){
       console.log(plan)
-      this.nuevaMateria.plan=plan
+      this.nuevaMateria.plan=plan, this.nuevaMateria.planid
       this.planService.GetPlanById(plan).subscribe( value => {
         if(value)
         {
           this.nuevaMateria.plan = value.plan
+          this.nuevaMateria.planid = value.id
         }
       })
     }
@@ -117,7 +118,8 @@ export class CapturasCursosAdmin1Component {
       this.cursoservice.GetCursoById(curso).subscribe( value => {
         if(value)
         {
-          this.nuevaMateria.curso = value.curso
+          this.nuevaMateria.curso = value.curso,
+          this.nuevaMateria.cursoid = value.id
         }
       })
     }
@@ -189,7 +191,7 @@ export class CapturasCursosAdmin1Component {
     this.materiaservice.AddMateria(this.nuevaMateria);
     //this.materias.push({ ...this.nuevaMateria });
     // this.nuevaMateria = { plan: '', curso: '', idMaestro: '', Maestro: '', Materia: '', Activo: true }; // Limpiar formulario
-    this.nuevaMateria = { plan: '', curso: '',idMaestro: '', Maestro: '', Materia: '', Activo: true };
+    this.nuevaMateria = { planid: '', plan: '', cursoid: '', curso: '', idMaestro: '', Maestro: '', Materia: '', Activo: true };
     this.selectPlan = '';
     this.selectCurso = '';
     this.selectedMaestro = '';

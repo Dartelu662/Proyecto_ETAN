@@ -1,1 +1,28 @@
-<p>calificaciones-alumno works!</p>
+<div class="contenedor">
+    <h2>Calificaciones Registradas</h2>
+    <div class="grid">
+      <div class="encabezado">Matricula</div>
+      <div class="encabezado">Plan</div>
+      <div class="encabezado">Curso</div>
+      <div class="encabezado">Maestro</div>
+      <div class="encabezado">Materia</div>
+      <div class="encabezado">Calificación</div>
+      <div class="encabezado">Fecha</div>
+  
+      <ng-container *ngFor="let cal of calificaciones">
+        <div>{{ cal.Matricula }}</div>
+        <div>{{ cal.plan }}</div>
+        <div>{{ cal.curso }}</div>
+        <div>{{ cal.Maestro }}</div>
+        <div>{{ cal.Materia }}</div>
+        <div>{{ cal.Calificacion }}</div>
+        <div>{{ cal.Fecha }}</div>
+      </ng-container>
+    </div>
+
+    <button (click)="exportarAExcel()" class="btn-exportar">
+      Exportar a Excel
+    </button>
+
+  </div>
+  
