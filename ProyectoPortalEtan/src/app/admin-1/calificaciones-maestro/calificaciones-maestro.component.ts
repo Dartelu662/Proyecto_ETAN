@@ -1,6 +1,10 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms'; // Importa FormsModule
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Maestro from '../../interfaces/maestro.interface';
+import { Escolar } from '../../interfaces/escolar.interface';
+import { MaestroService } from '../../services/maestro.service';
 
 interface Grupo {
   materia: string;
@@ -26,6 +30,37 @@ interface Alumno {
   styleUrls: ['./calificaciones-maestro.component.scss']
 })
 export class CalificacionesMaestroComponent {
+
+      // ✅ Agrega el FormGroup correctamente
+      planeFormGroup = new FormGroup({
+        listaMaestros: new FormControl('', Validators.required)
+      });
+  
+    listaMaestros: Maestro[] = [];
+  
+    selectedMaestro: string = '';
+
+    constructor( 
+     private maestroservice: MaestroService, 
+   ) { }
+ 
+   ngOnInit(): void {
+
+    this.maestroservice.GetMaestros().subscribe( async value => {
+      this.listaMaestros = value;
+      console.log (value)
+    })
+  }
+
+  onMaestroSelected(maestro: string): void{
+    if(maestro){
+      console.log(maestro)
+        this.maestroservice.GetMaestroById(maestro).subscribe( value => {
+      })
+    }
+   }
+  
+
   grupos: Grupo[] = [
     {
       materia: 'Aerodinámica',
@@ -48,6 +83,7 @@ export class CalificacionesMaestroComponent {
       edicionHabilitada: true,
     }
   ];
+  
   grupoSeleccionado: Grupo | null = null;
   periodosPasados: string[] = ['2023A', '2023B', '2022A'];
   periodoSeleccionado: string | null = null;

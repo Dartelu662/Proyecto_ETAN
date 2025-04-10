@@ -1,4 +1,15 @@
 <div *ngIf="!grupoSeleccionado">
+
+  <label for="Maestro">Selecciona un Maestro:</label>
+  <select id="Maestro" [(ngModel)]="listaMaestros">
+    <option *ngFor="let Maestro of listaMaestros" [value]="Maestro">{{ Maestro.Nombres }} {{Maestro.ApellidoP}}  {{Maestro.ApellidoM}}  </option>
+    <option >
+      <option *ngFor="let Maestro of listaMaestros" [value]="Maestro"
+    
+      option>
+  </select>
+
+
   <h2>Selecciona un grupo</h2>
   <div class="tarjetas">
     <ng-container *ngFor="let grupo of grupos">
@@ -12,10 +23,10 @@
     </ng-container>
   </div>
 
-  <label for="periodo">Selecciona un periodo:</label>
+  <!-- <label for="periodo">Selecciona un periodo:</label>
   <select id="periodo" [(ngModel)]="periodoSeleccionado">
     <option *ngFor="let periodo of periodosPasados" [value]="periodo">{{ periodo }}</option>
-  </select>
+  </select> -->
 </div>
 
 <div *ngIf="grupoSeleccionado">
