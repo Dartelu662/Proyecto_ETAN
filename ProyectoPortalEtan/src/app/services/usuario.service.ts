@@ -78,14 +78,14 @@ export class UsuarioService {
     const usuarioRef = collection(this._firestore, 'Usuarios');
     const q = query(usuarioRef, where('UserName', '==', userName));
     const querySnapshot = await getDocs(q);
-    const usuarioDoc = querySnapshot.docs[0]
-    const usuarioData: Usuario = {
-      ...usuarioDoc.data() as Usuario,
-      id: usuarioDoc.id
-    };
+  
     if (!querySnapshot.empty) {
+      const usuarioDoc = querySnapshot.docs[0];
+      const usuarioData: Usuario = {
+        ...usuarioDoc.data() as Usuario,
+        id: usuarioDoc.id
+      };
       return usuarioData;
-      
     } else {
       return null;
     }

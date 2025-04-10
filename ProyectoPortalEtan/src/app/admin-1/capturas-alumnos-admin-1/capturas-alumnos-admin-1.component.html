@@ -5,7 +5,7 @@
       <!-- Línea 1: Matrícula y Contraseña -->
       <div class="form-group linea1">
           <label for="matricula">Matrícula</label>
-          <input type="text" id="matricula" class="form-control" [(ngModel)]="usuario.UserName" name="matricula" required>
+          <input type="text" id="matricula" class="form-control" [(ngModel)]="usuario.UserName" name="matricula" (change)="matriculaChange()" required>
       </div>
 
       <div class="form-group linea1">

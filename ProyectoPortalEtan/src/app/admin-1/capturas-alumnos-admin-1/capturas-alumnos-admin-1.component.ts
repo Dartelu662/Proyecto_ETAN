@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, viewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Usuario from '../../interfaces/usuario.interface';
@@ -14,6 +14,7 @@ import { PlanService } from '../../services/plan.service';
 import { CursoService } from '../../services/curso.service';
 import { EscolarService } from '../../services/escolar.service';
 import { Escolar } from '../../interfaces/escolar.interface';
+import { AuthentificationService } from '../../services/authentification.service';
 
 @Component({
   selector: 'app-capturas-alumnos-admin-1',
@@ -26,6 +27,12 @@ import { Escolar } from '../../interfaces/escolar.interface';
   styleUrls: ['./capturas-alumnos-admin-1.component.scss']
 })
 export class CapturasAlumnosAdmin1Component implements OnInit{
+//          C U R S O S
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////////////////////////////////////////////////////
+matriculaChange() {
+  this.escolar.Matricula = this.usuario.UserName
+}
 
   alumnoUpdate: Alumno = {
     id: '',
@@ -55,7 +62,7 @@ export class CapturasAlumnosAdmin1Component implements OnInit{
 
 
   onPlanSelected(planId: string) {
-    
+  this.escolar.Plan = planId;
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 //          C U R S O S
@@ -65,6 +72,7 @@ export class CapturasAlumnosAdmin1Component implements OnInit{
 
 
   onCursoSelected(cursoId: string) {
+    this.escolar.Curso = cursoId;
     
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,24 +127,18 @@ export class CapturasAlumnosAdmin1Component implements OnInit{
     private usuarioService: UsuarioService,
     private planService: PlanService,
     private cursoService: CursoService,
-    private escolarService: EscolarService
-
+    private escolarService: EscolarService,
+    private authService: AuthentificationService
   ) {}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 //      Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el alumno
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  escolar: Escolar = {
-    Matricula: '',
-    Plan: '',
-    Curso: '',
-    Maestro: '',
-    Materia: '',
-    Calificacion: 0,
-    FechaActualizacion: '',
-    Activo: true
+  escolar  = {
+    Plan: "",
+    Curso: "",
+    Matricula: ""
   }
 
-  listaEscolar: Escolar[] = []
 
   usuario: Usuario = {
     UserName: '',
@@ -193,10 +195,9 @@ export class CapturasAlumnosAdmin1Component implements OnInit{
 
   
 
-  Guardar(): void {
+  async Guardar() {
 
     this.auth.Email = this.usuario.Email
-    this.Plan.plan = this.Plan.plan
 
      if (this.curso.Semanal === "Semanal") {
        this.curso.Semanal = "Semanal";
@@ -219,7 +220,10 @@ export class CapturasAlumnosAdmin1Component implements OnInit{
         console.error('Error al crear el Alumno:', error);
         alert(error);
         })
+    
+    await this.authService.registrer(this.auth);
+    console.log(this.escolar)
+    await this.escolarService.CrearEscolaresPorCursoYPlan(this.escolar.Plan, this.escolar.Curso, this.escolar.Matricula)
   }
-
 }
 
