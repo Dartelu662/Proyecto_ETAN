@@ -67,21 +67,35 @@
       </div>
 
       <!-- Línea 5: Plan y Curso -->
-      <div class="form-group linea5">
+      <!-- <div class="form-group linea5">
           <label for="plan">Plan</label>
           <select id="plan" class="form-control" [(ngModel)]="Plan.plan" name="plan">
               <option value="Plan 1">Plan 1</option>
               <option value="Plan 2">Plan 2</option>
           </select>
+      </div> -->
+
+      <div class="form-group linea5">
+        <label for="Plan">Plan</label>
+        <select id="Plan" class="form-control" [(ngModel)]="selectPlan" name="listaPlanes" (change)="onPlanSelected(selectPlan)" required>
+          <option   *ngFor="let plan of listaPlanes" [value]="plan.id">{{ plan.plan }}</option>
+        </select>
       </div>
 
       <div class="form-group linea5">
+        <label for="Curso">Curso</label>
+        <select id="Maestro" class="form-control" [(ngModel)]="selectCursos" name="listaCursos" (change)="onCursoSelected(selectCursos)" required>
+          <option   *ngFor="let curso of listaCursos" [value]="curso.id">{{ curso.curso }}</option>
+        </select>
+      </div>
+
+      <!-- <div class="form-group linea5">
           <label for="Curso">Curso</label>
           <select id="Curso" class="form-control" [(ngModel)]="curso.curso" name="Curso" required>
               <option value="curso 1">Curso 1</option>
               <option value="curso 2">Curso 2</option>
           </select>
-      </div>
+      </div> -->
 
       <div class="form-group linea5" >
         <label for="Modalidad" >Modalidad</label>
@@ -114,11 +128,11 @@
         <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.Direccion" placeholder="Direccion" required name="Direccion">
         <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.Celular" placeholder="Celular" required name="Celular">
         <input type="date" [(ngModel)]="alumnoSeleccionado.usuario.FechaNac" placeholder="Fecha Nacimiento" required name="FechaNac">
-      <input type="text" [(ngModel)]="alumnoSeleccionado.alumno.PermisoFormacion" placeholder="Permiso de Formacion" required name="PermisoFormacion">
-      <input type="date" [(ngModel)]="alumnoSeleccionado.alumno.FechaFinPF" placeholder="Fecha Fin PF" required name="FechaFinPF">
-      <button type="submit" class="btn btn-success">Actualizar</button>
-      <button type="button" class="btn btn-danger" (click)="deshabilitarAlumno()">Deshabilitar</button>
-      <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+        <input type="text" [(ngModel)]="alumnoSeleccionado.alumno.PermisoFormacion" placeholder="Permiso de Formacion" required name="PermisoFormacion">
+        <input type="date" [(ngModel)]="alumnoSeleccionado.alumno.FechaFinPF" placeholder="Fecha Fin PF" required name="FechaFinPF">
+        <button type="submit" class="btn btn-success">Actualizar</button>
+        <button type="button" class="btn btn-danger" (click)="deshabilitarAlumno()">Deshabilitar</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
     </form>
   </div>
   

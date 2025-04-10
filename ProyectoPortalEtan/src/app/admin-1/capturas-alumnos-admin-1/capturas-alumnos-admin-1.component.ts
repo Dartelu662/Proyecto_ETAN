@@ -5,10 +5,15 @@ import Usuario from '../../interfaces/usuario.interface';
 import alumno from '../../interfaces/alumno.interface';
 import Auth from '../../interfaces/auth.interface';
 import { AlumnoService } from '../../services/alumno.service';
-import plan from '../../interfaces/plan.interface';
 import curso from '../../interfaces/curso.interface';
 import { UsuarioService } from '../../services/usuario.service';
 import Alumno from '../../interfaces/alumno.interface';
+import Plan from '../../interfaces/plan.interface';
+import Curso from '../../interfaces/curso.interface';
+import { PlanService } from '../../services/plan.service';
+import { CursoService } from '../../services/curso.service';
+import { EscolarService } from '../../services/escolar.service';
+import { Escolar } from '../../interfaces/escolar.interface';
 
 @Component({
   selector: 'app-capturas-alumnos-admin-1',
@@ -22,6 +27,47 @@ import Alumno from '../../interfaces/alumno.interface';
 })
 export class CapturasAlumnosAdmin1Component implements OnInit{
 
+  alumnoUpdate: Alumno = {
+    id: '',
+    Username: '',
+    PermisoFormacion: '',
+    FechaFinPF: ''    
+  }
+  usuarioUpdate: Usuario = {
+    id: '',
+    UserName: '',
+    TipoUsuario: '',
+    Nombres: '',
+    ApellidoP: '',
+    ApellidoM: '',
+    Email: '',
+    Celular: '',
+    Direccion: '',
+    FechaNac: '',
+    FechaIngreso: '',
+    Activo: true,
+  }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//          P L A N E S
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  listaPlanes: Plan[] = [];
+  selectPlan: string = '';
+
+
+  onPlanSelected(planId: string) {
+    
+  }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//          C U R S O S
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  listaCursos: Curso[] = [];
+  selectCursos: string = '';
+
+
+  onCursoSelected(cursoId: string) {
+    
+  }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
   matriculaBusqueda: string = '';
   alumnoSeleccionado: { alumno: Alumno; usuario: Usuario } | null = null;
 
@@ -43,18 +89,15 @@ export class CapturasAlumnosAdmin1Component implements OnInit{
   }
   
   async actualizarAlumno(): Promise<void> {
-    if (!this.alumnoSeleccionado) return;
-
-    const { alumno, usuario } = this.alumnoSeleccionado;
-
-    const actualizado = await this.alumnoService.UpdateUsuarioYAlumno(usuario, alumno);
-    
-    if (actualizado) {
-      alert('Alumno actualizado correctamente');
-      this.alumnoSeleccionado = null;
-    } else {
-      alert('Error al actualizar');
-    }
+    if(!this.alumnoSeleccionado) return
+    console.log(this.alumnoSeleccionado)
+    const b = this.alumnoService.UpdateAlumno(this.alumnoSeleccionado.alumno, this.alumnoSeleccionado.usuario)
+    b.then(v => {
+    })
+    .catch(err => {
+      alert("error al actualizar el campo")
+      console.log(err);
+    })
   }
 
   async deshabilitarAlumno() {
@@ -71,45 +114,62 @@ export class CapturasAlumnosAdmin1Component implements OnInit{
     }
   }
 
-constructor ( 
-  private alumnoService: AlumnoService, 
-  private usuarioService: UsuarioService
-) {}
+  constructor ( 
+    private alumnoService: AlumnoService,
+    private usuarioService: UsuarioService,
+    private planService: PlanService,
+    private cursoService: CursoService,
+    private escolarService: EscolarService
 
-// Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el alumno
-   usuario: Usuario = {
-      UserName: '',
-      TipoUsuario: 'Alumno',
-      Nombres: '',
-      ApellidoP: '',
-      ApellidoM: '',
-      Email: '',
-      Celular: '',
-      Direccion: '',
-      FechaNac: '',
-      FechaIngreso: '',
-      Activo: true
-    }
+  ) {}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//      Creamos un objeto que contenga tanto los datos de Usuario como la propiedad para el alumno
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  escolar: Escolar = {
+    Matricula: '',
+    Plan: '',
+    Curso: '',
+    Maestro: '',
+    Materia: '',
+    Calificacion: 0,
+    FechaActualizacion: '',
+    Activo: true
+  }
+
+  listaEscolar: Escolar[] = []
+
+  usuario: Usuario = {
+    UserName: '',
+    TipoUsuario: 'Alumno',
+    Nombres: '',
+    ApellidoP: '',
+    ApellidoM: '',
+    Email: '',
+    Celular: '',
+    Direccion: '',
+    FechaNac: '',
+    FechaIngreso: '',
+    Activo: true
+  }
     
-    alumno: alumno = {
+  alumno: alumno = {
     PermisoFormacion: '',
     FechaFinPF: ''
   }
 
-    auth: Auth = {
-      Email: '',
-      Password: ''
+  auth: Auth = {
+    Email: '',
+    Password: ''
   }
 
-    Plan: plan = {
-      id: '',
-      plan: '',
-      FechaIni: '', 
-      FechaFin: '',
-      Activo: true
+  Plan: Plan = {
+    id: '',
+    plan: '',
+    FechaIni: '', 
+    FechaFin: '',
+    Activo: true
   }
 
-    
   curso: curso = {
     curso: '',
     plan: '',
@@ -118,12 +178,17 @@ constructor (
     FechaCursoIni: '',
     FechaCursoFin: '',
     Activo: true
-}
+  }
 
   listaMatricula: { usuario: Usuario, alumno: alumno }[] = [];
 
   ngOnInit(): void {
-    
+    this.planService.GetPlanes().subscribe(value => {
+      this.listaPlanes = value
+    })
+    this.cursoService.GetCursos().subscribe(value => {
+      this.listaCursos = value
+    })
   }
 
   
@@ -156,5 +221,5 @@ constructor (
         })
   }
 
-  }
+}
 
