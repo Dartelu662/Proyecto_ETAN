@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, doc, getDoc, getDocs, updateDoc, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, getDoc, getDocs, updateDoc, query, where, deleteDoc } from '@angular/fire/firestore';
 import Usuario from '../interfaces/usuario.interface';
 import Alumno from '../interfaces/alumno.interface';
 import { UsuarioService } from './usuario.service';
@@ -64,7 +64,22 @@ export class AlumnoService {
   
       return usuario ? { usuario, alumno: alumnoData } : null;
     }
-  
+    
+    async deleteAlumno(id: string): Promise<void | null> {
+        const alumnoRef = doc(this.firestore, 'Alumno', id);
+        const snapshot = await getDoc(alumnoRef);
+        if (!snapshot.exists()){
+          return null;
+        }
+    
+        const alumnoData = snapshot.data() as Alumno;
+        if(!alumnoData.Username){
+          return null;
+        }
+        this.usuarioService.deleteUsuario(alumnoData.Username);
+        await deleteDoc(alumnoRef);
+      }
+
     async GetAlumnoByUsername(username: string): Promise<{ usuario: Usuario; alumno: Alumno } | null> {
       const q = query(collection(this.firestore, 'Alumno'), where('Username', '==', username));
       const querySnapshot = await getDocs(q);

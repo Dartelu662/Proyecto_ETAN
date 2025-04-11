@@ -13,23 +13,36 @@ export class EscolarService {
 
     
     constructor() { }
-  
+    GetEscolars(): Observable<Escolar[]> {
+        const escolarRef = collection(this.firestore, 'Escolar');
+        // Se asume que la interfaz Escolar tiene la propiedad "Activo" para determinar si el Escolar está activo
+        const escolaresActivosQuery = query(escolarRef, where('Activo', '==', true));
+        return collectionData(escolaresActivosQuery, { idField: 'id' }) as Observable<Escolar[]>;
+      }
+
     async CrearEscolaresPorCursoYPlan(plan: string, curso: string, matricula: string): Promise<boolean> {
       try {
         const materiasRef = collection(this.firestore, 'Materia');
         const materiasQuery = query(
           materiasRef,
-          where('planid', '==', plan),
-          where('cursoid', '==', curso),
+          where('PlanId', '==', plan),
+          where('CursoId', '==', curso),
           where('Activo', '==', true)
         );
     
         const snapshot = await getDocs(materiasQuery);
+        console.log(snapshot)
         if (snapshot.empty) {
           console.warn('No se encontraron materias para este curso y plan.');
           return false;
         }
     
+        const firstMateria = snapshot.docs[0].data() as Materia;
+        const nombrePlan = firstMateria.plan;
+        const nombreCurso = firstMateria.curso;
+        if(nombrePlan == undefined || nombreCurso == undefined){
+          return false
+        }
         const escolarRef: CollectionReference<Escolar> = collection(this.firestore, 'Escolar') as CollectionReference<Escolar>;
     
         const fechaActual = new Date().toISOString();
@@ -39,11 +52,12 @@ export class EscolarService {
             ...docSnap.data() as Materia,
             id: docSnap.id
           }
+          
           const escolar: Escolar = {
             Matricula: matricula,
-            Plan: plan,
+            Plan: nombrePlan,
             planId: plan,
-            Curso: curso,
+            Curso: nombreCurso,
             cursoId: curso,
             Maestro: materia.Maestro,
             maestroId: materia.idMaestro,

@@ -1,28 +1,37 @@
+
+
 <div class="contenedor">
-    <h2>Calificaciones Registradas</h2>
-    <div class="grid">
-      <div class="encabezado">Matricula</div>
-      <div class="encabezado">Plan</div>
-      <div class="encabezado">Curso</div>
-      <div class="encabezado">Maestro</div>
-      <div class="encabezado">Materia</div>
-      <div class="encabezado">Calificación</div>
-      <div class="encabezado">Fecha</div>
-  
-      <ng-container *ngFor="let cal of calificaciones">
-        <div>{{ cal.Matricula }}</div>
-        <div>{{ cal.plan }}</div>
-        <div>{{ cal.curso }}</div>
-        <div>{{ cal.Maestro }}</div>
-        <div>{{ cal.Materia }}</div>
-        <div>{{ cal.Calificacion }}</div>
-        <div>{{ cal.Fecha }}</div>
-      </ng-container>
-    </div>
+ 
+  <h2>Calificaciones Registradas</h2>
+  <p *ngIf="!calificaciones || calificaciones.length === 0">No hay datos para mostrar.</p>
+  <p *ngIf="!calificaciones || calificaciones.length > 0"> Si hay datos para mostrar.</p>
 
-    <button (click)="exportarAExcel()" class="btn-exportar">
-      Exportar a Excel
-    </button>
+  <ng-container *ngFor="let cal of calificaciones">
+    {{ cal.Materia }} <!-- Solo esto, para probar -->
+  </ng-container>
 
+
+  <div class="grid">
+    <div class="encabezado">Matricula</div>
+    <div class="encabezado">Plan</div>
+    <div class="encabezado">Curso</div>
+    <div class="encabezado">Maestro</div>
+    <div class="encabezado">Materia</div>
+    <div class="encabezado">Calificacion</div>
+    <div class="encabezado">Fecha</div>
+
+    <ng-container *ngFor="let cal of calificaciones">
+      <div>{{ cal.Matricula || 'NA' }}</div>
+      <div>{{ cal.Plan || 'NA' }}</div>
+      <div>{{ cal.Curso || 'NA' }}</div>
+      <div>{{ cal.Maestro || 'NA' }}</div>
+      <div>{{ cal.Materia || 'NA' }}</div>
+      <div>{{ cal.Calificacion || 0 }}</div>
+      <div>{{ cal.FechaActualizacion || 'NA' }}</div>
+    </ng-container>
   </div>
-  
+
+  <button (click)="exportarAExcel()" class="btn-exportar">
+    Exportar a Excel
+  </button>
+</div>

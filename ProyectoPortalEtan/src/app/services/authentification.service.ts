@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, updatePassword, deleteUser, signInWithEmailAndPassword, User, signOut } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, updatePassword, deleteUser, signInWithEmailAndPassword, User, signOut, reauthenticateWithCredential, EmailAuthProvider } from '@angular/fire/auth';
 import AUTH from '../interfaces/auth.interface';
 import { UsuarioService } from './usuario.service';
 import { throwError } from 'rxjs';
@@ -12,10 +12,41 @@ import Usuario from '../interfaces/usuario.interface';
 })
 export class AuthentificationService {
     private authActual = inject(Auth);
-    constructor(private _Auth: Auth, private usuarioService: UsuarioService, private adminService:AdminService){}
+    constructor(private _Auth: Auth, private usuarioService: UsuarioService){}
 
-    registrer(_auth: AUTH){
-        return createUserWithEmailAndPassword(this._Auth, _auth.Email, _auth.Password);
+    async registrer(_auth: AUTH): Promise<boolean>{
+      const currentUser = this._Auth.currentUser;
+
+      if (!currentUser || !currentUser.email) {
+        alert('No hay una sesión activa de administrador.');
+        return false;
+      }
+
+      const adminPassword = prompt('Para continuar, introduce tu contraseña');
+
+      if (!adminPassword) {
+        alert('Se requiere la contraseña para continuar.');
+        return false;
+      }
+
+      try {
+        // Validamos la contraseña del admin
+        const credential = EmailAuthProvider.credential(currentUser.email, adminPassword);
+        await reauthenticateWithCredential(currentUser, credential);
+
+        // Si la reautenticación fue exitosa, se crea el usuario nuevo
+        await createUserWithEmailAndPassword(this._Auth, _auth.Email, _auth.Password);
+
+        // 🔥 Pero ahora el auth actual es el nuevo usuario, así que volvemos a loguear al admin
+        await signInWithEmailAndPassword(this._Auth, currentUser.email, adminPassword);
+
+        alert('Usuario creado correctamente y sesión de administrador restaurada.');
+        return true
+      } catch (error) {
+        console.error('Error durante la reautenticación o creación del usuario:', error);
+        alert('Error: contraseña incorrecta o no se pudo crear el usuario.');
+        return false
+      }
     }
 
     logout(): Promise<void> {

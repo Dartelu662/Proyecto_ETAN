@@ -107,7 +107,7 @@ matriculaChange() {
       console.log(err);
     })
   }
-
+  
   async deshabilitarAlumno() {
     if (this.alumnoSeleccionado) {
       const usuario = this.alumnoSeleccionado.usuario;
@@ -124,7 +124,6 @@ matriculaChange() {
 
   constructor ( 
     private alumnoService: AlumnoService,
-    private usuarioService: UsuarioService,
     private planService: PlanService,
     private cursoService: CursoService,
     private escolarService: EscolarService,
@@ -196,7 +195,7 @@ matriculaChange() {
   
 
   async Guardar() {
-
+    console.log("aqui empieza a guardar")
     this.auth.Email = this.usuario.Email
 
      if (this.curso.Semanal === "Semanal") {
@@ -208,12 +207,21 @@ matriculaChange() {
     
 
     this.alumnoService.AddAlumno(this.alumno, this.usuario)
-      .then((result) => {
+      .then(async (result) => {
         if (result === null) {
           alert('La MATRICULA ya existe.');
         } else {
-          alert('Usuario Alumno creado con exito');
-          console.log('Usuario creado:', result);
+          if(await this.authService.registrer(this.auth)){
+            await console.log("Este es su usuario actual", this.authService.retornarUsuarioActual());
+            await console.log(this.escolar)
+            await this.escolarService.CrearEscolaresPorCursoYPlan(this.escolar.Plan, this.escolar.Curso, this.escolar.Matricula)
+            await alert('Usuario Alumno creado con exito');
+            await console.log('Usuario creado:', result);
+          } else {
+            console.log(result)
+            this.alumnoService.deleteAlumno(result.id)
+          }
+          
         }
       })
       .catch((error) => { 
@@ -221,9 +229,7 @@ matriculaChange() {
         alert(error);
         })
     
-    await this.authService.registrer(this.auth);
-    console.log(this.escolar)
-    await this.escolarService.CrearEscolaresPorCursoYPlan(this.escolar.Plan, this.escolar.Curso, this.escolar.Matricula)
+    
   }
 }
 

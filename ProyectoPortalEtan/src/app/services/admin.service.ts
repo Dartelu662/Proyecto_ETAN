@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, doc, getDoc, getDocs, updateDoc, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, getDoc, getDocs, updateDoc, query, where, deleteDoc } from '@angular/fire/firestore';
 import Usuario from '../interfaces/usuario.interface';
 import Admin from '../interfaces/admin.interface';
 import { UsuarioService } from './usuario.service';
@@ -48,6 +48,21 @@ export class AdminService {
           .filter((item): item is { usuario: Usuario; admin: Admin } => item !== null);
       })
     );
+  }
+
+  async deleteAdmin(id: string, usuarioId: string): Promise<void | null> {
+    const adminRef = doc(this.firestore, 'Admin', id);
+    const snapshot = await getDoc(adminRef);
+    if (!snapshot.exists()){
+      return null;
+    }
+
+    const adminData = snapshot.data() as Admin;
+    if(!adminData.Username){
+      return null;
+    }
+    this.usuarioService.deleteUsuario(adminData.Username);
+    await deleteDoc(adminRef);
   }
 
   async GetAdminById(id: string): Promise<{ usuario: Usuario; admin: Admin } | null> {

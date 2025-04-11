@@ -24,7 +24,21 @@ export class UsuarioService {
     return collectionData(usuarioRef, { idField: 'id' }) as Observable<Usuario[]>;
   }
 
+  async deleteUsuario(userName: string): Promise<void | null> {
+    const usuarioRef = collection(this._firestore, 'Usuarios');
+    const q = query(usuarioRef, where('UserName', '==', userName));
+    const querySnapshot = await getDocs(q);
   
+    if (!querySnapshot.empty) {
+      const usuarioDoc = querySnapshot.docs[0];
+      const usuarioId = usuarioDoc.id;
+  
+      const userRef = doc(this._firestore, 'Usuarios', usuarioId); // Corregido aquí
+      await deleteDoc(userRef);
+    } else {
+      return null;
+    }
+  }
 
   async DisableUsuario(id: string): Promise<boolean> {
     if (!id) {
