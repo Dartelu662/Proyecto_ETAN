@@ -1,26 +1,39 @@
-import { Component, OnInit } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { EscolarService } from '../../services/escolar.service';
 import { Escolar } from '../../interfaces/escolar.interface';
-import { strict } from 'assert';
 import { ExportExcelService } from '../../services/exportexcel.service';
 import { AuthentificationService } from '../../services/authentification.service';
 import Usuario from '../../interfaces/usuario.interface';
-import { user } from '@angular/fire/auth';
-import { promises } from 'readline';
+
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-calificaciones-alumno',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './calificaciones-alumno.component.html',
   styleUrl: './calificaciones-alumno.component.css'
 })
-
-
-  export class CalificacionesAlumnoComponent implements OnInit {
-  calificaciones: Escolar[] = [];
+export class CalificacionesAlumnoComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['Materia', 'Maestro', 'Curso', 'Plan', 'Calificacion', 'FechaActualizacion'];
+  dataSource = new MatTableDataSource<Escolar>();
   usuarioActual: Usuario = {
     id: '',
     Nombres: '',
@@ -33,42 +46,50 @@ import { promises } from 'readline';
     FechaIngreso: '',
     TipoUsuario: '',
     UserName: '',
-    Activo:  true
-   }
-    constructor(
-      private escolarService: EscolarService,
-      private exportExcelService: ExportExcelService,
-      private _authService: AuthentificationService
-    ) {    }
+    Activo: true
+  };
 
-    
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
-    ngOnInit(): void {
-      this._authService.retornarUsuarioActual().then(userS => {
-        if (userS) {
-          this.usuarioActual = userS;
-          this.obtenerCalificaciones(); // lo llamas hasta que ya tienes el usuario
-          console.log('Usuario:', this.usuarioActual);
-          
-        }
-      });
-    }
-    
-    
-    obtenerCalificaciones(): void {
-      this.escolarService.GetEscolars().subscribe(data => {
-          this.calificaciones = data.filter(
-          value => value.Matricula.trim().toLowerCase() === this.usuarioActual.UserName.trim().toLowerCase()
-          //value => value.Matricula === this.usuarioActual.UserName
-        );
-       
-        console.log('Datos de escolar:', data)
-      });
-    }  
+  constructor(
+    private escolarService: EscolarService,
+    private exportExcelService: ExportExcelService,
+    private _authService: AuthentificationService
+  ) {}
 
-  
-    exportarAExcel(): void {
-      this.exportExcelService.exportAsExcelFile(this.calificaciones, 'Calificaciones');
-    }
+  ngOnInit(): void {
+    this._authService.retornarUsuarioActual().then(userS => {
+      if (userS) {
+        this.usuarioActual = userS;
+        this.obtenerCalificaciones();
+      }
+    });
   }
-  
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  obtenerCalificaciones(): void {
+    this.escolarService.GetEscolars().subscribe(data => {
+      const filtradas = data.filter(
+        d => d.Matricula?.trim().toLowerCase() === this.usuarioActual.UserName?.trim().toLowerCase()
+      );
+      this.dataSource.data = filtradas;
+    });
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    this.dataSource.filterPredicate = (data: Escolar, filter: string): boolean =>
+      data.Maestro?.toLowerCase().includes(filter);
+  }
+
+  exportarAExcel(): void {
+    this.exportExcelService.exportAsExcelFile(this.dataSource.data, 'Calificaciones');
+  }
+}

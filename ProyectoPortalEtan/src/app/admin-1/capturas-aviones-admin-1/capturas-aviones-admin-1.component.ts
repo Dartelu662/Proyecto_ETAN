@@ -24,7 +24,7 @@ export class CapturasAvionesAdmin1Component implements OnInit{
   
     ngOnInit(): void {
       // Obtener la lista de aviones
-        this.avionesService.GetAvions().subscribe(avion => {
+        this.avionesService.getAviones().subscribe(avion => {
         this.aviones = avion;
         console.log('Lista de aviones:', avion);
       });

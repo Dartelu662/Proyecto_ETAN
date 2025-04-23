@@ -5,16 +5,14 @@
     </mat-card-header>
     <mat-card-content>
       <mat-stepper [linear]="true" #stepper>
-        <!-- Paso 1: Selección de fecha -->
+        
+        <!-- Paso 1: Fecha -->
         <mat-step [stepControl]="dateFormGroup">
           <form [formGroup]="dateFormGroup">
             <ng-template matStepLabel>Fecha</ng-template>
-            <h3>Selecciona una fecha</h3>
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Fecha de reserva</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="date" required 
-               [ngModel]="hrsVuelo.Fecha"
-               > <!--input-->
+              <input matInput [matDatepicker]="picker" formControlName="date" required>
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
               <mat-error *ngIf="dateFormGroup.controls['date'].hasError('required')">
@@ -27,19 +25,14 @@
           </form>
         </mat-step>
 
-        <!-- Paso 2: Selección de horario -->
+        <!-- Paso 2: Hora -->
         <mat-step [stepControl]="timeFormGroup">
           <form [formGroup]="timeFormGroup">
             <ng-template matStepLabel>Horario</ng-template>
-            <h3>Selecciona un horario</h3>
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Horario disponible</mat-label>
-              <mat-select formControlName="timeSlot" required 
-              [ngModel]="hrsVuelo.Hora"  
-              > <!--input-->
-                <mat-option *ngFor="let slot of timeSlots" [value]="slot">
-                  {{ slot }}
-                </mat-option>
+              <mat-select formControlName="timeSlot" required>
+                <mat-option *ngFor="let slot of timeSlots" [value]="slot">{{ slot }}</mat-option>
               </mat-select>
               <mat-error *ngIf="timeFormGroup.controls['timeSlot'].hasError('required')">
                 Por favor selecciona un horario
@@ -52,24 +45,19 @@
           </form>
         </mat-step>
 
-
-        <!-- Paso 3: Selección de Avion -->
+        <!-- Paso 3: Avión -->
         <mat-step [stepControl]="planeFormGroup">
           <form [formGroup]="planeFormGroup">
-            <ng-template matStepLabel>Avion</ng-template>
-            <h3>Selecciona un Avion</h3>
+            <ng-template matStepLabel>Avión</ng-template>
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Avion disponible</mat-label>
-              <mat-select formControlName="listaAviones" required 
-              [ngModel]="hrsVuelo.Avion"  
-              >
-                <mat-option *ngFor="let slot of listaAviones" [value]="slot">
-                  {{ slot.Modelo }}
-                  {{ slot.NumeroRegistro }}
+              <mat-label>Avión disponible</mat-label>
+              <mat-select formControlName="listaAviones" (selectionChange)="onAvionSeleccionado()" required>
+                <mat-option *ngFor="let avion of listaAviones" [value]="avion">
+                  {{ avion.Modelo }} - {{ avion.NumeroRegistro }}
                 </mat-option>
               </mat-select>
               <mat-error *ngIf="planeFormGroup.controls['listaAviones'].hasError('required')">
-                Por favor selecciona un Avion
+                Por favor selecciona un avión
               </mat-error>
             </mat-form-field>
             <div class="button-row">
@@ -79,16 +67,63 @@
           </form>
         </mat-step>
 
-
-       <!-- Paso 4: Información de tarjeta de crédito -->
+        <!-- Paso 4: Método de pago -->
         <mat-step [stepControl]="paymentFormGroup">
           <form [formGroup]="paymentFormGroup">
             <ng-template matStepLabel>Pago</ng-template>
-            <h3>Información de pago</h3>
+            <h3>Selecciona un método de pago</h3>
+
+            <mat-radio-group
+              formControlName="metodoPago"
+              (selectionChange)="onMetodoPagoChange()"
+            >
+              <mat-radio-button value="paypal">PayPal</mat-radio-button>
+              <mat-radio-button value="credito">Crédito Horas Vuelo</mat-radio-button>
+            </mat-radio-group>
+
+            <!-- PayPal: solo si eligió PayPal y ya hay avión -->
+            <div
+              *ngIf="
+                paymentFormGroup.value.metodoPago === 'paypal' &&
+                selectedAvion
+              "
+            >
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Monto a pagar</mat-label>
+                <input
+                  matInput
+                  [value]="montoPago"
+                  readonly
+                />
+              </mat-form-field>
+              <div #paypal style="margin-top: 16px;"></div>
+            </div>
+
+            <!-- Crédito Horas Vuelo -->
+            <div *ngIf="paymentFormGroup.value.metodoPago === 'credito'">
+              <p><strong>Se usará tu crédito de horas de vuelo.</strong></p>
+              <ng-container *ngIf="!tieneHorasCredito; else creditoValido">
+                <p style="color: red;">
+                  No tienes horas de vuelo suficientes (tienes {{ horasDisponibles }} hrs).
+                </p>
+              </ng-container>
+              <ng-template #creditoValido>
+                <p style="color: green;">
+                  Tienes {{ horasDisponibles }} hrs disponibles. Puedes usar tu crédito.
+                </p>
+              </ng-template>
+            </div>
+            
             <div class="button-row">
-              <div #paypal></div>
               <button mat-button matStepperPrevious>Atrás</button>
-              <button mat-button matStepperNext color="primary" [disabled]="paymentFormGroup.invalid">Siguiente</button>
+              <button
+                mat-button
+                matStepperNext
+                color="primary"
+                [disabled]="!pagoValido()"
+              >
+                Siguiente
+              </button>
             </div>
           </form>
         </mat-step>
@@ -97,19 +132,15 @@
         <mat-step>
           <ng-template matStepLabel>Confirmación</ng-template>
           <h3>Resumen de tu reserva</h3>
-          <div class="summary" *ngIf="isFormValid()">
-            <p><strong>Fecha:</strong> {{ formatDate(dateFormGroup.value.date) }}</p>
-            <p><strong>Horario:</strong> {{ timeFormGroup.value.timeSlot }}</p>
-            <p><strong>Método de pago:</strong> Tarjeta terminada en {{ getLastFourDigits() }}</p>
-          </div>
-          <div class="button-row">
-            <button mat-button matStepperPrevious>Atrás</button>
-            <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!isFormValid()">
-              Confirmar reserva
-            </button>
-          </div>
+          <p><strong>Fecha:</strong> {{ dateFormGroup.value.date | date:'fullDate' }}</p>
+          <p><strong>Horario:</strong> {{ timeFormGroup.value.timeSlot }}</p>
+          <p><strong>Avión:</strong> {{ selectedAvion?.Modelo }}</p>
+          <p><strong>Método de pago:</strong> {{ paymentFormGroup.value.metodoPago }}</p>
+          <button mat-button matStepperPrevious>Atrás</button>
+          <button mat-raised-button color="primary" (click)="confirmarReserva()">
+            Confirmar
+          </button>
         </mat-step>
       </mat-stepper>
     </mat-card-content>
   </mat-card>
-</div>

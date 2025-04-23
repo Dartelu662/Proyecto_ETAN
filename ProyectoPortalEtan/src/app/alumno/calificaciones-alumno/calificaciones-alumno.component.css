@@ -5,8 +5,8 @@
   .grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    font-family: 'Roboto', sans-serif;
     gap: 10px;
+    border: 1px solid green;
     align-items: center;
   }
   

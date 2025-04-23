@@ -1,37 +1,52 @@
+<mat-card class="p-4">
+  <h2 class="text-xl font-semibold mb-4">Calificaciones Registradas</h2>
 
+  <mat-form-field appearance="fill" class="w-full mb-4">
+    <mat-label>Filtrar por maestro</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Escribe el nombre del maestro">
+  </mat-form-field>
 
-<div class="contenedor">
- 
-  <h2>Calificaciones Registradas</h2>
-  <p *ngIf="!calificaciones || calificaciones.length === 0">No hay datos para mostrar.</p>
-  <p *ngIf="!calificaciones || calificaciones.length > 0"> Si hay datos para mostrar.</p>
+  <table mat-table [dataSource]="dataSource" class="w-full" matSort>
 
-  <ng-container *ngFor="let cal of calificaciones">
-    {{ cal.Materia }} <!-- Solo esto, para probar -->
-  </ng-container>
-
-
-  <div class="grid">
-    <div class="encabezado">Matricula</div>
-    <div class="encabezado">Plan</div>
-    <div class="encabezado">Curso</div>
-    <div class="encabezado">Maestro</div>
-    <div class="encabezado">Materia</div>
-    <div class="encabezado">Calificacion</div>
-    <div class="encabezado">Fecha</div>
-
-    <ng-container *ngFor="let cal of calificaciones">
-      <div>{{ cal.Matricula || 'NA' }}</div>
-      <div>{{ cal.Plan || 'NA' }}</div>
-      <div>{{ cal.Curso || 'NA' }}</div>
-      <div>{{ cal.Maestro || 'NA' }}</div>
-      <div>{{ cal.Materia || 'NA' }}</div>
-      <div>{{ cal.Calificacion || 0 }}</div>
-      <div>{{ cal.FechaActualizacion || 'NA' }}</div>
+    <!-- Materia -->
+    <ng-container matColumnDef="Materia">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Materia </th>
+      <td mat-cell *matCellDef="let element"> {{element.Materia}} </td>
     </ng-container>
-  </div>
 
-  <button (click)="exportarAExcel()" class="btn-exportar">
-    Exportar a Excel
-  </button>
-</div>
+    <!-- Maestro -->
+    <ng-container matColumnDef="Maestro">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Maestro </th>
+      <td mat-cell *matCellDef="let element"> {{element.Maestro}} </td>
+    </ng-container>
+
+    <!-- Curso -->
+    <ng-container matColumnDef="Curso">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Curso </th>
+      <td mat-cell *matCellDef="let element"> {{element.Curso}} </td>
+    </ng-container>
+
+    <!-- Plan -->
+    <ng-container matColumnDef="Plan">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Plan </th>
+      <td mat-cell *matCellDef="let element"> {{element.Plan}} </td>
+    </ng-container>
+
+    <!-- Calificación -->
+    <ng-container matColumnDef="Calificacion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Calificación </th>
+      <td mat-cell *matCellDef="let element"> {{element.Calificacion}} </td>
+    </ng-container>
+
+    <!-- Fecha -->
+    <ng-container matColumnDef="FechaActualizacion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Actualizado </th>
+      <td mat-cell *matCellDef="let element"> {{ element.FechaActualizacion | date:'short' }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</mat-card>

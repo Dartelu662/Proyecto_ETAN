@@ -25,7 +25,7 @@ export class AvionesService {
   
   
   
-    GetAvions(): Observable<Avion[]> {
+    getAviones(): Observable<Avion[]> {
       const avionsRef = collection(this.firestore, 'Avion');
       const avionsActivosQuery = query(avionsRef, where('Activo', '==', true));
     

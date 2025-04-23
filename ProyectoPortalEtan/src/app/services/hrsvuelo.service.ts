@@ -1,91 +1,83 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, doc, docData, addDoc, CollectionReference, DocumentReference, updateDoc, query, where, getDoc} from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  doc,
+  query,
+  where,
+  orderBy,
+  limit
+} from '@angular/fire/firestore';
+import { Observable, from, of } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 import { HrsVuelo } from '../interfaces/hrsvuelo.interface';
-import { Observable } from 'rxjs';
 
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class HrsvueloService {
-  
   private firestore = inject(Firestore);
 
-    
-    constructor() { }
-  
-    async AddHrsVuelo(HrsVuelo: HrsVuelo): Promise<DocumentReference<HrsVuelo> | null> {
-      try {
-        const HrsVueloRef: CollectionReference<HrsVuelo> = collection(this.firestore, 'HrsVuelo') as CollectionReference<HrsVuelo>;
-        return await addDoc(HrsVueloRef, HrsVuelo);
-      } catch (error) {
-        console.error('Error al agregar HrsVuelo:', error);
-        return null;
-      }
-    }
-  
-  
-  
-    GetHrsVuelos(): Observable<HrsVuelo[]> {
-      const HrsVuelosRef = collection(this.firestore, 'HrsVuelo');
-      const HrsVuelosActivosQuery = query(HrsVuelosRef, where('Activo', '==', true));
-    
-      return collectionData(HrsVuelosActivosQuery, { idField: 'id' }) as Observable<HrsVuelo[]>;
-    }
-  
-    GetEscolarById(id: string): Observable<HrsVuelo | undefined> {
-      const HrsVueloDoc = doc(this.firestore, `HrsVuelo/${id}`);
-      return docData(HrsVueloDoc, { idField: 'id' }) as Observable<HrsVuelo | undefined>;
-    }
-  
-   
-    async UpdateHrsVuelo(HrsVuelo: HrsVuelo): Promise<boolean> {
-      if (!HrsVuelo.id) {
-        console.error('Error: El ID del HrsVuelo es obligatorio para actualizar.');
-        return false;
-      }
-  
-      const HrsVueloDocRef = doc(this.firestore, `HrsVuelo/${HrsVuelo.id}`);
-  
-      const updateData: Partial<HrsVuelo> = Object.fromEntries(
-        Object.entries(HrsVuelo).filter(([_, value]) => value !== null && value !== '')
-      );
-  
-      try {
-        await updateDoc(HrsVueloDocRef, updateData);
-        return true;
-      } catch (error) {
-        console.error('Error al actualizar HrsVuelo:', error);
-        return false;
-      }
-    }
-  
-  
-  
-    async deleteHrsVuelo(id: string): Promise<boolean> {
-      if (!id) {
-        console.error('Error: El ID del HrsVuelo es obligatorio para desactivarlo.');
-        return false;
-      }
-    
-      const HrsVueloDocRef = doc(this.firestore, `HrsVuelo/${id}`);
-    
-      // Verificar que el documento exista
-      const docSnapshot = await getDoc(HrsVueloDocRef);
-      if (!docSnapshot.exists()) {
-        console.error(`El documento con ID ${id} no existe.`);
-        return false;
-      }
-      console.log('Documento antes de la actualización:', docSnapshot.data());
-    
-      try {
-        console.log(`Intentando actualizar el campo 'Activo' a false para el documento con ID ${id}`);
-        await updateDoc(HrsVueloDocRef, { Activo: false });
-        console.log(`HrsVuelo con ID ${id} ha sido desactivado.`);
-        return true;
-      } catch (error) {
-        console.error('Error al desactivar HrsVuelo:', error);
-        return false;
-      }
-    }
+  /** Guarda un nuevo pago en 'pagos' */
+  registrarPago(reserva: HrsVuelo): Observable<void> {
+    const pagosRef = collection(this.firestore, 'pagos');
+    // Asegúrate de incluir aquí reserva.Fecha = new Date() si quieres timestamp real
+    return from(addDoc(pagosRef, reserva)).pipe(map(() => {}));
+  }
+
+  /** Verifica el crédito restante (hrsVuelo) del último pago para esa matrícula+avión */
+  verificarHorasCredito(matricula: string, avionId: string): Observable<number> {
+    const pagosRef = collection(this.firestore, 'pagos');
+    const q = query(
+      pagosRef,
+      where('Matricula', '==', matricula),
+      where('Avion', '==', avionId),
+      orderBy('Fecha', 'desc'),  // <— usa 'Fecha', que es el campo que realmente guardas
+      limit(1)
+    );
+    return from(getDocs(q)).pipe(
+      map(snapshot => {
+        if (snapshot.empty) return 0;
+        const data = snapshot.docs[0].data();
+        return (data['hrsVuelo'] as number) || 0;
+      })
+    );
+  }
+
+  /** Resta 'horas' del campo hrsVuelo del registro más reciente */
+  actualizarHorasCredito(
+    matricula: string,
+    avionId: string,
+    horas: number
+  ): Observable<void> {
+    const pagosRef = collection(this.firestore, 'pagos');
+    const q = query(
+      pagosRef,
+      where('Matricula', '==', matricula),
+      where('Avion', '==', avionId),
+      orderBy('Fecha', 'desc'),
+      limit(1)
+    );
+    return from(getDocs(q)).pipe(
+      switchMap(snapshot => {
+        if (snapshot.empty) {
+          console.warn('No hay pago previo para restar crédito');
+          return of(undefined);
+        }
+        const docSnap = snapshot.docs[0];
+        const current = (docSnap.data()['hrsVuelo'] as number) || 0;
+        const updated = current - horas;
+        const ref = doc(this.firestore, 'pagos', docSnap.id);
+        return from(updateDoc(ref, { hrsVuelo: updated }));
+      })
+    );
+  }
+
+  /** Guarda la reserva en la colección 'HrsVuelo' */
+  AddHrsVuelo(reserva: HrsVuelo): Promise<void> {
+    const hrsRef = collection(this.firestore, 'HrsVuelo');
+    // addDoc devuelve Promise<DocumentReference>, aquí la convertimos a void
+    return addDoc(hrsRef, reserva).then(() => {});
+  }
 }

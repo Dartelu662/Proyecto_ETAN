@@ -13,7 +13,6 @@ import { HrsvueloService } from '../../services/hrsvuelo.service';
 import { HrsVuelo } from '../../interfaces/hrsvuelo.interface';
 import Avion from '../../interfaces/avion.interface';
 import { AvionesService } from '../../services/aviones.service';
-import { ViewChild } from '@angular/core';
 
 declare var paypal: any;
 
@@ -37,15 +36,15 @@ declare var paypal: any;
 })
 export class HorasVueloAdmin2Component {
 
-  @ViewChild('paypal', { static: true }) paypalElement: ElementRef | undefined;
-
 
   hrsVuelo: HrsVuelo = {
     Matricula: '',
     Fecha: '',
     Hora: '',
-    Avion: ''
-}
+    Avion: '',
+    MetodoPago: '',
+    Monto: 0
+  }
 
   dateFormGroup: FormGroup;
   timeFormGroup: FormGroup;
@@ -55,7 +54,7 @@ export class HorasVueloAdmin2Component {
 
   
   timeSlots: string[] = [
-    '8:00 AM', '9:30 AM', 
+    '8:00 AM', '9:30 AM',
     '11:00 AM', '12:30 PM',
     '2:00 PM', '3:30 PM',
     '5:00 PM', '6:30 PM',
@@ -70,52 +69,11 @@ export class HorasVueloAdmin2Component {
   listaAviones: Avion[] = []
 
   ngOnInit(): void {
-    this.avionService.GetAvions().subscribe( async value => {
+    this.avionService.getAviones().subscribe( async value => {
       this.listaAviones = value;
       console.log (value)
     });
-
-
-    
-
-              // Verificar si paypal está definido
-        if (typeof paypal !== 'undefined') {
-    
-            paypal
-            .Buttons({
-              createOrder: (data: any, actions: any) => {
-                return actions.order.create({
-                  purchase_units: [{
-                    description: this.Pagos.descripcion, 
-                    amount     : {
-                    currency_code: 'MXN', 
-                    value        : this.Pagos.monto.toString()
-                    }
-                  }]
-                })
-              },
-    
-              onApprove: async (_data: any, actions: { order: { capture: () => any; }; }) => {
-                const order = await actions.order.capture();
-                console.log(order);
-              },
-              onError: (err: any) => {
-                console.log(err);
-              }
-     
-            })
-            
-            .render  (this.paypalElement?.nativeElement);
-    
-          } else {
-            console.error('PayPal SDK no ha sido cargado correctamente');
-          }
-
-
 }
-
-
-
 
 constructor(
   private _formBuilder: FormBuilder, 
@@ -206,26 +164,4 @@ constructor(
     }
   }
   
-  
-  // onSubmit(): void {
-  //   if (this.isFormValid()) {
-  //     console.log('Reserva confirmada', {
-  //       //date: this.dateFormGroup.value.date,  
-  //       date: this.hrsVuelo.Fecha,
-  //       //timeSlot: this.timeFormGroup.value.timeSlot,
-  //       timeSlot: this.hrsVuelo.Hora, 
-  //       Slot: this.hrsVuelo.Avion,
-  //       Avion: this.hrsVuelo.Avion,
-  //       // payment: {
-  //       //   cardName: this.paymentFormGroup.value.cardName,
-  //       //   lastFourDigits: this.getLastFourDigits()
-  //       // }
-      
-  //     });
-  //     // Aquí iría la lógica para enviar la información al servidor
-      
-  //     this.hrsVueloService.AddHrsVuelo(this.hrsVuelo)
-  //     alert('¡Reserva confirmada con éxito!');
-  //   }
-  // }
-}
+ }

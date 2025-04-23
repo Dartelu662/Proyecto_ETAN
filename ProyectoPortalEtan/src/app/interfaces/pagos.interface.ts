@@ -1,7 +1,12 @@
 export default interface Pagos {
-Matricula?: string;
-TipoPago: 'Mensualidad';
-Fecha: string;
+matricula?: string;
+TipoPago: string;
+fechaPago: string;
 Monto: number;
-FormaPago: 'PayPal';
+FormaPago: string;
+Referencia: string;
+tipoPago: string;
+medioPago: string;
+hrsVuelo: number;
+avion: string;
 }

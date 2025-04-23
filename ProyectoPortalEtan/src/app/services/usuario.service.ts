@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UsuarioService {
+  GetUsuarioById: any;
 
   constructor(private _firestore:Firestore) { }
 

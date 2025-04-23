@@ -33,13 +33,30 @@
         <option value="PermisoFormacion">Permiso de Formación</option>
         <option value="Mensualidad">Mensualidad</option>
         <option value="Horas Vuelo">Horas Vuelo</option>
+        <option value="Crédito Horas Vuelo">Crédito Horas Vuelo</option>
         <option value="Simulador">Horas Simulador</option>
         <option value="DoctoTramiteLicencia">Docto Trámite Licencia</option>
         <option value="HorasVueloExFinal">Horas Vuelo Ex. Final</option>
         <option value="OrdenExFinal">Orden Ex. Final</option>
-        <option value="ExSinudalTeorico">Examen Sinudal Práctico</option>
-        <option value="ExSinudalPractico">Examen Sinudal Teórico</option>
+        <option value="ExSinudalTeorico">Examen Sinodal Teórico</option>
+        <option value="ExSinudalPractico">Examen Sinodal Práctico</option>
       </select>
+    </div>
+
+    <div class="form-group">
+      <label for="aviones">Avión</label>
+      <select id="aviones" formControlName="avion">
+        <option value="" disabled>-- Selecciona un avión --</option>
+        <option *ngFor="let avion of listaAviones" [value]="avion.id">
+          {{ avion.Modelo }} - {{ avion.NumeroRegistro }}
+        </option>
+      </select>
+    </div>
+    
+
+    <div class="form-group">
+      <label for="hrsVuelo">Horas Vuelo</label>
+      <input id="hrsVuelo" type="number" formControlName="hrsVuelo" placeholder="Ingrese Horas Vuelo">
     </div>
 
     <button type="submit" [disabled]="pagoForm.invalid">Guardar Pago</button>

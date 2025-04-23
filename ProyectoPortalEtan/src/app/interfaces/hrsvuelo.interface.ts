@@ -1,8 +1,11 @@
 export interface HrsVuelo {
-    id?: string;
     Matricula: string;
-    Fecha: string;
+    Fecha: Date | string;
     Hora: string;
     Avion: string;
-    Instructor?: string
-}
+    MetodoPago: string; // 'paypal' o 'credito'
+    Monto: number;
+    hrsVuelo?: number;   // positivo (abono) o negativo (descuento)
+    PagoInfo?: any;      // datos de PayPal
+    id?: string;         // para Firestore
+  }
