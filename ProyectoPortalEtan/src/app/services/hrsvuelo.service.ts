@@ -31,11 +31,14 @@ export class HrsvueloService {
     const pagosRef = collection(this.firestore, 'pagos');
     const q = query(
       pagosRef,
-      where('Matricula', '==', matricula),
-      where('Avion', '==', avionId),
-      orderBy('Fecha', 'desc'),  // <— usa 'Fecha', que es el campo que realmente guardas
+      where('matricula', '==', matricula),
+      where('avion', '==', avionId),
+      orderBy('fechaPago', 'desc'),  // <— usa 'Fecha', que es el campo que realmente guardas
       limit(1)
     );
+    console.log('Verificando horas de crédito...', matricula, avionId);
+
+
     return from(getDocs(q)).pipe(
       map(snapshot => {
         if (snapshot.empty) return 0;
@@ -54,11 +57,13 @@ export class HrsvueloService {
     const pagosRef = collection(this.firestore, 'pagos');
     const q = query(
       pagosRef,
-      where('Matricula', '==', matricula),
-      where('Avion', '==', avionId),
-      orderBy('Fecha', 'desc'),
+      where('matricula', '==', matricula),
+      where('avion', '==', avionId),
+      orderBy('fechaPago', 'desc'),
       limit(1)
     );
+
+    console.log('Actualizando horas de crédito...', matricula, avionId, horas);
     return from(getDocs(q)).pipe(
       switchMap(snapshot => {
         if (snapshot.empty) {

@@ -44,30 +44,29 @@ declare const paypal: any;
 export class VuelosAlumnoComponent implements OnInit {
   @ViewChild('paypal', { static: false }) paypalElement!: ElementRef;
 
-  dateFormGroup: FormGroup;
-  timeFormGroup: FormGroup;
-  planeFormGroup: FormGroup;
-  paymentFormGroup: FormGroup;
+  dateFormGroup:     FormGroup;
+  timeFormGroup:     FormGroup;
+  planeFormGroup:    FormGroup;
+  paymentFormGroup:  FormGroup;
 
-  timeSlots = [
-    '8:00 AM','9:30 AM','11:00 AM','12:30 PM',
-    '2:00 PM','3:30 PM','5:00 PM','6:30 PM'
-  ];
+  timeSlots = ['8:00 AM','9:30 AM','11:00 AM','12:30 PM','2:00 PM','3:30 PM','5:00 PM','6:30 PM'];
   listaAviones: Avion[] = [];
-  selectedAvion?: Avion;
+  selectedAvion?:  Avion;
 
   montoPago = 0;
   horasDisponibles = 0;
   tieneHorasCredito = false;
   creditChecked = false;
-
   matricula: string | null = null;
 
-  private fb = inject(FormBuilder);
-  private avionService = inject(AvionesService);
+  /** <-- NUEVO: Horas que se descuentan por reserva */
+  readonly horasReserva = 1.5;
+
+  private fb              = inject(FormBuilder);
+  private avionService    = inject(AvionesService);
   private hrsVueloService = inject(HrsvueloService);
-  private usuarioService = inject(UsuarioService);
-  private auth = inject(Auth);
+  private usuarioService  = inject(UsuarioService);
+  private auth            = inject(Auth);
 
   constructor() {
     this.dateFormGroup    = this.fb.group({ date: ['', Validators.required] });
@@ -77,168 +76,127 @@ export class VuelosAlumnoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 1) Lista de aviones
-    this.avionService.getAviones().subscribe(avs => {
-      console.log('Aviones cargados:', avs);
-      this.listaAviones = avs;
-    });
+    // 1) cargar aviones
+    this.avionService.getAviones().subscribe(avs => this.listaAviones = avs);
 
-    // 2) Matrícula del usuario
+    // 2) obtener matrícula
     const user = this.auth.currentUser;
     if (user?.email) {
       this.usuarioService.getUsuarioByEMail(user.email)
-        .then(u => {
-          console.log('UsuarioService.getUsuarioByEMail:', u);
-          this.matricula = u?.UserName ?? null;
-        })
-        .catch(err => console.error('Error UsuarioService:', err));
+        .then(u => this.matricula = u?.UserName ?? null)
+        .catch(err => console.error(err));
     }
 
-    // 3) Cambio de método de pago
+    // 3) al cambiar método
     this.paymentFormGroup.get('metodoPago')!
       .valueChanges
-      .subscribe((metodo: 'paypal'|'credito') => {
-        console.log('Método de pago seleccionado:', metodo);
+      .subscribe((m: 'paypal'|'credito') => {
         if (!this.selectedAvion) return;
-        if (metodo === 'paypal') {
-          this.renderizarPaypal();
-        } else {
-          this.verificarCredito();
-        }
+        m==='paypal' ? this.renderizarPaypal() : this.verificarCredito();
       });
   }
 
   onAvionSeleccionado(): void {
     this.selectedAvion = this.planeFormGroup.value.listaAviones;
-    console.log('Avión seleccionado:', this.selectedAvion);
-    this.montoPago = this.selectedAvion?.CostoHoraVuelo || 0;
-    const metodo = this.paymentFormGroup.value.metodoPago;
-    if (metodo === 'paypal') this.renderizarPaypal();
-    if (metodo === 'credito') this.verificarCredito();
+    this.montoPago     = this.selectedAvion?.CostoHoraVuelo || 0;
+    const m = this.paymentFormGroup.value.metodoPago;
+    if (m==='paypal') this.renderizarPaypal();
+    if (m==='credito') this.verificarCredito();
   }
 
   onMetodoPagoChange(): void {
-    const metodo = this.paymentFormGroup.value.metodoPago;
-    console.log('onMetodoPagoChange ->', metodo);
+    const m = this.paymentFormGroup.value.metodoPago;
     if (!this.selectedAvion) return;
-    metodo === 'paypal' ? this.renderizarPaypal() : this.verificarCredito();
+    m==='paypal' ? this.renderizarPaypal() : this.verificarCredito();
   }
 
   private renderizarPaypal(): void {
-    if (!this.paypalElement || typeof paypal === 'undefined') return;
+    if (!this.paypalElement||typeof paypal==='undefined') return;
     this.paypalElement.nativeElement.innerHTML = '';
     paypal.Buttons({
-      createOrder: (_: any, actions: any) => actions.order.create({
-        purchase_units: [{
-          description: `Vuelo ${this.selectedAvion!.Modelo}`,
-          amount: { currency_code: 'MXN', value: this.montoPago.toString() }
+      createOrder: (_:any, act:any) => act.order.create({
+        purchase_units:[{
+          description:`Vuelo ${this.selectedAvion!.Modelo}`,
+          amount:{currency_code:'MXN', value:this.montoPago.toString()}
         }]
       }),
-      onApprove: async (_: any, actions: any) => {
-        const order = await actions.order.capture();
-        console.log('PayPal onApprove, order =', order);
+      onApprove: async(_:any, act:any) => {
+        const order = await act.order.capture();
         this.guardarReserva('paypal', order);
       },
-      onError: (err: any) => console.error('PayPal error:', err)
+      onError: console.error
     }).render(this.paypalElement.nativeElement);
   }
 
   private verificarCredito(): void {
-    if (!this.selectedAvion || !this.matricula) {
-      console.error('verificarCredito: falta selectedAvion o matricula');
-      return;
-    }
-
+    if (!this.selectedAvion||!this.matricula) return;
     this.creditChecked = false;
     this.horasDisponibles = 0;
-    this.tieneHorasCredito = false;
-
-    const avionId = this.selectedAvion.id;
-    console.log('verificarCredito para:', this.matricula, avionId);
-
-    this.hrsVueloService.verificarHorasCredito(this.matricula, avionId!)
-      .subscribe({
-        next: horas => {
-          console.log('verificarHorasCredito -> horas =', horas);
-          this.horasDisponibles = horas;
-          this.tieneHorasCredito = horas > 0;
-          this.creditChecked = true;
-        },
-        error: err => {
-          console.error('Error en verificarHorasCredito:', err);
-          this.creditChecked = true;
-        }
-      });
+    const id = this.selectedAvion.id;
+    this.hrsVueloService.verificarHorasCredito(this.matricula, id!)
+      .subscribe(h => {
+        this.horasDisponibles = h;
+        this.tieneHorasCredito = h > 0;
+        this.creditChecked = true;
+      }, console.error);
   }
 
   private guardarReserva(
-    metodo: 'paypal' | 'credito',
-    pagoInfo: any = null
+    metodo: 'paypal'|'credito',
+    info: any = null
   ): void {
-    if (!this.selectedAvion || !this.matricula) {
-      console.error('guardarReserva: falta selectedAvion o matricula');
-      return;
-    }
+    if (!this.selectedAvion||!this.matricula) return;
+    const id = this.selectedAvion.id;
+    console.log('Guardando reserva...', metodo, info);
 
-    const avionId = this.selectedAvion.id;
-    if (!avionId) {
-      console.error('guardarReserva: avión sin id');
-      return;
-    }
+    const reserva: HrsVuelo = {
+      Matricula:  this.matricula,
+      Fecha:      this.dateFormGroup.value.date,
+      Hora:       this.timeFormGroup.value.timeSlot,
+      Avion:      id!,
+      MetodoPago: metodo,
+      Monto:      this.montoPago,
+      /** <-- NUEVO: restamos las horas de vuelo reservadas */
+      hrsVuelo:   metodo==='credito'
+                    ? - this.horasReserva
+                    : 0,
+      PagoInfo:   info
+    };
 
-    console.log(`guardarReserva: metodo=${metodo}, matricula=${this.matricula}, avionId=${avionId}, monto=${this.montoPago}`);
-
-    if (metodo === 'paypal') {
-      // Insertar nuevo registro en 'pagos'
-      const reserva: HrsVuelo = {
-        Matricula:  this.matricula,
-        Fecha:      this.dateFormGroup.value.date,
-        Hora:       this.timeFormGroup.value.timeSlot,
-        Avion:      avionId,
-        MetodoPago: 'paypal',
-        Monto:      this.montoPago,
-        hrsVuelo:   0,
-        PagoInfo:   pagoInfo
-      };
-      console.log('Llamando registrarPago with', reserva);
-      this.hrsVueloService.registrarPago(reserva).subscribe({
-        next: () => console.log('✅ PayPal registrado en Firestore'),
-        error: err => console.error('❌ Error registrarPago:', err)
-      });
-
-    } else {
-      // Actualizar hrsVuelo en el último registro
-      console.log('Llamando actualizarHorasCredito...');
-      this.hrsVueloService
-        .actualizarHorasCredito(this.matricula, avionId, this.montoPago)
-        .subscribe({
-          next: () => console.log('✅ Crédito actualizado en Firestore'),
-          error: err => console.error('❌ Error actualizarHorasCredito:', err)
-        });
-    }
+    // 1) Siempre guardamos la reserva en HrsVuelo
+    this.hrsVueloService.AddHrsVuelo(reserva)
+      .then(() => {
+        if (metodo==='credito') {
+          // 2) y si es crédito, actualizamos el crédito en 'pagos'
+          this.hrsVueloService
+            .actualizarHorasCredito(this.matricula!, id!, this.horasReserva)
+            .subscribe({
+              next: () => alert('Reserva y crédito actualizado con éxito'),
+              error: err => console.error('Error actualizar crédito:', err)
+            });
+        } else {
+          alert('Reserva guardada con éxito');
+        }
+      })
+      .catch(err => console.error('Error guardando HrsVuelo:', err));
   }
 
   pagoValido(): boolean {
-    const metodo = this.paymentFormGroup.value.metodoPago;
-    return metodo === 'paypal'
-      ? this.montoPago > 0
-      : (this.creditChecked && this.horasDisponibles > 0);
+    const m = this.paymentFormGroup.value.metodoPago;
+    return m==='paypal'
+      ? this.montoPago>0
+      : (this.creditChecked && this.horasDisponibles>0);
   }
 
   confirmarReserva(): void {
-    const metodo = this.paymentFormGroup.value.metodoPago;
-    console.log('confirmarReserva -> metodo =', metodo);
-    if (metodo === 'credito') {
+    if (this.paymentFormGroup.value.metodoPago==='credito') {
       this.guardarReserva('credito');
     }
   }
 
   formatDate(d: Date): string {
     return new Date(d).toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      weekday:'long',year:'numeric',month:'long',day:'numeric'
     });
   }
 }
