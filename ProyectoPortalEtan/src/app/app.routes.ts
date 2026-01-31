@@ -8,6 +8,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   
   { path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent) },
+  { path: 'registro', loadComponent: () => import('./registro-usuario/registro-usuario.component').then(m => m.RegistroUsuarioComponent) },
 
   { 
     path: 'alumno', 
@@ -18,7 +19,7 @@ export const routes: Routes = [
       { path: 'datos-generales', loadComponent: () => import('./alumno/datos-generales-alumno/datos-generales-alumno.component').then(m => m.DatosGeneralesAlumnoComponent) },
       { path: 'vuelos', loadComponent: () => import('./alumno/vuelos-alumno/vuelos-alumno.component').then(m => m.VuelosAlumnoComponent) },
       { path: 'calificaciones', loadComponent: () => import('./alumno/calificaciones-alumno/calificaciones-alumno.component').then(m => m.CalificacionesAlumnoComponent) },
-      { path: 'pagos', loadComponent: () => import('./alumno/pagos-alumno/pagos-alumno.component').then(m => m.PagosAlumnoComponent) },
+      //{ path: 'pagos', loadComponent: () => import('./alumno/pagos-alumno/pagos-alumno.component').then(m => m.PagosAlumnoComponent) },
     ]
   },
 
@@ -48,6 +49,7 @@ export const routes: Routes = [
       { path: 'datos-generales', loadComponent: () => import('./admin-2/datos-generales-admin-2/datos-generales-admin-2.component').then(m => m.DatosGeneralesAdmin2Component) },
       { path: 'horas-vuelo', loadComponent: () => import('./admin-2/horas-vuelo-admin-2/horas-vuelo-admin-2.component').then(m => m.HorasVueloAdmin2Component)},
       { path: 'pagos', loadComponent: () => import('./admin-2/pagos-admin-2/pagos-admin-2.component').then(m => m.PagosAdmin2Component)},
+      { path: 'informes-escolar', loadComponent: () => import('./admin-2/informes-escolar-admin-2/informes-escolar-admin-2.component').then(m => m.InformesEscolarAdmin2Component)}, 
     ]
   },
 

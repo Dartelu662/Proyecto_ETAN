@@ -1,139 +1,251 @@
 <div class="container">
-  <h2>Captura de Alumnos</h2>
-
-  <form (ngSubmit)="Guardar()" #alumnoForm="ngForm">
-      <!-- Línea 1: Matrícula y Contraseña -->
-      <div class="form-group linea1">
-          <label for="matricula">Matrícula</label>
-          <input type="text" id="matricula" class="form-control" [(ngModel)]="usuario.UserName" name="matricula" (change)="matriculaChange()" required>
-      </div>
-
-      <div class="form-group linea1">
-          <label for="password">Contraseña</label>
-          <input type="password" id="password" class="form-control" [(ngModel)]="auth.Password" name="password" required>
-      </div>
-
-      <!-- Línea 2: Nombres, Apellido Paterno y Apellido Materno -->
-      <div class="form-group linea2">
-          <label for="nombres">Nombres</label>
-          <input type="text" id="nombres" class="form-control" [(ngModel)]="usuario.Nombres" name="nombres" required>
-      </div>
-
-      <div class="form-group linea2">
-          <label for="apellidoP">Apellido Paterno</label>
-          <input type="text" id="apellidoP" class="form-control" [(ngModel)]="usuario.ApellidoP" name="apellidoP" required>
-      </div>
-
-      <div class="form-group linea2">
-          <label for="apellidoM">Apellido Materno</label>
-          <input type="text" id="apellidoM" class="form-control" [(ngModel)]="usuario.ApellidoM" name="apellidoM" required>
-      </div>
-
-      <!-- Línea 3: Correo Electrónico, Celular y Dirección -->
-      <div class="form-group linea3">
-          <label for="email">Correo electrónico</label>
-          <input type="email" id="email" class="form-control" [(ngModel)]="usuario.Email" name="email" required>
-      </div>
-
-      <div class="form-group linea3">
-          <label for="celular">Celular</label>
-          <input type="text" id="celular" class="form-control" [(ngModel)]="usuario.Celular" name="celular" required>
-      </div>
-
-      <div class="form-group linea3">
-          <label for="direccion">Dirección</label>
-          <input type="text" id="direccion" class="form-control" [(ngModel)]="usuario.Direccion" name="direccion">
-      </div>
-
-      <!-- Línea 4: Fecha de Nacimiento, Fecha de Ingreso, Permiso Formación y Fecha Fin PF -->
-      <div class="form-group linea4">
-          <label for="fechaNac">Fecha de nacimiento</label>
-          <input type="date" id="fechaNac" class="form-control" [(ngModel)]="usuario.FechaNac" name="fechaNac" required>
-      </div>
-
-      <div class="form-group linea4">
-          <label for="fechaIngreso">Fecha de ingreso</label>
-          <input type="date" id="fechaIngreso" class="form-control" [(ngModel)]="usuario.FechaIngreso" name="fechaIngreso" required>
-      </div>
-
-      <div class="form-group linea4">
-          <label for="permisoFormacion">Permiso de Formación</label>
-          <input type="text" id="permisoFormacion" class="form-control" [(ngModel)]="alumno.PermisoFormacion" name="permisoFormacion" required>
-      </div>
-
-      <div class="form-group linea4">
-          <label for="fechaFinPF">Fecha Fin Formación</label>
-          <input type="date" id="fechaFinPF" class="form-control" [(ngModel)]="alumno.FechaFinPF" name="fechaFinPF" required>
-      </div>
-
-      <!-- Línea 5: Plan y Curso -->
-      <!-- <div class="form-group linea5">
-          <label for="plan">Plan</label>
-          <select id="plan" class="form-control" [(ngModel)]="Plan.plan" name="plan">
-              <option value="Plan 1">Plan 1</option>
-              <option value="Plan 2">Plan 2</option>
-          </select>
-      </div> -->
-
-      <div class="form-group linea5">
-        <label for="Plan">Plan</label>
-        <select id="Plan" class="form-control" [(ngModel)]="selectPlan" name="listaPlanes" (change)="onPlanSelected(selectPlan)" required>
-          <option   *ngFor="let plan of listaPlanes" [value]="plan.id">{{ plan.plan }}</option>
-        </select>
-      </div>
-
-      <div class="form-group linea5">
-        <label for="Curso">Curso</label>
-        <select id="Maestro" class="form-control" [(ngModel)]="selectCursos" name="listaCursos" (change)="onCursoSelected(selectCursos)" required>
-          <option   *ngFor="let curso of listaCursos" [value]="curso.id">{{ curso.curso }}</option>
-        </select>
-      </div>
-
-      <!-- <div class="form-group linea5">
-          <label for="Curso">Curso</label>
-          <select id="Curso" class="form-control" [(ngModel)]="curso.curso" name="Curso" required>
-              <option value="curso 1">Curso 1</option>
-              <option value="curso 2">Curso 2</option>
-          </select>
-      </div> -->
-
-      <div class="form-group linea5" >
-        <label for="Modalidad" >Modalidad</label>
-        <select id="Modalidad" class="form-control" [(ngModel)]="curso.Semanal" name="Modalidad" required>
-            <option value="Modalidad 1">Semanal</option>
-            <option value="Modalidad 2">Sabatino</option>
-        </select>
-      </div>
-
-      <!-- Botón de Guardar -->
-      <button type="submit" class="btn btn-primary" [disabled]="!alumnoForm.form.valid">Guardar</button>
-  </form>
-  <form (submit)="buscarAlumno()">
-    <div class="form-group">
-      <label for="matricula">Matrícula</label>
-      <input type="text" id="buscarMatricula" class="form-control" [(ngModel)]="matriculaBusqueda" name="matricula" required>
+    <div class="actions-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 class="title">Captura de Alumnos</h3>
+  
+      <!-- Botón Nuevo: limpia el formulario y prepara para captura -->
+      <button type="button" class="btn btn-primary" (click)="abrirNuevoAlumno()">
+        Nuevo alumno
+      </button>
     </div>
-    <button type="submit" class="btn btn-primary">Buscar</button>
-  </form>
   
-  <!-- Mostrar tarjeta del alumno si existe -->
-  <div *ngIf="alumnoSeleccionado" class="card">
-    <h3>Editar Alumno</h3>
-    <form (submit)="actualizarAlumno()">
-        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.UserName" [disabled]="true" placeholder="Matricula" required name="UserName">
-        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.Nombres" placeholder="Nombre" required name="Nombres">
-        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.ApellidoP" placeholder="Apellido Paterno" required name="ApellidoP">
-        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.ApellidoM" placeholder="Apellido Materno" required name="ApellidoM">
-        <input type="email" [(ngModel)]="alumnoSeleccionado.usuario.Email" placeholder="Correo" required name="Email">
-        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.Direccion" placeholder="Direccion" required name="Direccion">
-        <input type="text" [(ngModel)]="alumnoSeleccionado.usuario.Celular" placeholder="Celular" required name="Celular">
-        <input type="date" [(ngModel)]="alumnoSeleccionado.usuario.FechaNac" placeholder="Fecha Nacimiento" required name="FechaNac">
-        <input type="text" [(ngModel)]="alumnoSeleccionado.alumno.PermisoFormacion" placeholder="Permiso de Formacion" required name="PermisoFormacion">
-        <input type="date" [(ngModel)]="alumnoSeleccionado.alumno.FechaFinPF" placeholder="Fecha Fin PF" required name="FechaFinPF">
-        <button type="submit" class="btn btn-success">Actualizar</button>
-        <button type="button" class="btn btn-danger" (click)="deshabilitarAlumno()">Deshabilitar</button>
-        <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+    <!-- ── Formulario Nuevo Alumno / EdoCuenta ─────────────────────────────── -->
+    <form (ngSubmit)="Guardar()" #alumnoForm="ngForm">
+      <div class="form-group linea1">
+        <label>Matrícula</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="usuario.UserName"
+               (change)="validarMatricula()"
+               name="matricula"
+               required>
+      </div>
+
+      <!-- Mensaje de validación -->
+      <div *ngIf="mensajeValidacion" 
+           [ngClass]="{'alert alert-warning': matriculaExiste, 'alert alert-success': !matriculaExiste}"
+           style="margin-bottom: 12px; padding: 8px 12px; border-radius: 6px; font-size: 14px;">
+        {{ mensajeValidacion }}
+      </div>
+
+     <!-- CONTRASEÑA DEL ALUMNO -->
+      <div class="form-group linea3">
+        <label>Contraseña</label>
+        <input type="password" class="form-control"
+               [(ngModel)]="usuario.Password"
+               name="passwordAlumno"
+               autocomplete="new-password"
+               required>
+      </div>
+
+      <!-- Datos personales -->
+      <div class="form-group linea2">
+        <label>Nombres</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="usuario.Nombres"
+               (input)="buscarUsuariosPorNombre(usuario.Nombres)"
+               name="nombres"
+               required>
+      </div>
+
+    <!-- Lista de sugerencias -->
+    <ul *ngIf="usuariosSugeridos?.length" class="sugerencias">
+      <li *ngFor="let u of usuariosSugeridos" class="sugerencia-item" (click)="seleccionarUsuario(u)">
+        <div class="sugerencia-main">
+          <strong>{{ u.Nombres }} {{ u.ApellidoP }} {{ u.ApellidoM }}</strong>
+          <span class="muted"> ({{ u.UserName }})</span>
+        </div>
+        <div class="sugerencia-sub">
+          <small class="muted">{{ u.Email || '' }} {{ u.Celular ? '· ' + u.Celular : '' }}</small>
+        </div>
+      </li>
+    </ul>
+
+      <div class="form-group linea2">
+        <label>Apellido Paterno</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="usuario.ApellidoP"
+               name="apellidoP"
+               required>
+      </div>
+      <div class="form-group linea2">
+        <label>Apellido Materno</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="usuario.ApellidoM"
+               name="apellidoM"
+               required>
+      </div>
+  
+      <!-- Contacto -->
+      <div class="form-group linea3">
+        <label>Email</label>
+        <input type="email" class="form-control"
+               [(ngModel)]="usuario.Email"
+               name="email"
+               required>
+      </div>
+
+       <div class="form-group linea3">
+        <label>Celular</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="usuario.Celular"
+               name="celular"
+               required>
+      </div>
+      <div class="form-group linea3">
+        <label>Dirección</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="usuario.Direccion"
+               name="direccion">
+      </div>
+  
+      <!-- Fechas y permiso -->
+      <div class="form-group linea4">
+        <label>Fecha Nac.</label>
+        <input type="date" class="form-control"
+               [(ngModel)]="usuario.FechaNac"
+               name="fechaNac"
+               required>
+      </div>
+      <div class="form-group linea4">
+        <label>Fecha Ingreso</label>
+        <input type="date" class="form-control"
+               [(ngModel)]="usuario.FechaIngreso"
+               name="fechaIngreso"
+               required>
+      </div>
+      <div class="form-group linea4">
+        <label>Permiso Formación</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="alumno.PermisoFormacion"
+               name="permisoFormacion"
+               >
+      </div>
+      <div class="form-group linea4">
+        <label>Fecha Fin Formación</label>
+        <input type="date" class="form-control"
+               [(ngModel)]="alumno.FechaFinPF"
+               name="fechaFinPF"
+               >
+      </div>
+  
+      <!-- Plan / Curso -->
+      <div class="form-group linea5">
+        <label>Plan</label>
+        <select class="form-control"
+                [(ngModel)]="selectPlan"
+                name="listaPlanes"
+                (change)="onPlanSelected(selectPlan)"
+                required>
+          <option *ngFor="let p of listaPlanes" [value]="p.id">{{p.plan}}</option>
+        </select>
+      </div>
+      <div class="form-group linea5">
+        <label>Curso</label>
+        <select class="form-control"
+                [(ngModel)]="selectCurso"
+                name="listaCursos"
+                (change)="onCursoSelected(selectCurso)"
+                required>
+          <option *ngFor="let c of listaCursos" [value]="c.id">{{c.curso}}</option>
+        </select>
+      </div>
+  
+      <!-- Modalidad -->
+      <div class="form-group linea6">
+        <label>Modalidad</label>
+        <select class="form-control"
+                [(ngModel)]="modalidad"
+                name="modalidad"
+                required>
+          <option value="" disabled>-- Elige modalidad --</option>
+          <option value="Semanal">Semanal</option>
+          <option value="Sabatino">Sabatino</option>
+        </select>
+      </div>
+  
+      <button type="submit"
+              class="btn btn-primary"
+              [disabled]="!alumnoForm.form.valid">
+        Guardar
+      </button>
     </form>
-  </div>
   
-</div>
+    <hr>
+  
+    <!-- ── Buscar y editar Alumno existente ──────────────────────────────────── -->
+    <form (ngSubmit)="buscarAlumno()" class="mt-4">
+      <div class="form-group">
+        <label>Buscar Matrícula</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="matriculaBusqueda"
+               name="matriculaBusqueda"
+               required>
+      </div>
+      <button class="btn btn-secondary">Buscar</button>
+    </form>
+  
+    <div *ngIf="alumnoSeleccionado" class="card mt-3 p-3">
+      <h4>Editar Alumno {{ alumnoSeleccionado.usuario.UserName }}</h4>
+      <form (ngSubmit)="actualizarAlumno()">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input class="form-control"
+                 [(ngModel)]="alumnoSeleccionado.usuario.Nombres"
+                 name="editNombres" required>
+        </div>
+        <div class="form-group">
+          <label>Apellido Paterno</label>
+          <input class="form-control"
+                 [(ngModel)]="alumnoSeleccionado.usuario.ApellidoP"
+                 name="editApellidoP" required>
+        </div>
+        <div class="form-group">
+          <label>Apellido Materno</label>
+          <input class="form-control"
+                 [(ngModel)]="alumnoSeleccionado.usuario.ApellidoM"
+                 name="editApellidoM" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="form-control"
+                 [(ngModel)]="alumnoSeleccionado.usuario.Email"
+                 name="editEmail" required>
+        </div>
+        <div class="form-group">
+          <label>Dirección</label>
+          <input class="form-control"
+                 [(ngModel)]="alumnoSeleccionado.usuario.Direccion"
+                 name="editDireccion">
+        </div>
+        <div class="form-group">
+          <label>Celular</label>
+          <input class="form-control"
+                 [(ngModel)]="alumnoSeleccionado.usuario.Celular"
+                 name="editCelular">
+        </div>
+        <div class="form-group">
+          <label>Permiso Formación</label>
+          <input class="form-control"
+                 [(ngModel)]="alumnoSeleccionado.alumno.PermisoFormacion"
+                 name="editPermisoFormacion" required>
+        </div>
+        <div class="form-group">
+          <label>Fecha Fin Formación</label>
+          <input type="date" class="form-control"
+                 [(ngModel)]="alumnoSeleccionado.alumno.FechaFinPF"
+                 name="editFechaFinPF" required>
+        </div>
+  
+        <button type="submit" class="btn btn-success">Actualizar</button>
+        <button type="button"
+                class="btn btn-danger ml-2"
+                (click)="deshabilitarAlumno()">
+          Deshabilitar
+        </button>
+        <button type="button"
+                class="btn btn-outline-secondary ml-2"
+                (click)="cancelarEdicion()">
+          Cancelar
+        </button>
+      </form>
+    </div>
+  </div>

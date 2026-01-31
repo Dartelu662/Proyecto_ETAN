@@ -41,7 +41,7 @@ export class CapturasCursosAdmin1Component {
 
   // Modelos para los formularios
   nuevoPlan: Plan = { plan: '', FechaIni: '', FechaFin: '', Activo: true };
-  nuevoCurso: Curso = { curso: '', Semanal: '', Sabatino: '', FechaCursoIni: '', FechaCursoFin: '', plan: '', Activo: true };
+  nuevoCurso: Curso = { curso: '', Semanal: '', Sabatino: '', hrsvuelo: '', FechaCursoIni: '', FechaCursoFin: '', plan: '', Activo: true };
   nuevaMateria: Materia = { planid: '', plan: '', cursoid: '', curso: '', idMaestro: '', Maestro: '', Materia: '', Activo: true };
 
   selectedMaestro: string = '';
@@ -166,7 +166,7 @@ export class CapturasCursosAdmin1Component {
   agregarCurso(): void {
     this.cursoservice.AddCurso(this.nuevoCurso);
     //this.cursos.push({ ...this.nuevoCurso });
-    this.nuevoCurso = { curso: '', Semanal: '', Sabatino: '', FechaCursoIni: '', FechaCursoFin: '', plan: '', Activo: true }; // Limpiar formulario
+    this.nuevoCurso = { curso: '', Semanal: '', Sabatino: '', hrsvuelo: '', FechaCursoIni: '', FechaCursoFin: '', plan: '', Activo: true }; // Limpiar formulario
   }
 
   eliminarMateria(Materia: string | undefined): void {

@@ -11,6 +11,8 @@ import Usuario from '../interfaces/usuario.interface';
   providedIn: 'root'
 })
 export class AuthentificationService {
+  auth = { Email: '', Password: '' };
+
     private authActual = inject(Auth);
     constructor(private _Auth: Auth, private usuarioService: UsuarioService){}
 
@@ -22,10 +24,10 @@ export class AuthentificationService {
         return false;
       }
 
-      const adminPassword = prompt('Para continuar, introduce tu contraseña');
+      const adminPassword = prompt('Para continuar, +++ introduce tu contraseña');
 
       if (!adminPassword) {
-        alert('Se requiere la contraseña para continuar.');
+        alert('Se requiere la contraseña +++ para continuar.');
         return false;
       }
 
@@ -109,4 +111,9 @@ export class AuthentificationService {
       }
     }
 
+  /** Limpia credenciales temporales (email/password) */
+  clearCredentials(): void {
+    this.auth.Email = '';
+    this.auth.Password = '';
+  }
 }

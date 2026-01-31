@@ -25,6 +25,7 @@
     <input [(ngModel)]="curso.curso" placeholder="Nombre del Curso" class="input-field">
     <input [(ngModel)]="curso.Semanal" placeholder="Mod. Semanal" class="input-field">
     <input [(ngModel)]="curso.Sabatino" placeholder="Mod. Sabatino" class="input-field">
+    <input [(ngModel)]="curso.hrsvuelo" placeholder="Horas Vuelo" class="input-field">
     <input type="date" [(ngModel)]="curso.FechaCursoIni" class="input-field">
     <input type="date" [(ngModel)]="curso.FechaCursoFin" class="input-field">
     <button (click)="actualizarCurso(curso)" class="btn">Actualizar</button>
@@ -36,6 +37,7 @@
     <input type="text" [(ngModel)]="nuevoCurso.curso" name="nombreCurso" placeholder="Nombre del Curso" class="input-field" required>
     <input type="text" [(ngModel)]="nuevoCurso.Semanal" name="Semanal" placeholder="Semanal" class="input-field" required>
     <input type="text" [(ngModel)]="nuevoCurso.Sabatino" name="Sabatino" placeholder="Sabatino" class="input-field" required>
+    <input type="text" [(ngModel)]="nuevoCurso.hrsvuelo" name="hrsvuelo" placeholder="Horas Vuelo" class="input-field" required>
     <input type="date" [(ngModel)]="nuevoCurso.FechaCursoIni" name="fechaIniCurso" class="input-field" required>
     <input type="date" [(ngModel)]="nuevoCurso.FechaCursoFin" name="fechaFinCurso" class="input-field" required>
     <button type="submit" class="btn">Agregar Curso</button>

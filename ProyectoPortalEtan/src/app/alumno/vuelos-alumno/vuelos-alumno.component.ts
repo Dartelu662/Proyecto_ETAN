@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -11,11 +10,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatStepper } from '@angular/material/stepper';
 import { AvionesService } from '../../services/aviones.service';
 import { HrsvueloService } from '../../services/hrsvuelo.service';
 import { UsuarioService } from '../../services/usuario.service';
-
 import { Auth } from '@angular/fire/auth';
 import { HrsVuelo } from '../../interfaces/hrsvuelo.interface';
 import Avion from '../../interfaces/avion.interface';
@@ -42,6 +40,7 @@ declare const paypal: any;
   styleUrls: ['./vuelos-alumno.component.css']
 })
 export class VuelosAlumnoComponent implements OnInit {
+  @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('paypal', { static: false }) paypalElement!: ElementRef;
 
   dateFormGroup:     FormGroup;
@@ -176,9 +175,11 @@ export class VuelosAlumnoComponent implements OnInit {
             });
         } else {
           alert('Reserva guardada con éxito');
+          this.resetAll();            // <— aquí también
         }
       })
       .catch(err => console.error('Error guardando HrsVuelo:', err));
+      this.resetAll();            // <— aquí también
   }
 
   pagoValido(): boolean {
@@ -198,5 +199,23 @@ export class VuelosAlumnoComponent implements OnInit {
     return new Date(d).toLocaleDateString('es-ES', {
       weekday:'long',year:'numeric',month:'long',day:'numeric'
     });
+  }
+
+  private resetAll(): void {
+    // 1) Resetear el stepper al primer paso
+    this.stepper.reset();
+  
+    // 2) Resetear cada formulario
+    this.dateFormGroup.reset();
+    this.timeFormGroup.reset();
+    this.planeFormGroup.reset();
+    this.paymentFormGroup.reset();
+  
+    // 3) Limpiar variables internas
+    this.selectedAvion    = undefined;
+    this.montoPago        = 0;
+    this.horasDisponibles = 0;
+    this.tieneHorasCredito= false;
+    this.creditChecked    = false;
   }
 }

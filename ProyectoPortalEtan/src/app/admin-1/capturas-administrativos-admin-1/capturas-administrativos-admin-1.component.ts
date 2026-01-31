@@ -35,7 +35,8 @@ export class CapturasAdministrativosAdmin1Component implements OnInit{
     Direccion: '',
     FechaNac: '',
     FechaIngreso: '',
-    Activo: true
+    Activo: true,
+    Password: '' // <-- Agrega esta línea
   };
 
   // Objeto de tipo Admin

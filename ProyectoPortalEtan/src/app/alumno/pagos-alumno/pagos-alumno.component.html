@@ -1,18 +1,24 @@
 
 <div class="payment-container">
   <h2>Pago de Mensualidad</h2>
+
   <label for="matricula">Matrícula del Alumno:</label>
-  <input type="text" id="matricula" EdoCuenta.Matricula placeholder="Ingrese la matrícula" />
-  
-  <label for="monto">Monto a Pagar:</label>
-  <input type="number" id="monto" EdoCuenta.Mensualidad placeholder="Ingrese el monto" />
-  
-  <div id="paypal-button-container"></div>
-</div>
+  <input
+    type="text"
+    id="matricula"
+    [(ngModel)]="EdoCuenta.Matricula"
+    name="matricula"
+    readonly
+  />
 
-<br>
-<br>
+  <label for="mensualidad">Monto a Pagar:</label>
+  <input
+    type="number"
+    id="mensualidad"
+    [(ngModel)]="EdoCuenta.MontoMensual"
+    name="mensualidad"
+    readonly
+  />
 
-<div #paypal>
-    
+  <div #paypalButtonContainer></div>
 </div>

@@ -1,72 +1,59 @@
-<div *ngIf="!grupoSeleccionado">
+<div *ngIf="!selectedGrupo">
+  <form [formGroup]="maestroForm">
+    <label for="maestro">Selecciona un Maestro:</label>
+    <select id="maestro" formControlName="maestroId">
+      <option value="">-- Maestro --</option>
+      <option *ngFor="let m of listaMaestros" [value]="m.id">
+        {{ m.Nombres }} {{ m.ApellidoP }} {{ m.ApellidoM }}
+      </option>
+    </select>
+  </form>
 
-  <label for="Maestro">Selecciona un Maestro:</label>
-  <select id="Maestro" [(ngModel)]="listaMaestros">
-    <option *ngFor="let Maestro of listaMaestros" [value]="Maestro">{{ Maestro.Nombres }} {{Maestro.ApellidoP}}  {{Maestro.ApellidoM}}  </option>
-    <option >
-      <option *ngFor="let Maestro of listaMaestros" [value]="Maestro"
-    
-      option>
-  </select>
-
-
-  <h2>Selecciona un grupo</h2>
+  <h2 *ngIf="grupos.length">Grupos</h2>
   <div class="tarjetas">
-    <ng-container *ngFor="let grupo of grupos">
-      <div *ngIf="grupo.edicionHabilitada" 
-           class="tarjeta" 
-           (click)="seleccionarGrupo(grupo)">
-        <h3>{{ grupo.materia }}</h3>
-        <p>Plan de estudio: {{ grupo.planEstudio }}</p>
-        <p>Fecha de examen: {{ grupo.fechaExamen }}</p>
-      </div>
-    </ng-container>
+    <div *ngFor="let g of grupos" class="tarjeta" (click)="seleccionarGrupo(g)">
+      <h3>{{ g.materia }}</h3>
+      <p>Plan: {{ g.planEstudio }}</p>
+      <p>Examen: {{ g.fechaExamen }}</p>
+    </div>
   </div>
-
-  <!-- <label for="periodo">Selecciona un periodo:</label>
-  <select id="periodo" [(ngModel)]="periodoSeleccionado">
-    <option *ngFor="let periodo of periodosPasados" [value]="periodo">{{ periodo }}</option>
-  </select> -->
 </div>
 
-<div *ngIf="grupoSeleccionado">
-  <button (click)="regresarALista()">Volver a grupos</button>
-
-  <h2>{{ grupoSeleccionado.materia }} - {{ grupoSeleccionado.planEstudio }}</h2>
-  <p>Fecha de examen: {{ grupoSeleccionado.fechaExamen }}</p>
+<div *ngIf="selectedGrupo">
+  <button (click)="regresarALista()">← Volver a grupos</button>
+  <h2>{{ selectedGrupo.materia }} — {{ selectedGrupo.planEstudio }}</h2>
 
   <table>
     <thead>
       <tr>
-        <th>matricula</th>
-        <th>Nombre</th>
+        <th>Matrícula</th>
         <th>Calificación</th>
-        <th>Fecha de actualización</th>
-        <th>Hora de actualización</th>
-        <th>Acción</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th *ngIf="selectedGrupo.edicionHabilitada">Acción</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let alumno of grupoSeleccionado.alumnos">
-        <td>{{ alumno.matricula }}</td>
-        <td>{{ alumno.nombre }}</td>
+      <tr *ngFor="let a of selectedGrupo.alumnos">
+        <td>{{ a.matricula }}</td>
         <td>
-          <input 
-            *ngIf="grupoSeleccionado.edicionHabilitada" 
-            type="number" 
-            [value]="alumno.calificacion" 
-            (input)="ValidarInfo($event)" 
-            min="0" max="100">
-          <span *ngIf="!grupoSeleccionado.edicionHabilitada">{{ alumno.calificacion }}</span>
+          <input *ngIf="selectedGrupo.edicionHabilitada"
+                 type="number" min="0" max="100"
+                 [value]="a.calificacion"
+                 (input)="actualizarCalificacion(a, $event)">
+          <span *ngIf="!selectedGrupo.edicionHabilitada">{{ a.calificacion }}</span>
         </td>
-        <td>{{ alumno.fechaActualizacion || '-' }}</td>
-        <td>{{ alumno.horaActualizacion || '-' }}</td>
-        <td>
-          <button *ngIf="grupoSeleccionado.edicionHabilitada" (click)="actualizarCalificacion(alumno, $event)">Actualizar</button>
+        <td>{{ a.fechaActualizacion || '-' }}</td>
+        <td>{{ a.horaActualizacion  || '-' }}</td>
+        <td *ngIf="selectedGrupo.edicionHabilitada">
+          <button (click)="actualizarCalificacion(a, $event)">Guardar</button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <button *ngIf="grupoSeleccionado.edicionHabilitada" (click)="bloquearEdicion()">Bloquear edición</button>
+  <button *ngIf="selectedGrupo.edicionHabilitada"
+          (click)="bloquearEdicion()">
+    Bloquear edición
+  </button>
 </div>

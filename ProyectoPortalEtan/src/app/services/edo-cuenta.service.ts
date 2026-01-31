@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, collectionData, doc, docData, addDoc, CollectionReference, DocumentReference, updateDoc, query, where, getDoc} from '@angular/fire/firestore';
 import Edocuenta from '../interfaces/edocuenta.interface';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -27,14 +28,30 @@ export class EdoCuentaService {
   
   
   
-    GetEdocuentas(): Observable<Edocuenta[]> {
+    GetEdocuentas(Matricula: string): Observable<Edocuenta[]> {
+      console.log('Cargando estado de cuenta para matrícula:', Matricula);
+
       const edocuentasRef = collection(this.firestore, 'Edocuenta');
-      const edocuentasActivosQuery = query(edocuentasRef, where('Activo', '==', true));
-    
-      return collectionData(edocuentasActivosQuery, { idField: 'id' }) as Observable<Edocuenta[]>;
+      const activosQuery = query(edocuentasRef,  where('Matricula', '==', Matricula));
+  
+      return collectionData(activosQuery, { idField: 'id' })
+        .pipe(
+          map((arr: any[]) => 
+            arr.map(doc => ({
+              ...doc,
+              MensPag: doc.MensPag  ?? 0,
+              MensPen: doc.MensPen  ?? 0
+            }))
+          )
+        ) as Observable<Edocuenta[]>;
     }
   
-  
+    GetEdocuentasByAlumnoId(alumnoId: string): Observable<Edocuenta[]> {
+      const edocuentasRef = collection(this.firestore, 'Edocuenta');
+      const edocuentasQuery = query(edocuentasRef, where('Alumno', '==', alumnoId));
+    
+      return collectionData(edocuentasQuery, { idField: 'id' }) as Observable<Edocuenta[]>;
+    }
   
     GetEdocuentaById(id: string): Observable<Edocuenta | undefined> {
       const edocuentaDoc = doc(this.firestore, `Edocuenta/${id}`);

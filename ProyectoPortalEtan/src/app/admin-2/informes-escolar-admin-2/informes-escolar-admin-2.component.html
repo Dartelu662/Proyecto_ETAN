@@ -1,0 +1,74 @@
+<div class="report-container">
+  <h1>Informe de Pagos y Estado de Cuenta</h1>
+
+  <form (ngSubmit)="onFilter()" class="filter-form">
+    <input
+      type="text"
+      [(ngModel)]="matricula"
+      name="matricula"
+      placeholder="Matrícula"
+      required
+    />
+    <button type="submit">Buscar</button>
+  </form>
+
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <section *ngIf="edoCuenta" class="account-summary">
+    <h2>Resumen de Horas</h2>
+    <div class="summary-grid">
+      <div class="card">
+        <h3>Vuelo Pagadas</h3>
+        <p>{{ edoCuenta.HrsVueloPag || 0 }} hrs</p>
+      </div>
+      <div class="card">
+        <h3>Vuelo Pendientes</h3>
+        <p>{{ edoCuenta.HrsVueloPen || 0 }} hrs</p>
+      </div>
+      <div class="card">
+        <h3>Vuelo Restantes</h3>
+        <p>{{ edoCuenta.HrsVuelo || 0 }} hrs</p>
+      </div>
+      <div class="card">
+        <h3>Simulador Pagadas</h3>
+        <p>{{ edoCuenta.HrsSimulaPag || 0 }} hrs</p>
+      </div>
+      <div class="card">
+        <h3>Simulador Pendientes</h3>
+        <p>{{ edoCuenta.HrsSimulaPen || 0 }} hrs</p>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="pagosOtros.length" class="payments-section">
+    <h2>Pagos Generales</h2>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Tipo Pago</th><th>Monto</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of pagosOtros">
+          <td>{{ p.fechaPago | date:'short' }}</td>
+          <td>{{ p.tipoPago }}</td>
+          <td>{{ p.Monto | currency:'MXN' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section *ngIf="pagosVuelo.length" class="payments-section">
+    <h2>Horas de Vuelo Anticipadas</h2>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Avión ID</th><th>Monto</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of pagosVuelo">
+          <td>{{ p.fechaPago | date:'short' }}</td>
+          <td>{{ p.AvionId }}</td>
+          <td>{{ p.Monto | currency:'MXN' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>

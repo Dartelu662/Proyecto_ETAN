@@ -1,23 +1,30 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, query, where, getDocs, updateDoc, getDoc } from '@angular/fire/firestore';
+import { Firestore,  collectionData, doc, deleteDoc, query, where, getDocs, updateDoc, getDoc } from '@angular/fire/firestore';
 import Usuario from '../interfaces/usuario.interface';
 import { Observable } from 'rxjs';
+import { addDoc, collection } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
   GetUsuarioById: any;
+  auth: { Email?: string; Password?: string } = {}; // Add this property
 
   constructor(private _firestore:Firestore) { }
 
-  async AddUsuario(usuario:Usuario) {
+  async AddUsuario(usuario: Usuario) {
     const UsuarioRef = collection(this._firestore, 'Usuarios');
-    const existingUser = await this.getUsuarioByUserName(usuario.UserName)
-  if (existingUser) {
-    throw new Error('Usuario ya existente');
-  }
-  return await addDoc(UsuarioRef, usuario);
+    const existingUser = await this.getUsuarioByUserName(usuario.UserName);
+    if (existingUser) {
+      throw new Error('Usuario ya existente');
+    }
+    // Verificar si el correo ya existe
+    const existingEmail = await this.getUsuarioByEMail(usuario.Email);
+    if (existingEmail) {
+      throw new Error('Correo ya registrado');
+    }
+    return await addDoc(UsuarioRef, usuario);
   }
 
   GetUsuarios(): Observable<Usuario[]> {
@@ -111,7 +118,12 @@ export class UsuarioService {
     const q = query(usuarioRef, where('Email', '==', email));
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
-      return querySnapshot.docs[0].data() as Usuario;
+      const usuarioDoc = querySnapshot.docs[0];
+      const usuarioData: Usuario = {
+        ...usuarioDoc.data() as Usuario,
+        id: usuarioDoc.id
+      };
+      return usuarioData;
     } else {
       return null;
     }
@@ -132,5 +144,38 @@ export class UsuarioService {
 
     // 🔹 Retornar el objeto con el ID incluido
     return { id: snapshot.id, ...data } as Usuario;
+  }
+
+  // Busca usuarios por nombre parcial (o por UserName si no hay coincidencias por nombre)
+  async buscarUsuariosPorNombre(parcial: string): Promise<Usuario[]> {
+    const resultados: Usuario[] = [];
+    try {
+      const usuariosRef = collection(this._firestore, 'Usuarios');
+      // Busqueda por Nombres (rango para "starts with")
+      const q = query(usuariosRef, where('Nombres', '>=', parcial), where('Nombres', '<=', parcial + '\uf8ff'));
+      const snapshot = await getDocs(q);
+      snapshot.forEach(doc => {
+        const data = doc.data() as Usuario;
+        data.id = doc.id;
+        resultados.push(data);
+      });
+
+      // Si no hubo resultados por Nombres, intentamos por UserName
+      if (resultados.length === 0) {
+        const q2 = query(usuariosRef, where('UserName', '>=', parcial), where('UserName', '<=', parcial + '\uf8ff'));
+        const snap2 = await getDocs(q2);
+        snap2.forEach(doc => {
+          const data = doc.data() as Usuario;
+          data.id = doc.id;
+          resultados.push(data);
+        });
+      }
+
+      console.log('buscarUsuariosPorNombre -> parcial:', parcial, 'resultados:', resultados.length);
+      return resultados;
+    } catch (error) {
+      console.error('Error en buscarUsuariosPorNombre:', error);
+      return [];
+    }
   }
 }

@@ -1,6 +1,7 @@
 // Variables de colores y estilos
 $primary-color: #3f51b5; // Azul principal
 $primary-light: #e3e8f9; // Azul tenue para bordes
+$secondary-color: #f44336; // Color para botones de eliminar
 $border-radius: 6px;
 $spacing-x: 3mm;
 $spacing-y: 5mm;
@@ -302,5 +303,47 @@ form {
       }
     }
   }
+}
+
+.sugerencias {
+  list-style: none;
+  margin: 6px 0 16px 0;
+  padding: 0;
+  border: 1px solid #e3e8ef;
+  border-radius: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(20,40,60,0.04);
+}
+
+.sugerencia-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f4f6f9;
+  font-size: 14px;
+}
+
+.sugerencia-item:hover {
+  background: #f5fbff;
+}
+.muted { color: #6b7280; font-size: 12px; margin-left:6px; }
+
+.alert {
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.alert-warning {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  color: #856404;
+}
+
+.alert-success {
+  background: #d4edda;
+  border: 1px solid #28a745;
+  color: #155724;
 }
 

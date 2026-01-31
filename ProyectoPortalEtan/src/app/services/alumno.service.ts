@@ -15,19 +15,26 @@ export class AlumnoService {
   constructor(private usuarioService: UsuarioService) { }
 
   async AddAlumno(alumno: Alumno, usuario: Usuario) {
-    
-    let usuarioCreado = await this.usuarioService.getUsuarioByUserName(usuario.UserName);
-    if (!usuarioCreado) {
-      
-      await this.usuarioService.AddUsuario(usuario);
-    } else {
-    throw new Error('Usuario ya existente');
-    }
+    console.log('AddAlumno llamado con:', alumno, usuario);
+
+    // Elimina la verificación del usuario
+    // let usuarioCreado = await this.usuarioService.getUsuarioByUserName(usuario.UserName);
+    // if (!usuarioCreado) {
+    //   console.warn('Usuario no existe, no se puede guardar alumno');
+    //   return;
+    // }
 
     alumno.Username = usuario.UserName;
-    
+
     const AlumnoRef = collection(this.firestore, 'Alumno');
-    return await addDoc(AlumnoRef, alumno);
+    try {
+      const result = await addDoc(AlumnoRef, alumno);
+      console.log('Documento alumno creado:', result);
+      return result;
+    } catch (error) {
+      console.error('Error al crear documento alumno:', error);
+      throw error;
+    }
   }
   
   GetAlumnos(): Observable<{ usuario: Usuario; alumno: Alumno }[]> {
@@ -162,6 +169,11 @@ export class AlumnoService {
         return false;
       }
     }
-        
-      
+
+    async buscarUsuariosPorNombre(parcial: string): Promise<Usuario[]> {
+      const usuariosRef = collection(this.firestore, 'Usuarios');
+      const q = query(usuariosRef, where('Nombres', '>=', parcial), where('Nombres', '<=', parcial + '\uf8ff'));
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => ({ ...(doc.data() as Usuario), id: doc.id }));
+    }
 }

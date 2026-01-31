@@ -10,6 +10,7 @@ export default interface Usuario{
     Direccion: string;
     FechaNac: string;
     FechaIngreso: string;
+    Password: string;
     Activo: boolean;
 }
 

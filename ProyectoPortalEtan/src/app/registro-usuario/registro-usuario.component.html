@@ -1,0 +1,21 @@
+<div class="registro-container">
+  <h2>Registro de Usuario</h2>
+  <form class="registro-form" (ngSubmit)="registrar()">
+    <div class="form-group">
+      <label for="UserName">Matrícula</label>
+      <input [(ngModel)]="usuario.UserName" name="UserName" id="UserName" required />
+    </div>
+    <div class="form-group">
+      <label for="Email">Correo electrónico</label>
+      <input [(ngModel)]="usuario.Email" name="Email" id="Email" required type="email" />
+    </div>
+    <div class="form-group">
+      <label for="Password">Contraseña</label>
+      <input [(ngModel)]="usuario.Password" name="Password" id="Password" required type="password" />
+    </div>
+    <!-- Puedes agregar más campos si lo deseas -->
+    <button type="submit" class="btn-registrar">Registrar</button>
+    <button type="button" class="btn-volver" (click)="volverLogin()">Volver</button>
+  </form>
+  <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
+</div>

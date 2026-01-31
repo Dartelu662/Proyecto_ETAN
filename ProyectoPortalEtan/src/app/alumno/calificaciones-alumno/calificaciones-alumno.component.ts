@@ -46,7 +46,8 @@ export class CalificacionesAlumnoComponent implements OnInit, AfterViewInit {
     FechaIngreso: '',
     TipoUsuario: '',
     UserName: '',
-    Activo: true
+    Activo: true,
+    Password:''
   };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

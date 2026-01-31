@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 import { AvionesService } from '../../services/aviones.service';
 import Avion from '../../interfaces/avion.interface';
+import { HorasVueloAdmin2Component } from '../horas-vuelo-admin-2/horas-vuelo-admin-2.component';
 
 @Component({
   selector: 'app-pagos-admin-2',
@@ -55,12 +56,15 @@ export class PagosAdmin2Component implements OnInit {
   // Escuchar cambios en el tipo de pago para activar/desactivar el select de avión
   this.pagoForm.get('tipoPago')?.valueChanges.subscribe((nuevoTipo: string) => {
     const avionControl = this.pagoForm.get('avion');
-
+    const hrsVueloControl = this.pagoForm.get('hrsVuelo');
     if (this.debeMostrarAviones(nuevoTipo)) {
       avionControl?.enable();
+      hrsVueloControl?.enable(); // habilitar hrsVuelo si es necesario
     } else {
       avionControl?.disable();
       avionControl?.reset(); // opcional: limpia el valor seleccionado
+      hrsVueloControl?.disable(); // deshabilitar hrsVuelo si no es necesario
+      hrsVueloControl?.reset(); // opcional: limpia el valor seleccionado
     }
   });
 

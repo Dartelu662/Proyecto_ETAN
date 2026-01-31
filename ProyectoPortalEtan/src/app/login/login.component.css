@@ -16,14 +16,29 @@
     z-index: -1;
   }
   
-  .login {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
+  body {
+    background: linear-gradient(135deg, #eaf6fb 0%, #c9e7fa 100%);
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  }
+  
+  .login-container {
     max-width: 400px;
+    width: 100%;
+    margin: 60px auto;
+    padding: 36px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .login {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
   
   input {
@@ -37,33 +52,70 @@
   
   .contenedor__password {
     position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  .contenedor__password input {
+    width: 100%;
+    padding-right: 36px;
+    box-sizing: border-box; /* <-- asegura que el padding no aumente el ancho */
+    margin-bottom: 0; /* <-- elimina margen extra si lo hay */
   }
   
   .eye {
     position: absolute;
     right: 10px;
-    top: 40%;
+    top: 50%;
     transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
     cursor: pointer;
-    color: #555;
+    width: 22px;
+    height: 22px;
+    fill: #2980b9;
   }
   
   #submit_registrar {
     width: 100%;
-    padding: 0.75rem;
+    padding: 10px;
+    background: #2980b9;
+    color: #fff;
     border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    transition: background 0.2s;
   }
   
   #submit_registrar:hover {
-    background-color: #0056b3;
+    background: #3498db;
   }
   
+  .registro-link {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 15px;
+    color: #34495e;
+    width: 100%;
+  }
   
+  .registro-link a {
+    color: #2980b9;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 4px;
+  }
+  
+  .registro-link a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 500px) {
+    .login-container {
+      padding: 18px 8px;
+      max-width: 98vw;
+    }
+  }
+

@@ -1,10 +1,10 @@
-export default interface Pagos {
+export default interface pagos {
+AvionId: any;
+Activo: boolean;
 matricula?: string;
-TipoPago: string;
 fechaPago: string;
 Monto: number;
 FormaPago: string;
-Referencia: string;
 tipoPago: string;
 medioPago: string;
 hrsVuelo: number;
