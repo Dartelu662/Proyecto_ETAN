@@ -9,6 +9,7 @@ export const routes: Routes = [
   
   { path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent) },
   { path: 'registro', loadComponent: () => import('./registro-usuario/registro-usuario.component').then(m => m.RegistroUsuarioComponent) },
+  { path: 'cambiar-password', loadComponent: () => import('./cambiar-password/cambiar-password.component').then(m => m.CambiarPasswordComponent) },
 
   { 
     path: 'alumno', 

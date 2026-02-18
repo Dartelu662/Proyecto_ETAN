@@ -1,20 +1,28 @@
+// ...existing code...
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthentificationService } from '../services/authentification.service'; // Ajusta la ruta si es necesario
 import AUTH from '../interfaces/auth.interface';
 import Usuario from '../interfaces/usuario.interface';
 import { UsuarioService } from '../services/usuario.service';
 import { Auth } from '@angular/fire/auth';
+import { CambiarPasswordComponent } from '../cambiar-password/cambiar-password.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, CommonModule], // <-- añadí CommonModule
+  imports: [RouterModule, CommonModule, FormsModule, CambiarPasswordComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  emailRecuperar = '';
+  mensajeRecuperar = '';
+  mostrarRecuperar = false;
+  
+
   auth: AUTH = {
       Email: '',
       Password: ''
@@ -98,6 +106,8 @@ export class LoginComponent implements OnInit {
     } else {
       alert('Por favor, complete todos los campos.');
     }
+
+
   }
 
   /**

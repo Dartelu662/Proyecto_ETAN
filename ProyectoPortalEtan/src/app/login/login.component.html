@@ -1,6 +1,7 @@
 <img src="./recursos/andres-dallimonti-kjqTlMHLci4-unsplash-3-scaled.jpg" alt="Fondo" id="fondo">
 
 <div class="login-container">
+  <div *ngIf="!mostrarRecuperar" class="recuperar-container">
   <form class="login" (submit)="submitForm($event)">
     <input type="text" #username placeholder="Matrícula" required>
     <div class="contenedor__password">
@@ -11,10 +12,12 @@
     </div>
     <button type="submit" id="submit_registrar">Ingresar</button>
   </form>
-  <p class="registro-link">
-    ¿No tienes cuenta?
-    <a routerLink="/registro">Regístrate aquí</a>
+  <!-- Opción de registro eliminada por no tener utilidad -->
+  <p class="recuperar-link">
+    <a href="#" (click)="$event.preventDefault(); mostrarRecuperar = !mostrarRecuperar">¿Olvidaste tu contraseña?</a>
   </p>
+  </div>
+  <app-cambiar-password *ngIf="mostrarRecuperar"></app-cambiar-password>
 </div>
 
 
